@@ -10,7 +10,7 @@ secrets:
 services:
   ldap.iam.provider.test:
     container_name: ldap.iam.provider.test
-    build: lldap
+    build: .
     restart: unless-stopped
     hostname: ldap
     expose:
