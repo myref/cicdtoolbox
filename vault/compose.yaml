@@ -10,7 +10,7 @@ services:
   vault.internal.provider.test:
     container_name: vault.internal.provider.test
     build:
-      context: ./vault
+      context: .
       dockerfile: docker/Dockerfile-vault
     depends_on:
       - consul.internal.provider.test
@@ -45,7 +45,7 @@ services:
   consul.internal.provider.test:
     container_name: consul.internal.provider.test
     build:
-      context: ./vault
+      context: .
       dockerfile: docker/Dockerfile-consul
     restart: unless-stopped
     init: true
