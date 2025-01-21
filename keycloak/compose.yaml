@@ -7,7 +7,7 @@ secrets:
 services:
   keycloak.services.provider.test:
     container_name: keycloak.services.provider.test
-    build: keycloak
+    build: .
     command: ["start"]
     restart: unless-stopped
     init: true
