@@ -26,25 +26,32 @@ The setup has been developed and tested on a fully updated Ubuntu 22.04.3 minima
 
 After install, execute:
 
-```sudo wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg```
+```sudo wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt-get update && sudo apt-get upgrade -y
+```
 
-```echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list```
+```sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-```sudo apt-get update && sudo apt-get upgrade -y```
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
 
-```sudo apt -y install openjdk-11-jre-headless git docker.io docker-compose docker-buildx curl python3 python3-pip python-is-python3 jq vim xauth iputils-ping make build-essential wget terraform vault direnv```
-
-```mkdir -p ~/.docker/cli-plugins/```
-
-```curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose```
-
-```chmod +x ~/.docker/cli-plugins/docker-compose```
+```sudo apt -y install openjdk-11-jre-headless git docker.io docker-compose-plugin docker-buildx curl python3 python3-pip python-is-python3 jq vim xauth iputils-ping make build-essential wget terraform vault direnv```
 
 ```sudo usermod -aG docker ${USER}```
 
 ```sudo su - ${USER}```
 
-```sudo python3 -m pip install robotframework robotframework-selenium2library robotframework-debuglibrary```
+```sudo python3 -m pip install robotframework robotframework-selenium2library robotframework-debuglibrary --break-system-packages```
 
 ```echo "export COMPOSE_DOCKER_CLI_BUILD=1" >> ~/.bashrc```
 
@@ -66,11 +73,11 @@ Install [Docker Buildkit](https://docs.docker.com/build/buildkit/#getting-starte
 
 Reboot to make sure all changes are activated. You will probably get a popup to do that through the software updater anyway.
 
-Install the [CICD-toolbox](https://github.com/Devoteam/CICD-toolbox):
+Install the [CICD-toolbox](https://github.com/myref/cicdtoolbox):
 
-```git clone https://github.com/Devoteam/CICD-toolbox.git```
+```git clone https://github.com/myref/cicdtoolbox.git```
 
-```cd CICD-toolbox/```
+```cd cicdtoolbox/```
 
 ```direnv allow```
 
