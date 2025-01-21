@@ -139,9 +139,9 @@ echo " "
 
 CreateRepo "Infraautomator" "CICD-toolbox" "https://github.com/Devoteam/CICD-toolbox.git" "The CICD-toolbox"
 CreateRepo "Infraautomator" "NetCICD" "https://github.com/Devoteam/NetCICD.git" "The NetCICD pipeline"
-CreateRepo "Infraautomator" "OsCICD" "https://github.com/myref/empty.git" "OsCICD"
-CreateRepo "Infraautomator" "OsDeploy" "https://github.com/myref/empty.git" "OS configuration"
-CreateRepo "Infraautomator" "OsTest" "https://github.com/myref/empty.git" "OS test"
+CreateRepo "Infraautomator" "OsCICD" "https://github.com/myref/OsCICD.git" "OsCICD"
+CreateRepo "Infraautomator" "OsDeploy" "https://github.com/myref/OsDeploy.git" "OS configuration"
+CreateRepo "Infraautomator" "OsTest" "https://github.com/myref/OsTest.git" "OS test"
 CreateRepo "Infraautomator" "AppCICD" "https://github.com/DevoteamNL/AppCICD.git" "The AppCICD pipeline"
 CreateRepo "Infraautomator" "templateApp" "https://github.com/DevoteamNL/templateApp.git" "Some Application"
 
