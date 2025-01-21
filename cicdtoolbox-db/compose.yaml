@@ -1,0 +1,47 @@
+volumes:
+  cicdtoolbox_db_data: null
+  cicdtoolbox_db_conf: null
+
+secrets:
+  cicdtoolbox-db_key:
+    file: ./vault/certs/cicdtoolbox-db.internal.provider.test.pem
+  cicdtoolbox-db_crt:
+    file: ./vault/certs/cicdtoolbox-db.internal.provider.test.crt
+
+services:
+  cicdtoolbox-db.internal.provider.test:
+    container_name: cicdtoolbox-db.internal.provider.test
+    build: cicdtoolbox-db
+    command: |
+      -c ssl=on  -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key
+    restart: unless-stopped
+    init: true
+    stop_signal: SIGINT
+    stop_grace_period: 15s
+    environment:
+      - 'POSTGRES_MULTIPLE_DATABASES=ldap,gitea,keycloak,terraform,pulp'
+      - 'POSTGRES_USER=${postgres_user}'
+      - 'POSTGRES_PASSWORD=${postgres_password}'
+    secrets:
+      - source: cicdtoolbox-db_key
+        target: /var/lib/postgresql/server1.key
+      - source: cicdtoolbox-db_crt
+        target: /var/lib/postgresql/server.crt
+      - source: ca_crt
+        target: /var/lib/postgresql/root.crt
+    networks:
+      internal:
+        ipv4_address: 172.16.9.2
+    expose:
+      - '5432'
+    volumes:
+      - 'cicdtoolbox_db_data:/var/lib/postgresql/data'
+      - 'cicdtoolbox_db_conf:/etc/postgresql'
+      - './cicdtoolbox-db/docker-entrypoint-initdb-resources:/docker-entrypoint-initdb-resources:ro'
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'pg_isready -U ${postgres_user}'
+      interval: 5s
+      timeout: 5s
+      retries: 5

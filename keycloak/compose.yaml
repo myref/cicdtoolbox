@@ -1,0 +1,55 @@
+secrets:
+  keycloak_key:
+    file: ./vault/certs/keycloak.services.provider.test.pem
+  keycloak_crt:
+    file: ./vault/certs/keycloak.services.provider.test.crt
+
+services:
+  keycloak.services.provider.test:
+    container_name: keycloak.services.provider.test
+    build: keycloak
+    command: ["start"]
+    restart: unless-stopped
+    init: true
+    stop_signal: SIGINT
+    stop_grace_period: 15s
+    environment:
+      KEYCLOAK_ADMIN: '${keycloak_admin}'
+      KEYCLOAK_ADMIN_PASSWORD: '${keycloak_admin_password}'
+      KC_HEALTH_ENABLED: 'true'
+      KC_METRICS_ENABLED: 'true' 
+      KC_DB: postgres
+      KC_DB_URL_DATABASE: keycloak 
+      KC_DB_URL_HOST: cicdtoolbox-db.internal.provider.test 
+      KC_DB_URL_PORT: 5432 
+      KC_DB_SCHEMA: public
+      KC_DB_USERNAME: '${keycloak_db_user}'
+      KC_DB_PASSWORD: '${keycloak_db_password}' 
+      KC_HOSTNAME: keycloak.services.provider.test 
+      KC_HTTPS_CERTIFICATE_FILE: '/etc/x509/https/tls.crt'
+      KC_HTTPS_CERTIFICATE_KEY_FILE: '/etc/x509/https/tls.key'
+      QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY: 'true' 
+      JDBC_PARAMS: ssl=true&sslmode=verify-ca&sslrootcert=/etc/pki/ca-trust/source/anchors/ca.crt
+    secrets:
+      - source: keycloak_key
+        target: /etc/x509/https/tls.key
+      - source: keycloak_crt
+        target: /etc/x509/https/tls.crt
+    networks:
+      internal:
+        ipv4_address: 172.16.10.11
+    expose:
+      - 8080
+      - 8443
+    ports:
+      - '8080:8080'
+      - '8443:8443'
+    healthcheck:
+      test: 'curl --head --insecure -fSs https://172.16.10.11:9000/health/ready'
+      start_period: 60s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - cicdtoolbox-db.internal.provider.test
+

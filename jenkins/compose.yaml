@@ -1,0 +1,52 @@
+volumes:
+  jenkins_certs: null
+  jenkins_data: null
+  jenkins_conf: null
+
+secrets:
+  jenkins_key:
+    file: ./vault/certs/jenkins.tooling.provider.test.pem
+  jenkins_crt:
+    file: ./vault/certs/jenkins.tooling.provider.test.crt
+
+services:
+  jenkins.tooling.provider.test:
+    container_name: jenkins.tooling.provider.test
+    build: ./jenkins
+    restart: unless-stopped
+    privileged: true
+    user: root
+    networks:
+      internal:
+        ipv4_address: 172.16.11.8
+    environment:
+      - 'JENKINS_ADMIN_ID=${jenkins_admin}'
+      - 'JENKINS_ADMIN_PASSWORD=${jenkins_admin_password}'
+      - 'NETCICD_PASSWORD=${default_user_password}'
+      - 'GIT_PASSWORD=${git_password}'
+      - GITEA_IP=172.16.11.3
+      - JENKINS_IP=172.16.11.8
+      - NEXUS_IP=172.16.11.9
+      - 'JENKINS_NEXUS_PASSWORD=${jenkins_nexus_password}'
+    secrets:
+      - source: jenkins_key
+        target: /var/jenkins_home/jenkins.tooling.provider.test.pem
+      - source: jenkins_crt
+        target: /var/jenkins_home/jenkins.tooling.provider.test.crt
+    volumes:
+      - 'jenkins_certs:/certs/client'
+      - 'jenkins_data:/var/jenkins_home'
+      - 'jenkins_conf:/var/jenkins_conf'
+    expose: 
+      - 8084
+      - '50000'
+    ports:
+      - '8084:8084'
+    depends_on:
+      - keycloak.services.provider.test
+    healthcheck:
+      test: 'curl --insecure -fSs https://jenkins.tooling.provider.test:8084/static/%3Canystring%3E/images/svgs/logo.svg'
+      start_period: 60s
+      interval: 5s
+      timeout: 5s
+      retries: 5
