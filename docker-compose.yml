@@ -77,10 +77,6 @@ secrets:
     file: ./vault/certs/nexus.tooling.provider.test.pem
   nexus_crt:
     file: ./vault/certs/nexus.tooling.provider.test.crt
-  pulp_key:
-    file: ./vault/certs/pulp.tooling.provider.test.pem
-  pulp_crt:
-    file: ./vault/certs/pulp.tooling.provider.test.crt
 
 services:
   cicdtoolbox-db.internal.provider.test:
