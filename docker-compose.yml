@@ -1,10 +1,13 @@
-version: '3.9'
 networks:
   internal:
     driver: bridge
     ipam:
       config:
         - subnet: 172.16.8.0/21
+
+include:
+  - pulp/compose.yaml
+
 volumes:
   cicdtoolbox_db_data: null
   cicdtoolbox_db_conf: null
@@ -22,10 +25,6 @@ volumes:
   vault-policies: null
   vault-data: null
   vault-logs: null
-  pulp-settings: null
-  pulp-pgsql: null
-  pulp-storage: null
-  pulp-containers: null
 
 secrets:
   ca_crt:
@@ -389,41 +388,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-  pulp.tooling.provider.test:
-    container_name: pulp.tooling.provider.test
-    build: pulp
-    restart: unless-stopped
-    init: false
-    stop_signal: SIGINT
-    stop_grace_period: 15s
-    # user: '${default_user}'
-    environment:
-      CONTENT_ORIGIN: 'https://pulp.tooling.provider.test'
-      PULP_UI: 'true'
-      PULP_SECRET_KEY: 'secret'
-      PULP_HTTPS: true
-    secrets:
-      - source: pulp_key
-        target: /etc/pki/tls/private/pulp_webserver.key
-      - source: pulp_crt
-        target: /etc/pki/tls/certs/pulp_webserver.crt
-    volumes:
-      - 'pulp-settings:/etc/pulp'
-      - 'pulp-pgsql:/var/lib/pgsql'
-      - 'pulp-storage:/var/lib/pulp'
-      - 'pulp-containers:/var/lib/containers'
-    devices:
-      - '/dev/fuse'
-    networks:
-      internal:
-        ipv4_address: 172.16.11.10
-    ports:
-      - '443:443'
-    expose:
-      - 8002
-    depends_on:
-      - keycloak.services.provider.test
 
   consul.internal.provider.test:
     container_name: consul.internal.provider.test
