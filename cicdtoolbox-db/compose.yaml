@@ -4,14 +4,14 @@ volumes:
 
 secrets:
   cicdtoolbox-db_key:
-    file: ./vault/certs/cicdtoolbox-db.internal.provider.test.pem
+    file: ../vault/certs/cicdtoolbox-db.internal.provider.test.pem
   cicdtoolbox-db_crt:
-    file: ./vault/certs/cicdtoolbox-db.internal.provider.test.crt
+    file: ../vault/certs/cicdtoolbox-db.internal.provider.test.crt
 
 services:
   cicdtoolbox-db.internal.provider.test:
     container_name: cicdtoolbox-db.internal.provider.test
-    build: cicdtoolbox-db
+    build: .
     command: |
       -c ssl=on  -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key
     restart: unless-stopped

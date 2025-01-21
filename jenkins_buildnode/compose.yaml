@@ -1,12 +1,12 @@
 secrets:
   dev_jenkins_secret:
-    file: ./jenkins_buildnode/Dev_secret.txt
+    file: ./Dev_secret.txt
   test_jenkins_secret:
-    file: ./jenkins_buildnode/Test_secret.txt
+    file: ./Test_secret.txt
   acc_jenkins_secret:
-    file: ./jenkins_buildnode/Acc_secret.txt
+    file: ./Acc_secret.txt
   prod_jenkins_secret:
-    file: ./jenkins_buildnode/Prod_secret.txt
+    file: ./Prod_secret.txt
   build-dev_key:
     file: ./vault/certs/build-dev.delivery.provider.test.pem
   build-dev_crt:
@@ -28,7 +28,7 @@ services:
   build-dev.delivery.provider.test:
     container_name: build-dev.delivery.provider.test
     build:
-      context: ./jenkins_buildnode
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     init: true
@@ -57,7 +57,7 @@ services:
   build-test.delivery.provider.test:
     container_name: build-test.delivery.provider.test
     build:
-      context: ./jenkins_buildnode
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     init: true
@@ -83,7 +83,7 @@ services:
   build-acc.delivery.provider.test:
     container_name: build-acc.delivery.provider.test
     build:
-      context: ./jenkins_buildnode
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     init: true
@@ -109,7 +109,7 @@ services:
   build-prod.delivery.provider.test:
     container_name: build-prod.delivery.provider.test
     build:
-      context: ./jenkins_buildnode
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     init: true

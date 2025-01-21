@@ -1,8 +1,8 @@
 secrets:
   keycloak_key:
-    file: ./vault/certs/keycloak.services.provider.test.pem
+    file: ../vault/certs/keycloak.services.provider.test.pem
   keycloak_crt:
-    file: ./vault/certs/keycloak.services.provider.test.crt
+    file: ../vault/certs/keycloak.services.provider.test.crt
 
 services:
   keycloak.services.provider.test:

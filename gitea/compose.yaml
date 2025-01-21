@@ -4,14 +4,14 @@ volumes:
 
 secrets:
   gitea_key:
-    file: ./vault/certs/gitea.tooling.provider.test.pem
+    file: ../vault/certs/gitea.tooling.provider.test.pem
   gitea_crt:
-    file: ./vault/certs/gitea.tooling.provider.test.crt
+    file: ../vault/certs/gitea.tooling.provider.test.crt
 
 services:
   gitea.tooling.provider.test:
     container_name: gitea.tooling.provider.test
-    build: gitea
+    build: .
     depends_on:
       - cicdtoolbox-db.internal.provider.test
       - keycloak.services.provider.test

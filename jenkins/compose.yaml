@@ -5,14 +5,14 @@ volumes:
 
 secrets:
   jenkins_key:
-    file: ./vault/certs/jenkins.tooling.provider.test.pem
+    file: ../vault/certs/jenkins.tooling.provider.test.pem
   jenkins_crt:
-    file: ./vault/certs/jenkins.tooling.provider.test.crt
+    file: ../vault/certs/jenkins.tooling.provider.test.crt
 
 services:
   jenkins.tooling.provider.test:
     container_name: jenkins.tooling.provider.test
-    build: ./jenkins
+    build: .
     restart: unless-stopped
     privileged: true
     user: root

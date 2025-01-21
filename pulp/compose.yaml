@@ -6,14 +6,14 @@ volumes:
 
 secrets:
   pulp_key:
-    file: ./vault/certs/pulp.tooling.provider.test.pem
+    file: ../vault/certs/pulp.tooling.provider.test.pem
   pulp_crt:
-    file: ./vault/certs/pulp.tooling.provider.test.crt
+    file: ../vault/certs/pulp.tooling.provider.test.crt
 
 services:
   pulp.tooling.provider.test:
     container_name: pulp.tooling.provider.test
-    build: pulp
+    build: .
     restart: unless-stopped
     init: false
     stop_signal: SIGINT

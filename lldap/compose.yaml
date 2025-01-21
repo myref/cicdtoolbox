@@ -3,9 +3,9 @@ volumes:
 
 secrets:
   ldap_key:
-    file: ./vault/certs/ldap.iam.provider.test.pem
+    file: ../vault/certs/ldap.iam.provider.test.pem
   ldap_crt:
-    file: ./vault/certs/ldap.iam.provider.test.crt
+    file: ../vault/certs/ldap.iam.provider.test.crt
 
 services:
   ldap.iam.provider.test:
@@ -23,7 +23,7 @@ services:
       - source: ldap_crt
         target: /data/cert.crt
     volumes:
-      - './lldap/data:/data'
+      - './data:/data'
     environment:
       - UID=1000
       - GID=1000
