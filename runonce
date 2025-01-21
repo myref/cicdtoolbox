@@ -1,0 +1,260 @@
+#!/bin/bash 
+
+sp="/-\|"
+sc=0
+spin() {
+   printf -- "${sp:sc++:1}  ( ${t} sec.) \r"
+   ((sc==${#sp})) && sc=0
+   sleep 1
+   let t+=1
+}
+
+endspin() {
+   printf "\r%s\n" "$@"
+}
+
+echo "****************************************************************************************************************"
+echo " Start clean" 
+echo "****************************************************************************************************************"
+docker compose --project-name cicd-toolbox down --remove-orphans
+docker compose --project-name cicd-toolbox rm -f
+docker volume rm $(docker volume ls -q)
+rm -f *_token
+rm -f install_tests/log.html
+rm -f install_tests/output.xml
+rm -f install_tests/report.html
+rm -f install_tests/*.png
+rm -f install_tests/*.log
+rm -rf install_log/*
+rm *_log.html
+rm *_report.html
+rm *.xml
+echo " " 
+echo "****************************************************************************************************************"
+echo " Cleaning LLDAP" 
+echo "****************************************************************************************************************"
+rm -f lldap/data/*.crt
+rm -rf lldap/data/*.pem
+echo " " 
+echo "****************************************************************************************************************"
+echo " Cleaning database" 
+echo "****************************************************************************************************************"
+rm -f cicdtoolbox-db/docker-entrypoint-initdb-resources/*
+echo " " 
+echo "****************************************************************************************************************"
+echo " Cleaning Jenkins" 
+echo "****************************************************************************************************************"
+rm -f jenkins/jenkins.tooling*
+rm -f jenkins_buildnode/*_secret.txt
+rm -f jenkins_buildnode/agent.jar
+rm -f jenkins_buildnode/jenkins-cli.jar
+rm -f jenkins_buildnode/*_token
+echo " " 
+
+echo "****************************************************************************************************************"
+echo " Making sure all containers are reachable locally with the name in the"
+echo " hosts file."
+echo "****************************************************************************************************************"
+echo " " 
+sudo chmod o+w /etc/hosts
+
+if grep -q "cicdtoolbox-db" /etc/hosts; then
+    echo " CICDtoolbox-db exists in /etc/hosts, removing..."
+    sudo sed -i '/cicdtoolbox-db.internal.provider.test/d' /etc/hosts
+fi
+echo " Add CICDtoolbox-db to /etc/hosts"
+sudo echo "172.16.9.2   cicdtoolbox-db.internal.provider.test" >> /etc/hosts
+
+
+if grep -q "jenkins" /etc/hosts; then
+    echo " Jenkins exists in /etc/hosts, removing..."
+    sudo sed -i '/jenkins.tooling.provider.test/d' /etc/hosts
+fi
+echo " Add Jenkins to /etc/hosts"
+sudo echo "172.16.11.8   jenkins.tooling.provider.test" >> /etc/hosts
+
+if grep -q "build-dev" /etc/hosts; then
+    echo " Jenkins build-dev node exists in /etc/hosts, removing..."
+    sudo sed -i '/build-dev.delivery.provider.test/d' /etc/hosts
+fi
+echo " Add Jenkins build-dev node to /etc/hosts"
+sudo echo "172.16.12.2   build-dev.delivery.provider.test" >> /etc/hosts
+
+if grep -q "build-test" /etc/hosts; then
+    echo " Jenkins build-test node exists in /etc/hosts, removing..."
+    sudo sed -i '/build-test.delivery.provider.test/d' /etc/hosts
+fi
+echo " Add Jenkins build-test node to /etc/hosts"
+sudo echo "172.16.12.3   build-test.delivery.provider.test" >> /etc/hosts
+
+if grep -q "build-acc" /etc/hosts; then
+    echo " Jenkins build-acc node exists in /etc/hosts, removing..."
+    sudo sed -i '/build-acc.delivery.provider.test/d' /etc/hosts
+fi
+echo " Add Jenkins build-acc node to /etc/hosts"
+sudo echo "172.16.12.4   build-acc.delivery.provider.test" >> /etc/hosts
+
+if grep -q "build-prod" /etc/hosts; then
+    echo " Jenkins build-prod node exists in /etc/hosts, removing..."
+    sudo sed -i '/build-prod.delivery.provider.test/d' /etc/hosts
+fi
+echo " Add Jenkins build-prod node to /etc/hosts"
+sudo echo "172.16.12.5   build-prod.delivery.provider.test" >> /etc/hosts
+
+if grep -q "ldap" /etc/hosts; then
+    echo " LLDAP exists in /etc/hosts, removing..."
+    sudo sed -i '/ldap.iam.provider.test/d' /etc/hosts
+fi
+echo " Add LLDAP to /etc/hosts"
+sudo echo "172.16.8.11   ldap.iam.provider.test" >> /etc/hosts
+
+if grep -q "pulp" /etc/hosts; then
+    echo " Pulp exists in /etc/hosts, removing..."
+    sudo sed -i '/pulp.tooling.provider.test/d' /etc/hosts
+fi
+echo " Add Pulp to /etc/hosts"
+sudo echo "172.16.11.10   pulp.tooling.provider.test" >> /etc/hosts
+
+if grep -q "seleniumffhost" /etc/hosts; then
+    echo "Selenium Firefox testhost exists in /etc/hosts, removing..."
+    sudo sed -i '/seleniumffhost.internal.provider.test/d' /etc/hosts
+fi
+echo " Add Selenium Firefox testhost to /etc/hosts"
+sudo echo "172.16.10.100 seleniumffhost.internal.provider.test" >> /etc/hosts
+
+if grep -q "seleniumgchost" /etc/hosts; then
+    echo "Selenium Google Chrome testhost exists in /etc/hosts, removing..."
+    sudo sed -i '/seleniumgchost.internal.provider.test/d' /etc/hosts
+fi
+echo " Add Selenium Google Chrome testhost to /etc/hosts"
+sudo echo "172.16.10.101 seleniumgchost.internal.provider.test" >> /etc/hosts
+
+sudo chmod o-w /etc/hosts
+
+echo "****************************************************************************************************************"
+echo " Setting up Chrome host for Selenium" 
+echo "****************************************************************************************************************"
+docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumgchost.internal.provider.test
+echo "****************************************************************************************************************"
+echo " Setting up Firefox host for Selenium" 
+echo "****************************************************************************************************************"
+docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumffhost.internal.provider.test
+echo "****************************************************************************************************************"
+echo " Setting up Vault" 
+echo "****************************************************************************************************************"
+vault/vault_install.sh | tee install_log/vault_create.log
+echo " " 
+echo "****************************************************************************************************************"
+echo " Creating LDAP server" 
+echo "****************************************************************************************************************"
+docker compose --project-name cicd-toolbox up -d --build --remove-orphans ldap.iam.provider.test
+echo " "
+echo "****************************************************************************************************************"
+echo " Creating database"
+echo "****************************************************************************************************************"
+DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build cicdtoolbox-db.internal.provider.test
+sleep 10
+echo " " 
+echo "****************************************************************************************************************"
+echo " Creating Keycloak "
+echo "****************************************************************************************************************"
+keycloak/keycloak_install.sh ${local_admin_user} ${local_admin_password} | tee install_log/keycloak_install.log
+echo "****************************************************************************************************************"
+echo " Creating keycloak-vault integration"
+echo "****************************************************************************************************************"
+vault/vault_install_post_keycloak.sh
+echo "****************************************************************************************************************"
+echo " Saving gitea certificates"
+echo "****************************************************************************************************************"
+cp vault/certs/gitea* gitea/
+echo "****************************************************************************************************************"
+echo " Creating gitea setup"
+echo "****************************************************************************************************************"
+gitea/gitea_install.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_create.log
+gitea/gitea_users.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_users.log
+echo " " 
+echo "****************************************************************************************************************"
+echo " Starting Jenkins"
+echo "****************************************************************************************************************"
+jenkins/jenkins_install.sh
+echo " "
+echo "****************************************************************************************************************"
+echo " Starting Pulp"
+echo "****************************************************************************************************************"
+pulp/pulp_install.sh ${local_admin_password} | tee install_log/pulp_create.log
+echo " "
+echo "****************************************************************************************************************"
+echo " Finalizing install via ROBOT"
+echo "****************************************************************************************************************"
+robot --variable VALID_PASSWORD:${netcicd_pwd} -d install_log -o 20_finalize.xml -l 20_finalize_log.html -r 20_finalize_report.html finalize_install.robot
+echo " " 
+echo "****************************************************************************************************************"
+echo " Validating install"
+echo "****************************************************************************************************************"
+robot --variable VALID_PASSWORD:${netcicd_pwd} -d install_log -o 100_install_test.xml -l 100_install_test_log.html -r 100_install_test_report.html install_tests
+echo " " 
+echo "****************************************************************************************************************"
+echo " Running trivy vulnerability scanner (https://github.com/aquasecurity/trivy)" 
+echo "****************************************************************************************************************"
+if command -v trivy &> /dev/null
+then
+echo "****************************************************************************************************************"
+echo " Toolbox files" 
+echo "****************************************************************************************************************"
+trivy fs --security-checks vuln,config . | tee install_log/trivy_create.log
+
+echo "****************************************************************************************************************"
+echo " Gitea" 
+echo "****************************************************************************************************************"
+trivy image gitea/gitea:rootless | tee -a install_log/trivy_create.log
+echo "****************************************************************************************************************"
+echo " Jenkins" 
+echo "****************************************************************************************************************"
+trivy image jenkins/jenkins:lts | tee -a install_log/trivy_create.log
+echo "****************************************************************************************************************"
+echo " Keycloak" 
+echo "****************************************************************************************************************"
+trivy image jboss/keycloak:latest | tee -a install_log/trivy_create.log
+echo "****************************************************************************************************************"
+echo " PostgreSQL" 
+echo "****************************************************************************************************************"
+trivy image postgres:latest | tee -a install_log/trivy_create.log
+else
+    echo "trivy is not installed"
+fi
+echo "****************************************************************************************************************"
+echo " Consolidating all robot test reports into one"
+echo "****************************************************************************************************************"
+rebot --norpa --output runonce.xml --log runonce_log.html --report runonce_report.html  ./install_log/*.xml
+echo "****************************************************************************************************************"
+echo " The pipeline uses the default Cisco DevNet CML Sandbox credentials developer/C1sco12345 to log in to CML."
+echo " You may change this to your own credentials in:"
+echo " "
+echo " http://jenkins.tooling.provider.test:8084/credentials/store/system/domain/_/credential/CML-SIM-CRED/update"
+echo " "
+echo " Due to limitations in Keycloak, do **not** use docker compose --project-name cicd-toolbox down. Keycloak will no longer function after this."
+echo " "
+echo " Stop the environment with ./down, start with ./up"
+echo " "
+echo "****************************************************************************************************************"
+echo "CICD-toolbox install done "
+echo " "
+echo "You can read the install test report in install_tests/report.html"
+echo " "
+echo "You can reach the servers on:"
+echo " "
+echo " Vault:       https://vault.internal.provider.test:8200"
+echo " LLDAP:       http://ldap.iam.provider.test:17170"
+echo " Keycloak:    https://keycloak.services.provider.test:8443"
+echo " Gitea:       https://gitea.tooling.provider.test:3000"
+echo " Jenkins:     https://jenkins.tooling.provider.test:8084"
+echo " Pulp :       https://pulp.tooling.provider.test/ui/status/"
+echo " Firefox:     http://seleniumffhost.internal.provider.test:4444 (Dashboard)"
+echo "              http://seleniumffhost.internal.provider.test:7900 (NoVNC)"
+echo " Chrome:      http://seleniumgchost.internal.provider.test:4444 (Dashboard)"
+echo "              http://seleniumgchost.internal.provider.test:7900 (NoVNC)"
+echo " "
+echo " The installation test report generated by Robotframework can be found here: file:///home/$USER/CICD-toolbox/runonce_report.html" 
+echo "****************************************************************************************************************"
+echo "Cleaning up"
+echo "****************************************************************************************************************"

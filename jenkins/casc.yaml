@@ -1,0 +1,409 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - usernamePassword:
+          description: "Credentials to start simulation in VIRL/CML"
+          id: "CML-SIM-CRED"
+          password: ${CML_PASSWORD}
+          scope: GLOBAL
+          username: ${CML_USER}
+      - usernamePassword:
+          description: "Credentials to be used to log into Gitea from Jenkins to retrieve\
+            \ the NetCICD repo."
+          id: "jenkins-pulp"
+          password: ${JENKINS_PULP_PASSWORD}
+          scope: GLOBAL
+          username: "admin"
+      - usernamePassword:
+          description: "Credentials to be used to log into Jenkins from Jenkins to configure\
+            \ the NetCICD agent."
+          id: "jenkins-jenkins"
+          scope: GLOBAL
+          username: "jenkins-jenkins"
+      - usernamePassword:
+          description: "Credentials to be used to get an access token from Keycloak."
+          id: "jenkins-git"
+          password: ${JENKINS_PULP_PASSWORD}
+          scope: GLOBAL
+          username: "Jenkins"
+      - usernamePassword:
+          description: "Credentials to let the jenkins user on the buildhost log on\
+            \ to the generated machine"
+          id: "jenkins-ansible-dev"
+          password: ${JENKINS_DEV_LOGON_PASSWORD}
+          scope: GLOBAL
+          username: "myapp"
+jenkins:
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+        - entries:
+          - user: "jenkins-jenkins"
+          name: "localAgentManager"
+          pattern: ".*"
+          permissions:
+          - "Overall/Read"
+          - "Agent/Create"
+          - "Agent/Delete"
+          - "Agent/Connect"        
+        - entries:
+          - user: "jenkins-readonly"
+          - user: "jenkins-git"
+          name: "localReadonly"
+          pattern: ".*"
+          permissions:
+          - "Overall/Read"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Job/Read"
+          - "Job/ViewStatus"
+          - "View/Read"
+          - "Lockable Resources/View"
+        - entries:
+          - group: "jenkins-admin"
+          name: "localAdmin"
+          pattern: ".*"
+          permissions:
+          - "Job/Move"
+          - "Job/Build"
+          - "Lockable Resources/View"
+          - "Credentials/Delete"
+          - "Credentials/ManageDomains"
+          - "Lockable Resources/Unlock"
+          - "View/Create"
+          - "Agent/Configure"
+          - "Job/Read"
+          - "Credentials/Update"
+          - "Agent/Create"
+          - "Job/Delete"
+          - "Agent/Build"
+          - "View/Configure"
+          - "Agent/Provision"
+          - "SCM/Tag"
+          - "Job/Create"
+          - "Job/Discover"
+          - "Credentials/View"
+          - "Agent/Connect"
+          - "Agent/Delete"
+          - "Run/Replay"
+          - "Agent/Disconnect"
+          - "Run/Delete"
+          - "Job/Cancel"
+          - "Overall/Read"
+          - "Run/Update"
+          - "Credentials/Create"
+          - "Overall/Administer"
+          - "View/Delete"
+          - "Job/Configure"
+          - "Job/Workspace"
+          - "View/Read"
+          - "Job/ViewStatus"
+        - entries:
+          - group: "jenkins-user"
+          name: "localUser"
+          pattern: ".*"
+          permissions:
+          - "Job/Move"
+          - "Job/Build"
+          - "Credentials/Delete"
+          - "View/Create"
+          - "Agent/Configure"
+          - "Job/Read"
+          - "Credentials/Update"
+          - "Agent/Create"
+          - "Job/Delete"
+          - "Agent/Build"
+          - "View/Configure"
+          - "Agent/Provision"
+          - "SCM/Tag"
+          - "Job/Create"
+          - "Job/Discover"
+          - "Credentials/View"
+          - "Agent/Connect"
+          - "Agent/Delete"
+          - "Run/Replay"
+          - "Agent/Disconnect"
+          - "Run/Delete"
+          - "Job/Cancel"
+          - "Overall/Read"
+          - "Run/Update"
+          - "Credentials/Create"
+          - "View/Delete"
+          - "Job/Configure"
+          - "Job/Workspace"
+          - "View/Read"
+          - "Job/ViewStatus"
+        items:
+        - entries:
+          - group: "jenkins-netcicd-dev"
+          name: "NetCICD-dev"
+          pattern: "^jenkins-*cicd-dev$"
+          permissions:
+          - "Credentials/Create"
+          - "Credentials/Delete"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Job/Build"
+          - "Job/Cancel"
+          - "Job/Configure"
+          - "Job/Create"
+          - "Job/Delete"
+          - "Job/Read"
+          - "Job/ViewStatus"
+          - "Job/Workspace"
+          - "Run/Delete"
+          - "Run/Replay"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-cicdtoolbox-dev"
+          name: "CICD-toolbox-dev"
+          pattern: "^jenkins-cicdtoolbox-dev$"
+          permissions:
+          - "Credentials/Create"
+          - "Credentials/Delete"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Job/Build"
+          - "Job/Cancel"
+          - "Job/Configure"
+          - "Job/Create"
+          - "Job/Delete"
+          - "Job/Read"
+          - "Job/ViewStatus"
+          - "Job/Workspace"
+          - "Run/Delete"
+          - "Run/Replay"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group:  "jenkins-netcicd-run"
+          name: "NetCICD-run"
+          pattern: "^jenkins-*cicd-run$"
+          permissions:
+          - "Credentials/View"
+          - "Job/Build"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-cicdtoolbox-run"
+          name: "CICD-toolbox-run"
+          pattern: "^jenkins-cicdtoolbox-run$"
+          permissions:
+          - "Credentials/View"
+          - "Job/Build"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-OsCICD-dev"
+          name: "myapp Radar OS development-dev"
+          pattern: "^jenkins-OsCICD-dev$"
+          permissions:
+          - "Credentials/Create"
+          - "Credentials/Delete"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Job/Build"
+          - "Job/Cancel"
+          - "Job/Configure"
+          - "Job/Create"
+          - "Job/Delete"
+          - "Job/Read"
+          - "Job/ViewStatus"
+          - "Job/Workspace"
+          - "Run/Delete"
+          - "Run/Replay"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-OsCICD-run"
+          name: "myapp Radar OS development-run"
+          pattern: "^jenkins-OsCICD-run$"
+          permissions:
+          - "Credentials/View"
+          - "Job/Build"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-OsDeploy-dev"
+          name: "myapp Radar deployment development-dev"
+          pattern: "^jenkins-OsDeploy-dev$"
+          permissions:
+          - "Credentials/Create"
+          - "Credentials/Delete"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Job/Build"
+          - "Job/Cancel"
+          - "Job/Configure"
+          - "Job/Create"
+          - "Job/Delete"
+          - "Job/Read"
+          - "Job/ViewStatus"
+          - "Job/Workspace"
+          - "Run/Delete"
+          - "Run/Replay"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-OsDeploy-run"
+          name: "myapp Radar deployment development-run"
+          pattern: "^jenkins-OsDeploy-run$"
+          permissions:
+          - "Credentials/View"
+          - "Job/Build"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-OsTest-dev"
+          name: "myapp Radar deployment development-dev"
+          pattern: "^jenkins-OsTest-dev$"
+          permissions:
+          - "Credentials/Create"
+          - "Credentials/Delete"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Job/Build"
+          - "Job/Cancel"
+          - "Job/Configure"
+          - "Job/Create"
+          - "Job/Delete"
+          - "Job/Read"
+          - "Job/ViewStatus"
+          - "Job/Workspace"
+          - "Run/Delete"
+          - "Run/Replay"
+          - "Run/Update"
+          - "SCM/Tag"
+        - entries:
+          - group: "jenkins-OsTest-run"
+          name: "myapp Radar deployment development-run"
+          pattern: "^jenkins-OsTest-run$"
+          permissions:
+          - "Credentials/View"
+          - "Job/Build"
+          - "Run/Update"
+          - "SCM/Tag"
+  labelAtoms:
+  - name: "Acc"
+  - name: "Dev"
+  - name: "Prod"
+  - name: "Test"
+  nodes:
+  - permanent:
+      labelString: "Dev"
+      launcher:
+        inbound:
+          workDirSettings:
+            disabled: false
+            failIfWorkDirIsMissing: false
+            internalDir: "remoting"
+            workDirPath: "/home/jenkins"
+      name: "Dev"
+      nodeDescription: "Build node for Dev jobs"
+      numExecutors: 4
+      remoteFS: "/home/jenkins"
+      retentionStrategy: "always"
+  - permanent:
+      labelString: "Test"
+      launcher:
+        inbound:
+          workDirSettings:
+            disabled: false
+            failIfWorkDirIsMissing: false
+            internalDir: "remoting"
+            workDirPath: "/home/jenkins"
+      name: "Test"
+      nodeDescription: "Build node for Test jobs"
+      numExecutors: 4
+      remoteFS: "/home/jenkins"
+      retentionStrategy: "always"
+  - permanent:
+      labelString: "Acc"
+      launcher:
+        inbound:
+          workDirSettings:
+            disabled: false
+            failIfWorkDirIsMissing: false
+            internalDir: "remoting"
+            workDirPath: "/home/jenkins"
+      name: "Acc"
+      nodeDescription: "Build node for Acc jobs"
+      numExecutors: 4
+      remoteFS: "/home/jenkins"
+      retentionStrategy: "always"
+  - permanent:
+      labelString: "Prod"
+      launcher:
+        inbound:
+          workDirSettings:
+            disabled: false
+            failIfWorkDirIsMissing: false
+            internalDir: "remoting"
+            workDirPath: "/home/jenkins"
+      name: "Prod"
+      nodeDescription: "Build node for Prod jobs"
+      numExecutors: 4
+      remoteFS: "/home/jenkins"
+      retentionStrategy: "always"
+  numExecutors: 0
+  projectNamingStrategy:
+    roleBased:
+      forceExistingJobs: true
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: true
+  securityRealm:
+    oic:
+      allowedTokenExpirationClockSkewSeconds: 0
+      clientId: "Jenkins"
+      clientSecret: oic_secret
+      disableSslVerification: false
+      emailFieldName: "email"
+      escapeHatchEnabled: true
+      escapeHatchGroup: "local-admin"
+      escapeHatchSecret: ${JENKINS_ADMIN_PASSWORD}
+      escapeHatchUsername: ${JENKINS_ADMIN_ID}
+      fullNameFieldName: "name"
+      groupsFieldName: "groupmembership"
+      logoutFromOpenidProvider: true
+      postLogoutRedirectUrl: "https://jenkins.tooling.provider.test:8084"
+      sendScopesInTokenRequest: true
+      serverConfiguration:
+        wellKnown:
+          wellKnownOpenIDConfigurationUrl: "https://keycloak.services.provider.test:8443/realms/cicdtoolbox/.well-known/openid-configuration"
+      userNameField: "preferred_username"
+  globalNodeProperties:
+    - envVars:
+        env:
+        # - key: "CML_URL"
+        #   value: ${CML_URL}
+        - key: "GITEA_IP"
+          value: ${GITEA_IP}
+        - key: "JENKINS_IP"
+          value: ${JENKINS_IP}
+        - key: "PULP_IP"
+          value: ${PULP_IP}
+security:
+  scriptApproval:
+    approvedSignatures:
+    - "method hudson.model.Run getLogFile"
+    - "method hudson.slaves.SlaveComputer getJnlpMac"
+    - "method jenkins.model.Jenkins getComputer java.lang.String"
+    - "method org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper getRawBuild"
+    - "staticMethod jenkins.model.Jenkins getInstance"
+    - "staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods getText java.io.File"
+unclassified:
+  location:
+    url: https://jenkins.tooling.provider.test:8084/
+  giteaServers:
+    servers:
+    - displayName: "Gitea"
+      manageHooks: false
+      serverUrl: "https://gitea.tooling.provider.test:3000"
+  timestamper:
+    allPipelines: true
+    elapsedTimeFormat: "'<b>'HH:mm:ss.S'</b> '"
+    systemTimeFormat: "'<b>'HH:mm:ss'</b> '" 

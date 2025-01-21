@@ -1,0 +1,12 @@
+#
+# This profile is for the domain whose UUID matches this file.
+#
+
+#include <tunables/global>
+
+profile LIBVIRT_TEMPLATE flags=(attach_disconnected) {
+  #include <abstractions/libvirt-qemu>
+  #Allow access to local storage pool
+  "/home/jenkins/cluster_storage/" r,
+  "/home/jenkins/cluster_storage/**" rwk,
+}
