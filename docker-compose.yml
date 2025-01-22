@@ -33,7 +33,7 @@ services:
       internal:
         ipv4_address: 172.16.10.100
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444/grid/api/proxy"] 
+      test: ["CMD", "wget", "--spider", "http://seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444"] 
       interval: 10s
       timeout: 5s
       retries: 3
@@ -52,7 +52,7 @@ services:
       internal:
         ipv4_address: 172.16.10.101
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444/grid/api/proxy"] 
+      test: ["CMD", "wget", "--spider", "http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444"] 
       interval: 10s
       timeout: 5s
       retries: 3
