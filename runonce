@@ -137,11 +137,11 @@ sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Setting up Chrome host for Selenium" 
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumgchost
 echo "****************************************************************************************************************"
 echo " Setting up Firefox host for Selenium" 
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumffhost
 echo "****************************************************************************************************************"
 echo " Setting up Vault" 
 echo "****************************************************************************************************************"
