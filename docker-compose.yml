@@ -6,13 +6,13 @@ networks:
         - subnet: 172.16.8.0/21
 
 include:
-  - cicdtoolbox-db/compose.yaml
-  - gitea/compose.yaml
-  - jenkins/compose.yaml
-  - jenkins_buildnode/compose.yaml
-  - keycloak/compose.yaml
-  - lldap/compose.yaml
-  - pulp/compose.yaml
+  # - cicdtoolbox-db/compose.yaml
+  # - gitea/compose.yaml
+  # - jenkins/compose.yaml
+  # - jenkins_buildnode/compose.yaml
+  # - keycloak/compose.yaml
+  # - lldap/compose.yaml
+  # - pulp/compose.yaml
   - vault/compose.yaml
 
 secrets:
@@ -20,7 +20,7 @@ secrets:
     file: ./vault/certs/ca.crt
 
 services:
-  seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  seleniumffhost.internal:
     container_name: seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     image: 'selenium/standalone-firefox:latest'
     restart: unless-stopped
@@ -33,7 +33,7 @@ services:
       internal:
         ipv4_address: 172.16.10.100
 
-  seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  seleniumgchost.internal:
     container_name: seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     image: 'selenium/standalone-chrome:latest'
     restart: unless-stopped
