@@ -76,13 +76,13 @@ if grep -q "consul" /etc/hosts; then
         echo " Consul exists in /etc/hosts, removing..."
         echo "sudo sed -i '/consul.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
         echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elseif [ $install_mode == "local" ]; then
+    elif [ $install_mode == "local" ]; 
         echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
     fi
 else
     if [ $install_mode == "vm" ]; then
         echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elseif [ $install_mode == "local" ]; then
+    elif [ $install_mode == "local" ]; then
         echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
     fi
 fi
@@ -94,13 +94,13 @@ if grep -q "Vault" /etc/hosts; then
         echo " Vault exists in /etc/hosts, removing..."
         echo "sudo sed -i '/vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
         echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elseif [ $install_mode == "local" ]; then
+    elif [ $install_mode == "local" ]; then
         echo "172.16.9.4   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
     fi
 else
     if [ $install_mode == "vm" ]; then
         echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elseif [ $install_mode == "local" ]; then
+    elif [ $install_mode == "local" ]; then
         echo "172.16.9.4   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
     fi
 fi
