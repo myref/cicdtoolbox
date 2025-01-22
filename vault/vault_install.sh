@@ -76,7 +76,7 @@ if grep -q "consul" /etc/hosts; then
         echo " Consul exists in /etc/hosts, removing..."
         echo "sudo sed -i '/consul.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
         echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ $install_mode == "local" ]; 
+    elif [ $install_mode == "local" ]; then
         echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
     fi
 else
