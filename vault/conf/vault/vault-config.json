@@ -1,7 +1,7 @@
 {
   "backend": {
     "consul": {
-      "address": "consul.internal.provider.test:8500",
+      "address": "consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8500",
       "path": "vault/"
     }
   },
@@ -12,5 +12,5 @@
     }
   },
   "ui": true,
-  "api_addr": "http://vault.internal.provider.test:8200"
+  "api_addr": "http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200"
 }

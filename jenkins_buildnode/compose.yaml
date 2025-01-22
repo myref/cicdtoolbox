@@ -8,25 +8,25 @@ secrets:
   prod_jenkins_secret:
     file: ./Prod_secret.txt
   build-dev_key:
-    file: ./vault/certs/build-dev.delivery.provider.test.pem
+    file: ./vault/certs/build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   build-dev_crt:
-    file: ./vault/certs/build-dev.delivery.provider.test.crt
+    file: ./vault/certs/build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
   build-test_key:
-    file: ./vault/certs/build-test.delivery.provider.test.pem
+    file: ./vault/certs/build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   build-test_crt:
-    file: ./vault/certs/build-test.delivery.provider.test.crt
+    file: ./vault/certs/build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
   build-acc_key:
-    file: ./vault/certs/build-acc.delivery.provider.test.pem
+    file: ./vault/certs/build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   build-acc_crt:
-    file: ./vault/certs/build-acc.delivery.provider.test.crt
+    file: ./vault/certs/build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
   build-prod_key:
-    file: ./vault/certs/build-prod.delivery.provider.test.pem
+    file: ./vault/certs/build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   build-prod_crt:
-    file: ./vault/certs/build-prod.delivery.provider.test.crt
+    file: ./vault/certs/build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  build-dev.delivery.provider.test:
-    container_name: build-dev.delivery.provider.test
+  build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
       dockerfile: Dockerfile
@@ -48,14 +48,14 @@ services:
     volumes: 
       - '~/images:/home/jenkins/images'
     depends_on:
-      - jenkins.tooling.provider.test
-      - gitea.tooling.provider.test
+      - jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     networks:
       internal:
         ipv4_address: 172.16.12.2
         
-  build-test.delivery.provider.test:
-    container_name: build-test.delivery.provider.test
+  build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
       dockerfile: Dockerfile
@@ -80,8 +80,8 @@ services:
       internal:
         ipv4_address: 172.16.12.3
 
-  build-acc.delivery.provider.test:
-    container_name: build-acc.delivery.provider.test
+  build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
       dockerfile: Dockerfile
@@ -106,8 +106,8 @@ services:
       internal:
         ipv4_address: 172.16.12.4
 
-  build-prod.delivery.provider.test:
-    container_name: build-prod.delivery.provider.test
+  build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
       dockerfile: Dockerfile

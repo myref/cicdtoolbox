@@ -1,12 +1,12 @@
 secrets:
   keycloak_key:
-    file: ../vault/certs/keycloak.services.provider.test.pem
+    file: ../vault/certs/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   keycloak_crt:
-    file: ../vault/certs/keycloak.services.provider.test.crt
+    file: ../vault/certs/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  keycloak.services.provider.test:
-    container_name: keycloak.services.provider.test
+  keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     command: ["start"]
     restart: unless-stopped
@@ -20,12 +20,12 @@ services:
       KC_METRICS_ENABLED: 'true' 
       KC_DB: postgres
       KC_DB_URL_DATABASE: keycloak 
-      KC_DB_URL_HOST: cicdtoolbox-db.internal.provider.test 
+      KC_DB_URL_HOST: cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} 
       KC_DB_URL_PORT: 5432 
       KC_DB_SCHEMA: public
       KC_DB_USERNAME: '${keycloak_db_user}'
       KC_DB_PASSWORD: '${keycloak_db_password}' 
-      KC_HOSTNAME: keycloak.services.provider.test 
+      KC_HOSTNAME: keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} 
       KC_HTTPS_CERTIFICATE_FILE: '/etc/x509/https/tls.crt'
       KC_HTTPS_CERTIFICATE_KEY_FILE: '/etc/x509/https/tls.key'
       QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY: 'true' 
@@ -51,5 +51,5 @@ services:
       timeout: 5s
       retries: 5
     depends_on:
-      - cicdtoolbox-db.internal.provider.test
+      - cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 

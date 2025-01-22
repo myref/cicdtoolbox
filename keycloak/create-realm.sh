@@ -4,7 +4,7 @@
 cd $HOME/bin
 
 #Create credentials
-./kcadm.sh config credentials --server https://keycloak.services.provider.test:8443 --realm master --user $4 --password $1
+./kcadm.sh config credentials --server https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443 --realm master --user $4 --password $1
 echo "Credentials created"
 
 #add realm
@@ -26,10 +26,10 @@ echo "Realm created"
     -s publicClient=false \
     -s fullScopeAllowed=false \
     -s directAccessGrantsEnabled=true \
-    -s rootUrl=https://vault.internal.provider.test:8200 \
-    -s adminUrl=https://vault.internal.provider.test:8200/ \
-    -s 'redirectUris=[ "https://vault.internal.provider.test:8200/oidc/oidc/callback","https://vault.internal.provider.test:8200/ui/vault/auth/oidc/oidc/callback" ]' \
-    -s 'webOrigins=[ "https://vault.internal.provider.test:8200/" ]' \
+    -s rootUrl=https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200 \
+    -s adminUrl=https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/ \
+    -s 'redirectUris=[ "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/oidc/oidc/callback","https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/ui/vault/auth/oidc/oidc/callback" ]' \
+    -s 'webOrigins=[ "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/" ]' \
     -o --fields id >cicdtoolbox_VAULT
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -93,7 +93,7 @@ echo "Created role-group mapper in the Client Scope"
     -s protocol=openid-connect \
 	-s protocolMapper=oidc-audience-mapper \
     -s consentRequired=false \
-	-s config="{\"included.client.audience\" : \"https://keycloak.services.provider.test:8443/realms/cicdtoolbox\",\"id.token.claim\" : \"false\",\"access.token.claim\" : \"true\"}"
+	-s config="{\"included.client.audience\" : \"https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/realms/cicdtoolbox\",\"id.token.claim\" : \"false\",\"access.token.claim\" : \"true\"}"
 
 # echo "Created audience mapper in the Client Scope" 
 
@@ -112,10 +112,10 @@ echo "Created keycloak-vault installation json"
     -s publicClient=false \
     -s fullScopeAllowed=false \
     -s directAccessGrantsEnabled=true \
-    -s rootUrl=https://gitea.tooling.provider.test:3000 \
-    -s adminUrl=https://gitea.tooling.provider.test:3000/ \
-    -s 'redirectUris=[ "https://gitea.tooling.provider.test:3000/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://gitea.tooling.provider.test:3000/" ]' \
+    -s rootUrl=https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000 \
+    -s adminUrl=https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/ \
+    -s 'redirectUris=[ "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/oauth2/keycloak/callback" ]' \
+    -s 'webOrigins=[ "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/" ]' \
     -o --fields id >cicdtoolbox_GITEA
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -179,10 +179,10 @@ echo "Created role-group mapper in the Client Scope"
     -s directAccessGrantsEnabled=true \
     -s serviceAccountsEnabled=true \
     -s authorizationServicesEnabled=true \
-    -s rootUrl=https://jenkins.tooling.provider.test:8084 \
-    -s adminUrl=https://jenkins.tooling.provider.test:8084/ \
-    -s 'redirectUris=[ "https://jenkins.tooling.provider.test:8084/*" ]' \
-    -s 'webOrigins=[ "https://jenkins.tooling.provider.test:8084/" ]' \
+    -s rootUrl=https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084 \
+    -s adminUrl=https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/ \
+    -s 'redirectUris=[ "https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/*" ]' \
+    -s 'webOrigins=[ "https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/" ]' \
     -o --fields id >cicdtoolbox_JENKINS
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -286,10 +286,10 @@ echo ""
     -s directAccessGrantsEnabled=true \
     -s serviceAccountsEnabled=true \
     -s authorizationServicesEnabled=true \
-    -s rootUrl=https://pulp.tooling.provider.test:8443 \
-    -s adminUrl=https://pulp.tooling.provider.test:8443/ \
-    -s 'redirectUris=[ "https://pulp.tooling.provider.test:8443/*" ]' \
-    -s 'webOrigins=[ "https://pulp.tooling.provider.test:8443/" ]' \
+    -s rootUrl=https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443 \
+    -s adminUrl=https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/ \
+    -s 'redirectUris=[ "https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/*" ]' \
+    -s 'webOrigins=[ "https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/" ]' \
     -o --fields id >cicdtoolbox_PULP
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -348,10 +348,10 @@ echo ""
     -s publicClient=false \
     -s fullScopeAllowed=false \
     -s directAccessGrantsEnabled=true \
-    -s rootUrl=https://build_dev.delivery.provider.test \
-    -s adminUrl=https://build_dev.delivery.provider.test:3100/ \
-    -s 'redirectUris=[ "https://build_dev.delivery.provider.test:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_dev.delivery.provider.test:3100/" ]' \
+    -s rootUrl=https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
+    -s adminUrl=https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
+    -s 'redirectUris=[ "https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
+    -s 'webOrigins=[ "https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
     -o --fields id >cicdtoolbox_build_dev
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -379,10 +379,10 @@ echo ""
     -s publicClient=false \
     -s fullScopeAllowed=false \
     -s directAccessGrantsEnabled=true \
-    -s rootUrl=https://build_test.delivery.provider.test \
-    -s adminUrl=https://build_test.delivery.provider.test:3100/ \
-    -s 'redirectUris=[ "https://build_test.delivery.provider.test:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_test.delivery.provider.test:3100/" ]' \
+    -s rootUrl=https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
+    -s adminUrl=https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
+    -s 'redirectUris=[ "https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
+    -s 'webOrigins=[ "https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
     -o --fields id >cicdtoolbox_build_test
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -410,10 +410,10 @@ echo ""
     -s publicClient=false \
     -s fullScopeAllowed=false \
     -s directAccessGrantsEnabled=true \
-    -s rootUrl=https://build_acc.delivery.provider.test \
-    -s adminUrl=https://build_acc.delivery.provider.test:3100/ \
-    -s 'redirectUris=[ "https://build_acc.delivery.provider.test:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_acc.delivery.provider.test:3100/" ]' \
+    -s rootUrl=https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
+    -s adminUrl=https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
+    -s 'redirectUris=[ "https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
+    -s 'webOrigins=[ "https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
     -o --fields id >cicdtoolbox_build_acc
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -439,10 +439,10 @@ echo "Build_acc_token: ${BUILD_ACC_token}"
     -s publicClient=false \
     -s fullScopeAllowed=false \
     -s directAccessGrantsEnabled=true \
-    -s rootUrl=https://build_prod.delivery.provider.test \
-    -s adminUrl=https://build_prod.delivery.provider.test:3100/ \
-    -s 'redirectUris=[ "https://build_prod.delivery.provider.test:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_prod.delivery.provider.test:3100/" ]' \
+    -s rootUrl=https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
+    -s adminUrl=https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
+    -s 'redirectUris=[ "https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
+    -s 'webOrigins=[ "https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
     -o --fields id >cicdtoolbox_build_prod
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -627,7 +627,7 @@ echo "Added roles to Tooling Specialist."
     -s 'config.rdnLDAPAttribute=["uid"]' \
     -s 'config.uuidLDAPAttribute=["uid"]' \
     -s 'config.userObjectClasses=["person"]' \
-    -s 'config.connectionUrl=["ldap://ldap.iam.provider.test:3890"]' \
+    -s 'config.connectionUrl=["ldap://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3890"]' \
     -s 'config.usersDn=["ou=people,dc=provider,dc=test"]' \
     -s 'config.searchScope=["1"]' \
     -s 'config.authType=["simple"]' \

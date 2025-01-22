@@ -8,8 +8,8 @@ create_runner_node() {
     robot --variable environment:$1 --variable VALID_PASSWORD:$2 -d install_log/ -o .30_build-$1_runner_create.xml -l 30_build-$1_runner_create_log.html -r 30_build-$1_runner_create_report.html jenkins_buildnode/runnertoken.robot
     export RUNNER_TOKEN=$(cat jenkins_buildnode/${1}_runner_token)
     echo $RUNNER_TOKEN
-    docker compose --project-name cicd-toolbox up -d --build --no-deps --force-recreate build-$1.delivery.provider.test
-    docker exec --user root -it build-$1.delivery.provider.test /bin/bash -c "source /etc/rc.local"
+    docker compose --project-name cicd-toolbox up -d --build --no-deps --force-recreate build-$1.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+    docker exec --user root -it build-$1.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} /bin/bash -c "source /etc/rc.local"
     echo "****************************************************************************************************************"
     echo " Validating Gitea runner for ${1} with name ${4} and sequence number ${3}"
     echo "****************************************************************************************************************"

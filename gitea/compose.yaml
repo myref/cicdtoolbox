@@ -4,17 +4,17 @@ volumes:
 
 secrets:
   gitea_key:
-    file: ../vault/certs/gitea.tooling.provider.test.pem
+    file: ../vault/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   gitea_crt:
-    file: ../vault/certs/gitea.tooling.provider.test.crt
+    file: ../vault/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  gitea.tooling.provider.test:
-    container_name: gitea.tooling.provider.test
+  gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     depends_on:
-      - cicdtoolbox-db.internal.provider.test
-      - keycloak.services.provider.test
+      - cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     restart: unless-stopped
     init: true
     stop_signal: SIGINT
@@ -22,7 +22,7 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
-      - GITEA__server__DOMAIN=gitea.tooling.provider.test
+      - GITEA__server__DOMAIN=gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
       - 'GITEA__database__USER=${gitea_db_user}'
       - 'GITEA__database__PASSWD=${gitea_db_password}'
     secrets:

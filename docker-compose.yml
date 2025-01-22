@@ -20,8 +20,8 @@ secrets:
     file: ./vault/certs/ca.crt
 
 services:
-  seleniumffhost.internal.provider.test:
-    container_name: seleniumffhost.internal.provider.test
+  seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     image: 'selenium/standalone-firefox:latest'
     restart: unless-stopped
     expose:
@@ -33,8 +33,8 @@ services:
       internal:
         ipv4_address: 172.16.10.100
 
-  seleniumgchost.internal.provider.test:
-    container_name: seleniumgchost.internal.provider.test
+  seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     image: 'selenium/standalone-chrome:latest'
     restart: unless-stopped
     expose:

@@ -4,7 +4,7 @@ Library           OperatingSystem
 Library           DebugLibrary
 Documentation     Creating jenkins-jenkins token
 
-Suite Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.provider.test:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Test cases ***
@@ -27,8 +27,8 @@ Close browsers
 ${BROWSER1}         chrome
 
 ${DELAY}            0
-${JENKINS URL}      https://jenkins.tooling.provider.test:8084/
-${JENKINS LOGOUT}   https://jenkins.tooling.provider.test:8084/logout 
+${JENKINS URL}      https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/
+${JENKINS LOGOUT}   https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/logout 
 
 *** Keywords ***   
 Log into Jenkins as jenkins-jenkins
@@ -43,7 +43,7 @@ Log into Jenkins as jenkins-jenkins
     Log to Console              Successfully logged in to Jenkins as jenkins-jenkins
 
 Create jenkins-jenkins token
-    Go To                       https://jenkins.tooling.provider.test:8084/user/jenkins-jenkins/security
+    Go To                       https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/user/jenkins-jenkins/security
     Click Button                Add new Token
     Click Button                Generate
     Wait Until Page Contains Element                 class:new-token-value.visible
@@ -63,7 +63,7 @@ Log into Jenkins as netcicd
     Capture Page Screenshot
 
 Change jenkins-jenkins credentials 
-    Go To                       https://jenkins.tooling.provider.test:8084/credentials/store/system/domain/_/credential/jenkins-jenkins/update
+    Go To                       https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/credentials/store/system/domain/_/credential/jenkins-jenkins/update
     Click Button                class:hidden-password-update.hidden-password-update-btn.jenkins-button.jenkins-button--primary
     Input Text                  name:_.password       ${TOKEN}
     Click Button                Save
@@ -72,7 +72,7 @@ Change jenkins-jenkins credentials
 Enter Jenkins token in Jenkins credentials
     Go To                       ${JENKINS URL}
     Log into Jenkins as netcicd
-    Go To                       https://jenkins.tooling.provider.test:8084/credentials/store/system/domain/_/credential/jenkins-git/update
+    Go To                       https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/credentials/store/system/domain/_/credential/jenkins-git/update
     Click Button                Change Password
     Input Text                  name:_.password         ${SA_TOKEN_text}
     Click Button                Save

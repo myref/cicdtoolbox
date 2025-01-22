@@ -3,7 +3,7 @@ Library           SeleniumLibrary
 Library           OperatingSystem
 Documentation     Validate gitea runner
 
-Suite Setup       Open Browser   ${GITEA URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.provider.test:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${GITEA URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Tasks ***
@@ -15,8 +15,8 @@ Validate runner operation
 
 ${BROWSER1}         chrome
 ${DELAY}            0
-${GITEA URL}        https://gitea.tooling.provider.test:3000
-${GITEA LOGIN}      https://gitea.tooling.provider.test:3000/user/login?redirect_to=%2f
+${GITEA URL}        https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000
+${GITEA LOGIN}      https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/login?redirect_to=%2f
 
 *** Keywords ***   
 
@@ -30,7 +30,7 @@ Submit Credentials
 Login to Gitea as netcicd
     Set Selenium Speed          ${DELAY}
     Set Window Size             2560                 1920 
-    Go To                       https://gitea.tooling.provider.test:3000/user/oauth2/keycloak
+    Go To                       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/oauth2/keycloak
     Keycloak Page Should Be Open
     Input Text                  username              netcicd
     Input Text                  password              ${VALID_PASSWORD}

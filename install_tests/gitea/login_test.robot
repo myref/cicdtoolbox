@@ -10,7 +10,7 @@ Documentation       Validating login for each LDAP group
 ...                 - Are explicitly disallowed roles not secretly present
 ...                 - Are any other roles not secretly present
 
-Test Setup       Open Browser   ${GITEA URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.provider.test:4444    options=add_argument("--ignore-certificate-errors")
+Test Setup       Open Browser   ${GITEA URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Test Teardown    Close Browser
 
 Test Template    Login with correct role provides correct authorization
@@ -69,8 +69,8 @@ field_services_eng group can login                      mechanicjoe         ${VA
 field_services_floor_management group can login         patchhero           ${VALID_PASSWORD}       gitea-netcicd-read                                                                   --
 
 *** Variables ***
-${GITEA URL}      https://gitea.tooling.provider.test:3000/
-${GITEA LOGIN}    https://gitea.tooling.provider.test:3000/user/login?redirect_to=%2f
+${GITEA URL}      https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/
+${GITEA LOGIN}    https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/login?redirect_to=%2f
 
 *** Keywords ***
 Login with correct role provides correct authorization
@@ -87,7 +87,7 @@ Are assigned roles present
 
 Log in as user
     [Arguments]  ${USERNAME}  ${PASSWORD}
-    Go To                       https://gitea.tooling.provider.test:3000/user/oauth2/keycloak
+    Go To                       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/oauth2/keycloak
     Keycloak Page Should Be Open
     Input Text                  username                ${USERNAME}
     Input Text                  password                ${PASSWORD}
@@ -98,7 +98,7 @@ Create user in Gitea
     ${user_not_created}=        Run Keyword And Return Status    Page Should Contain        Complete Account
     IF  ${user_not_created}
         Click Button                Complete Account
-        Go To                       https://gitea.tooling.provider.test:3000/user/oauth2/keycloak
+        Go To                       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/oauth2/keycloak
         Gitea Page Should Be Open   ${USERNAME}
         Log To Console              User created
     ELSE

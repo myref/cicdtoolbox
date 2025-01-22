@@ -1,7 +1,7 @@
 #!/bin/sh
-if $(wget --spider https://gitea.tooling.provider.test:3000/infraautomator/); then
+if $(wget --spider https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/infraautomator/); then
     echo "Setting git to Gitea." >>/home/jenkins/install-log.txt
-    export GIT_URL=https://gitea.tooling.provider.test:3000/infraautomator/ >> /etc/profile
+    export GIT_URL=https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/infraautomator/ >> /etc/profile
 else
     echo "Setting git to Github." >>/home/jenkins/install-log.txt
     export GIT_URL=https://github.com/Devoteam/ >> /etc/profile

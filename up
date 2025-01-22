@@ -13,9 +13,9 @@ endspin() {
    printf "\r%s\n" "$@"
 }
 
-docker-compose start consul.internal.provider.test vault.internal.provider.test
+docker-compose start consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "Waiting for Vault to come online"
-until $(curl --output /dev/null --silent --head --fail http://vault.internal.provider.test:8200); do
+until $(curl --output /dev/null --silent --head --fail http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200); do
     printf '.'
     sleep 5
 done
@@ -27,9 +27,9 @@ unseal_key=$(cat ./vault/key.txt)
 >>>>>>> e86c637 (bare rr version)
 robot --variable key:${unseal_key} -d install_log ./vault/unseal.robot
 
-docker-compose start cicdtoolbox-db.internal.provider.test keycloak.services.provider.test
+docker-compose start cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "Waiting for Keycloak to come online"
-until $(curl --output /dev/null --silent --head --fail http://keycloak.services.provider.test:8080); do
+until $(curl --output /dev/null --silent --head --fail http://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8080); do
     printf '.'
     sleep 5
 done
@@ -46,21 +46,21 @@ echo " Waiting for the containers to come up"
 echo "****************************************************************************************************************"
 echo " Gitea"
 let t=0
-until $(curl --output /dev/null --silent --head --insecure --fail https://gitea.tooling.provider.test:3000); do
+until $(curl --output /dev/null --silent --head --insecure --fail https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000); do
     spin
 done
 endspin
 
 echo "Nexus"
 let t=0
-until $(curl --output /dev/null --insecure --silent --head --fail https://nexus.tooling.provider.test:8443); do
+until $(curl --output /dev/null --insecure --silent --head --fail https://nexus.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443); do
     spin
 done
 endspin
 
 echo "Jenkins"
 let t=0
-until $(curl --output /dev/null --insecure --silent --head --fail https://jenkins.tooling.provider.test:8084/whoAmI); do
+until $(curl --output /dev/null --insecure --silent --head --fail https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/whoAmI); do
     spin
 done
 endspin

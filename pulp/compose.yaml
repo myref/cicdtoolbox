@@ -6,13 +6,13 @@ volumes:
 
 secrets:
   pulp_key:
-    file: ../vault/certs/pulp.tooling.provider.test.pem
+    file: ../vault/certs/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   pulp_crt:
-    file: ../vault/certs/pulp.tooling.provider.test.crt
+    file: ../vault/certs/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  pulp.tooling.provider.test:
-    container_name: pulp.tooling.provider.test
+  pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     restart: unless-stopped
     init: false
@@ -20,7 +20,7 @@ services:
     stop_grace_period: 15s
     # user: '${default_user}'
     environment:
-      CONTENT_ORIGIN: 'https://pulp.tooling.provider.test'
+      CONTENT_ORIGIN: 'https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}'
       PULP_UI: 'true'
       PULP_SECRET_KEY: 'secret'
       PULP_HTTPS: true
@@ -44,4 +44,4 @@ services:
     expose:
       - 8002
     depends_on:
-      - keycloak.services.provider.test
+      - keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}

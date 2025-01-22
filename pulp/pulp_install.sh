@@ -41,9 +41,9 @@ function create_deb_repo() {
 echo "****************************************************************************************************************"
 echo " Starting Pulp"
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --no-deps pulp.tooling.provider.test
+docker compose --project-name cicd-toolbox up -d --build --no-deps pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 let t=0
-until $(curl --output /dev/null --insecure --silent --head --fail https://pulp.tooling.provider.test/pulp/api/v3/status/); do
+until $(curl --output /dev/null --insecure --silent --head --fail https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/pulp/api/v3/status/); do
     spin
 done
 endspin
@@ -51,8 +51,8 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Setting pulp admin password"
 echo "****************************************************************************************************************"
-docker exec -it pulp.tooling.provider.test sh -c "pulpcore-manager reset-admin-password --password $1"
-pulp --no-verify-ssl config create --username admin --base-url https://pulp.tooling.provider.test --password $1
+docker exec -it pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "pulpcore-manager reset-admin-password --password $1"
+pulp --no-verify-ssl config create --username admin --base-url https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} --password $1
 echo "****************************************************************************************************************"
 echo " Creating repository and distribution"
 echo "****************************************************************************************************************"

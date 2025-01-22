@@ -3,13 +3,13 @@ volumes:
 
 secrets:
   ldap_key:
-    file: ../vault/certs/ldap.iam.provider.test.pem
+    file: ../vault/certs/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   ldap_crt:
-    file: ../vault/certs/ldap.iam.provider.test.crt
+    file: ../vault/certs/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  ldap.iam.provider.test:
-    container_name: ldap.iam.provider.test
+  ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     restart: unless-stopped
     hostname: ldap
@@ -29,19 +29,19 @@ services:
       - GID=1000
       - TZ=Europe/Amsterdam
       - LLDAP_LDAP_BASE_DN=dc=provider,dc=test
-      - LLDAP_HTTP_URL = "http://ldap.iam.provider.test"
+      - LLDAP_HTTP_URL = "http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}"
       # - LLDAP_LDAP_USER_PASS='${ldap_admin_password}'
       # - LLDAP_KEY_FILE = "/data/key.pem"
       # - LLDAP_LDAPS_OPTIONS__ENABLED = TRUE
       # - LLDAP_LDAPS_OPTIONS__PORT = 6360
       - LLDAP_LDAPS_OPTIONS__CERT_FILE = "/data/cert.crt"
       - LLDAP_LDAPS_OPTIONS__KEY_FILE = "/data/key.pem"
-      # - LLDAP_DATABASE_URL=postgres://'${ldap_db_user}':'${ldap_db_password}'@cicdtoolbox-db.internal.provider.test/ldap
+      # - LLDAP_DATABASE_URL=postgres://'${ldap_db_user}':'${ldap_db_password}'@cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/ldap
     networks:
       internal:
         ipv4_address: 172.16.8.11
     healthcheck:
-      test: 'curl --insecure -fSs http://172.16.8.11:17170/login'
+      test: 'curl --insecure -fSs http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:17170/login'
       start_period: 60s
       interval: 5s
       timeout: 5s

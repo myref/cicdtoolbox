@@ -5,13 +5,13 @@ volumes:
 
 secrets:
   jenkins_key:
-    file: ../vault/certs/jenkins.tooling.provider.test.pem
+    file: ../vault/certs/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   jenkins_crt:
-    file: ../vault/certs/jenkins.tooling.provider.test.crt
+    file: ../vault/certs/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  jenkins.tooling.provider.test:
-    container_name: jenkins.tooling.provider.test
+  jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    container_name: jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     restart: unless-stopped
     privileged: true
@@ -30,9 +30,9 @@ services:
       - 'JENKINS_NEXUS_PASSWORD=${jenkins_nexus_password}'
     secrets:
       - source: jenkins_key
-        target: /var/jenkins_home/jenkins.tooling.provider.test.pem
+        target: /var/jenkins_home/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
       - source: jenkins_crt
-        target: /var/jenkins_home/jenkins.tooling.provider.test.crt
+        target: /var/jenkins_home/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
     volumes:
       - 'jenkins_certs:/certs/client'
       - 'jenkins_data:/var/jenkins_home'
@@ -43,9 +43,9 @@ services:
     ports:
       - '8084:8084'
     depends_on:
-      - keycloak.services.provider.test
+      - keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     healthcheck:
-      test: 'curl --insecure -fSs https://jenkins.tooling.provider.test:8084/static/%3Canystring%3E/images/svgs/logo.svg'
+      test: 'curl --insecure -fSs https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/static/%3Canystring%3E/images/svgs/logo.svg'
       start_period: 60s
       interval: 5s
       timeout: 5s

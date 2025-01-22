@@ -29,6 +29,7 @@ rm -rf install_log/*
 rm *_log.html
 rm *_report.html
 rm *.xml
+cat /dev/null > ./hosts_additions.txt
 echo " " 
 echo "****************************************************************************************************************"
 echo " Cleaning LLDAP" 
@@ -56,89 +57,91 @@ echo " Making sure all containers are reachable locally with the name in the"
 echo " hosts file."
 echo "****************************************************************************************************************"
 echo " " 
+host_ip=$(hostname -I | awk '{print $1}')
+
 sudo chmod o+w /etc/hosts
 
 if grep -q "cicdtoolbox-db" /etc/hosts; then
     echo " CICDtoolbox-db exists in /etc/hosts, removing..."
-    sudo sed -i '/cicdtoolbox-db.internal.provider.test/d' /etc/hosts
+    sudo sed -i '/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add CICDtoolbox-db to /etc/hosts"
-sudo echo "172.16.9.2   cicdtoolbox-db.internal.provider.test" >> /etc/hosts
+sudo echo "172.16.9.2   cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 
 if grep -q "jenkins" /etc/hosts; then
     echo " Jenkins exists in /etc/hosts, removing..."
-    sudo sed -i '/jenkins.tooling.provider.test/d' /etc/hosts
+    sudo sed -i '/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Jenkins to /etc/hosts"
-sudo echo "172.16.11.8   jenkins.tooling.provider.test" >> /etc/hosts
+sudo echo "172.16.11.8   jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "build-dev" /etc/hosts; then
     echo " Jenkins build-dev node exists in /etc/hosts, removing..."
-    sudo sed -i '/build-dev.delivery.provider.test/d' /etc/hosts
+    sudo sed -i '/build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Jenkins build-dev node to /etc/hosts"
-sudo echo "172.16.12.2   build-dev.delivery.provider.test" >> /etc/hosts
+sudo echo "172.16.12.2   build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "build-test" /etc/hosts; then
     echo " Jenkins build-test node exists in /etc/hosts, removing..."
-    sudo sed -i '/build-test.delivery.provider.test/d' /etc/hosts
+    sudo sed -i '/build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Jenkins build-test node to /etc/hosts"
-sudo echo "172.16.12.3   build-test.delivery.provider.test" >> /etc/hosts
+sudo echo "172.16.12.3   build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "build-acc" /etc/hosts; then
     echo " Jenkins build-acc node exists in /etc/hosts, removing..."
-    sudo sed -i '/build-acc.delivery.provider.test/d' /etc/hosts
+    sudo sed -i '/build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Jenkins build-acc node to /etc/hosts"
-sudo echo "172.16.12.4   build-acc.delivery.provider.test" >> /etc/hosts
+sudo echo "172.16.12.4   build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "build-prod" /etc/hosts; then
     echo " Jenkins build-prod node exists in /etc/hosts, removing..."
-    sudo sed -i '/build-prod.delivery.provider.test/d' /etc/hosts
+    sudo sed -i '/build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Jenkins build-prod node to /etc/hosts"
-sudo echo "172.16.12.5   build-prod.delivery.provider.test" >> /etc/hosts
+sudo echo "172.16.12.5   build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "ldap" /etc/hosts; then
     echo " LLDAP exists in /etc/hosts, removing..."
-    sudo sed -i '/ldap.iam.provider.test/d' /etc/hosts
+    sudo sed -i '/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add LLDAP to /etc/hosts"
-sudo echo "172.16.8.11   ldap.iam.provider.test" >> /etc/hosts
+sudo echo "172.16.8.11   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "pulp" /etc/hosts; then
     echo " Pulp exists in /etc/hosts, removing..."
-    sudo sed -i '/pulp.tooling.provider.test/d' /etc/hosts
+    sudo sed -i '/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Pulp to /etc/hosts"
-sudo echo "172.16.11.10   pulp.tooling.provider.test" >> /etc/hosts
+sudo echo "172.16.11.10   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "seleniumffhost" /etc/hosts; then
     echo "Selenium Firefox testhost exists in /etc/hosts, removing..."
-    sudo sed -i '/seleniumffhost.internal.provider.test/d' /etc/hosts
+    sudo sed -i '/seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Selenium Firefox testhost to /etc/hosts"
-sudo echo "172.16.10.100 seleniumffhost.internal.provider.test" >> /etc/hosts
+sudo echo "172.16.10.100 seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 if grep -q "seleniumgchost" /etc/hosts; then
     echo "Selenium Google Chrome testhost exists in /etc/hosts, removing..."
-    sudo sed -i '/seleniumgchost.internal.provider.test/d' /etc/hosts
+    sudo sed -i '/seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
 fi
 echo " Add Selenium Google Chrome testhost to /etc/hosts"
-sudo echo "172.16.10.101 seleniumgchost.internal.provider.test" >> /etc/hosts
+sudo echo "172.16.10.101 seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 
 sudo chmod o-w /etc/hosts
 
 echo "****************************************************************************************************************"
 echo " Setting up Chrome host for Selenium" 
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumgchost.internal.provider.test
+docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "****************************************************************************************************************"
 echo " Setting up Firefox host for Selenium" 
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumffhost.internal.provider.test
+docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "****************************************************************************************************************"
 echo " Setting up Vault" 
 echo "****************************************************************************************************************"
@@ -147,12 +150,12 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Creating LDAP server" 
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --remove-orphans ldap.iam.provider.test
+docker compose --project-name cicd-toolbox up -d --build --remove-orphans ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo " "
 echo "****************************************************************************************************************"
 echo " Creating database"
 echo "****************************************************************************************************************"
-DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build cicdtoolbox-db.internal.provider.test
+DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 sleep 10
 echo " " 
 echo "****************************************************************************************************************"
@@ -230,7 +233,7 @@ echo "**************************************************************************
 echo " The pipeline uses the default Cisco DevNet CML Sandbox credentials developer/C1sco12345 to log in to CML."
 echo " You may change this to your own credentials in:"
 echo " "
-echo " http://jenkins.tooling.provider.test:8084/credentials/store/system/domain/_/credential/CML-SIM-CRED/update"
+echo " http://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/credentials/store/system/domain/_/credential/CML-SIM-CRED/update"
 echo " "
 echo " Due to limitations in Keycloak, do **not** use docker compose --project-name cicd-toolbox down. Keycloak will no longer function after this."
 echo " "
@@ -243,16 +246,16 @@ echo "You can read the install test report in install_tests/report.html"
 echo " "
 echo "You can reach the servers on:"
 echo " "
-echo " Vault:       https://vault.internal.provider.test:8200"
-echo " LLDAP:       http://ldap.iam.provider.test:17170"
-echo " Keycloak:    https://keycloak.services.provider.test:8443"
-echo " Gitea:       https://gitea.tooling.provider.test:3000"
-echo " Jenkins:     https://jenkins.tooling.provider.test:8084"
-echo " Pulp :       https://pulp.tooling.provider.test/ui/status/"
-echo " Firefox:     http://seleniumffhost.internal.provider.test:4444 (Dashboard)"
-echo "              http://seleniumffhost.internal.provider.test:7900 (NoVNC)"
-echo " Chrome:      http://seleniumgchost.internal.provider.test:4444 (Dashboard)"
-echo "              http://seleniumgchost.internal.provider.test:7900 (NoVNC)"
+echo " Vault:       https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200"
+echo " LLDAP:       http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:17170"
+echo " Keycloak:    https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443"
+echo " Gitea:       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000"
+echo " Jenkins:     https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084"
+echo " Pulp :       https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/ui/status/"
+echo " Firefox:     http://seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444 (Dashboard)"
+echo "              http://seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:7900 (NoVNC)"
+echo " Chrome:      http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444 (Dashboard)"
+echo "              http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:7900 (NoVNC)"
 echo " "
 echo " The installation test report generated by Robotframework can be found here: file:///home/$USER/CICD-toolbox/runonce_report.html" 
 echo "****************************************************************************************************************"

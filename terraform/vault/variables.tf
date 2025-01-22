@@ -13,11 +13,11 @@ variable "client_id" {
 variable "discovery_url" {
   description = "OIDC Discovery endpoint"
   type        = string
-  default     = "https://keycloak.services.provider.test:8443/realms/cicdtoolbox"
+  default     = "https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/realms/cicdtoolbox"
 }
 
 variable "authorized_redirects" {
   description = "List of authorized redirects for CICD Toolbox OIDC"
   type        = list(string)
-  default     = ["http://localhost:8250/oidc/callback", "https://vault.internal.provider.test:8200/ui/vault/auth/oidc/oidc/callback"]
+  default     = ["http://localhost:8250/oidc/callback", "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/ui/vault/auth/oidc/oidc/callback"]
 }

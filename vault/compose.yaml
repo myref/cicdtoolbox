@@ -7,13 +7,13 @@ volumes:
   consul-data: null
 
 services:
-  vault.internal.provider.test:
-    container_name: vault.internal.provider.test
+  vault.internal:
+    container_name: vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
       dockerfile: docker/Dockerfile-vault
     depends_on:
-      - consul.internal.provider.test
+      - consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     restart: unless-stopped
     init: true
     stop_signal: SIGINT
@@ -31,19 +31,19 @@ services:
       - 'vault-data:/vault/data'
       - 'vault-logs:/vault/logs'
     environment:
-      - 'VAULT_ADDR=http://vault.internal.provider.test:8200'
-      - 'VAULT_API_ADDR=http://vault.internal.provider.test:8200'
+      - 'VAULT_ADDR=http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200'
+      - 'VAULT_API_ADDR=http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200'
     cap_add:
       - IPC_LOCK
     healthcheck:
-      test: [ "CMD", "wget", "--spider", "--proxy", "off", "https://vault.internal.provider.test:8200/v1/sys/health?standbyok=true" ]
+      test: [ "CMD", "wget", "--spider", "--proxy", "off", "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/v1/sys/health?standbyok=true" ]
       interval: 10s
       timeout: 3s
       retries: 10
       start_period: 5s
 
-  consul.internal.provider.test:
-    container_name: consul.internal.provider.test
+  consul.internal:
+    container_name: consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
       dockerfile: docker/Dockerfile-consul
