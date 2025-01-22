@@ -13,8 +13,8 @@ services:
     container_name: gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     depends_on:
-      - cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
-      - keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - cicdtoolbox-db
+      - keycloak
     restart: unless-stopped
     init: true
     stop_signal: SIGINT

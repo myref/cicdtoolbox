@@ -5,7 +5,7 @@ secrets:
     file: ../vault/certs/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  keycloak:
     container_name: keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     command: ["start"]
@@ -51,5 +51,5 @@ services:
       timeout: 5s
       retries: 5
     depends_on:
-      - cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - cicdtoolbox-db
 

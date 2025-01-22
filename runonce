@@ -150,12 +150,12 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Creating LDAP server" 
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --remove-orphans ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+docker compose --project-name cicd-toolbox up -d --build --remove-orphans ldap
 echo " "
 echo "****************************************************************************************************************"
 echo " Creating database"
 echo "****************************************************************************************************************"
-DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build cicdtoolbox-db
 sleep 10
 echo " " 
 echo "****************************************************************************************************************"

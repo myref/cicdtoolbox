@@ -25,7 +25,7 @@ secrets:
     file: ./vault/certs/build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  build-dev:
     container_name: build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
@@ -48,13 +48,14 @@ services:
     volumes: 
       - '~/images:/home/jenkins/images'
     depends_on:
-      - jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
-      - gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - jenkins
+      - gitea
     networks:
       internal:
         ipv4_address: 172.16.12.2
-        
-  build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+    expose:
+      - '50000'
+  build-test:
     container_name: build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
@@ -74,13 +75,18 @@ services:
     secrets:
       - source: test_jenkins_secret
         target: /home/jenkins/secret-file.txt
+    volumes: 
+      - '~/images:/home/jenkins/images'
+    depends_on:
+      - jenkins
+      - gitea
     expose:
       - '50000'
     networks:
       internal:
         ipv4_address: 172.16.12.3
 
-  build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  build-acc:
     container_name: build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
@@ -100,13 +106,18 @@ services:
     secrets:
       - source: acc_jenkins_secret
         target: /home/jenkins/secret-file.txt
+    volumes: 
+      - '~/images:/home/jenkins/images'
+    depends_on:
+      - jenkins
+      - gitea
     expose:
       - '50000'
     networks:
       internal:
         ipv4_address: 172.16.12.4
 
-  build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  build-prod:
     container_name: build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
@@ -123,6 +134,11 @@ services:
       ANSIBLE_TF_DIR: AppCICD
       ARM_SKIP_PROVIDER_REGISTRATION: 'true'
       RUNNER_TOKEN: '${RUNNER_TOKEN}'
+    volumes: 
+      - '~/images:/home/jenkins/images'
+    depends_on:
+      - jenkins
+      - gitea
     secrets:
       - source: prod_jenkins_secret
         target: /home/jenkins/secret-file.txt

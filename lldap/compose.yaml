@@ -8,7 +8,7 @@ secrets:
     file: ../vault/certs/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  ldap:
     container_name: ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     restart: unless-stopped

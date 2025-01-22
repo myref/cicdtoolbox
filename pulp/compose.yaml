@@ -11,7 +11,7 @@ secrets:
     file: ../vault/certs/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  pulp:
     container_name: pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     restart: unless-stopped
@@ -44,4 +44,5 @@ services:
     expose:
       - 8002
     depends_on:
-      - keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - keycloak
+      - cicdtoolbox-db

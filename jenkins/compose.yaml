@@ -10,7 +10,7 @@ secrets:
     file: ../vault/certs/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  jenkins:
     container_name: jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     restart: unless-stopped
