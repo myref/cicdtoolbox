@@ -116,8 +116,8 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Starting Vault and Consul backend" 
 echo "****************************************************************************************************************"
-docker compose up -d --build --remove-orphans consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
-docker compose up -d --build --remove-orphans vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+docker compose up -d --build --remove-orphans consul
+docker compose up -d --build --remove-orphans vault
 echo "****************************************************************************************************************"
 echo " Wait until vault is running (~5 sec.)"
 echo "****************************************************************************************************************"

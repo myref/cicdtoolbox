@@ -7,7 +7,7 @@ volumes:
   consul-data: null
 
 services:
-  vault.internal:
+  vault:
     container_name: vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
@@ -42,7 +42,7 @@ services:
       retries: 10
       start_period: 5s
 
-  consul.internal:
+  consul:
     container_name: consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
       context: .
@@ -56,3 +56,9 @@ services:
         ipv4_address: 172.16.9.4
     volumes:
       - 'consul-data:/consul/data'
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "--proxy", "off", "https://consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:5000/health" ]
+      interval: 15s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
