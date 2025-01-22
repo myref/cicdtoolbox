@@ -122,16 +122,16 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Configuring Consul backend" 
 echo "****************************************************************************************************************"
-cp conf/consul/consul-config.json.org vault/conf/consul/consul-config.json
+cp vault/conf/consul/consul-config.json.org vault/conf/consul/consul-config.json
 sed -i -e 's/${DOMAIN_NAME_SL}/\"${DOMAIN_NAME_SL}\"/' vault/conf/consul/consul-config.json
 sed -i -e 's/${DOMAIN_NAME_TL}/\"${DOMAIN_NAME_TL}\"/' vault/conf/consul/consul-config.json
 echo "****************************************************************************************************************"
 echo " Configuring Vault backend" 
 echo "****************************************************************************************************************"
-cp conf/vault/vault-config.json.org vault/conf/vault/vault-config-ssl.json
+cp vault/conf/vault/vault-config.json.org vault/conf/vault/vault-config-ssl.json
 sed -i -e 's/${DOMAIN_NAME_SL}/\"${DOMAIN_NAME_SL}\"/' vault/conf/vault/vault-config-ssl.json
 sed -i -e 's/${DOMAIN_NAME_TL}/\"${DOMAIN_NAME_TL}\"/' vault/conf/vault/vault-config.-ssljson
-cp conf/vault/vault-config.json.org vault/conf/vault/vault-config.json
+cp vault/conf/vault/vault-config.json.org vault/conf/vault/vault-config.json
 sed -i -e 's/${DOMAIN_NAME_SL}/\"${DOMAIN_NAME_SL}\"/' vault/conf/vault/vault-config.json
 sed -i -e 's/${DOMAIN_NAME_TL}/\"${DOMAIN_NAME_TL}\"/' vault/conf/vault/vault-config.json
 echo "****************************************************************************************************************"
