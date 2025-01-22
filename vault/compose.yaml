@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile-vault
     depends_on:
-      - consul.internal
+      - consul
     restart: unless-stopped
     init: true
     stop_signal: SIGINT
