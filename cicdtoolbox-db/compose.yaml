@@ -9,7 +9,7 @@ secrets:
     file: ../vault/certs/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  cicdtoolbox-db.internal:
     container_name: cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     command: |
