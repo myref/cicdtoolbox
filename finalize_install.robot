@@ -5,7 +5,7 @@ Library           DebugLibrary
 Documentation     Creating jenkins-jenkins token
 ...               Enabling gitea login from Jenkins
 
-Suite Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Test cases ***
@@ -23,10 +23,10 @@ Close browsers
 ${BROWSER1}         chrome
 
 ${DELAY}            1
-${JENKINS URL}      https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/
-${JENKINS LOGOUT}   https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/logout 
-${GITEA URL}        https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000
-${GITEA LOGIN}      https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/login?redirect_to=%2f
+${JENKINS URL}      https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/
+${JENKINS LOGOUT}   https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/logout 
+${GITEA URL}        https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000
+${GITEA LOGIN}      https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/login?redirect_to=%2f
 
 *** Keywords ***   
 Login to Gitea as Jenkins
@@ -40,7 +40,7 @@ Login to Gitea as Jenkins
     Log to Console              Jenkins changed password to token
 
 Create Jenkins token in Gitea
-    Go To                       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/settings/applications
+    Go To                       https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/settings/applications
     Input Text                  name                    Jenkins
     
     Click Element               xpath://summary[contains(., "Select permissions")]
@@ -56,7 +56,7 @@ Create Jenkins token in Gitea
     Set Global Variable         ${SA_TOKEN_text}
     Log to Console              Jenkins token created in Gitea
 
-    Go To                       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/settings/account
+    Go To                       https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/settings/account
     Input Text                  old_password            ${VALID_PASSWORD}
     Input Text                  password                ${SA_TOKEN_text}
     Input Text                  retype                  ${SA_TOKEN_text}
@@ -66,7 +66,7 @@ Create Jenkins token in Gitea
 Enter Jenkins token in Jenkins credentials
     Go To                       ${JENKINS URL}
     Log into Jenkins as netcicd
-    Go To                       https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/credentials/store/system/domain/_/credential/jenkins-git/update
+    Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/credentials/store/system/domain/_/credential/jenkins-git/update
     Click Button                Change Password
     Input Text                  name:_.password         ${SA_TOKEN_text}
     Click Button                Save

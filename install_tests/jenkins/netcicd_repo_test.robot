@@ -3,13 +3,13 @@ Resource          ../install_test.resource
 
 Documentation       Making sure that Jenkins has access to the myapp-os repository on gitea
 
-Suite Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Variables ***
-${JENKINS URL}      https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/
-${JENKINS NetCICD}  https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/job/Infraautomator/computation/console
-${JENKINS LOGOUT}   https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/logout 
+${JENKINS URL}      https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/
+${JENKINS NetCICD}  https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/job/Infraautomator/computation/console
+${JENKINS LOGOUT}   https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/logout 
 
 *** Test cases ***
 Log into Jenkins
@@ -31,7 +31,7 @@ Log into Jenkins as netcicd
     Jenkins Page Should Be Open
 
 Get infraautomator repositories
-    Go To                       https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/job/Infraautomator/computation/console
+    Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/job/Infraautomator/computation/console
 
     ${repo_status}=             Run Keyword And Return Status    Page Should Contain        Finished: SUCCESS
 

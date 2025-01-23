@@ -1,0 +1,4 @@
+vault/conf/vault/vault-config.json
+vault/conf/vault/vault-config-ssl.json
+vault/conf/consul/consul-config.json
+install_log/vault_create.log

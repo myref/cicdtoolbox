@@ -4,7 +4,7 @@ Library           OperatingSystem
 Library    XML
 Documentation     Unseal Hashicorp Vault
 
-Suite Setup       Open Browser   ${URL}      ${BROWSER1}       remote_url=http://seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${URL}      ${BROWSER1}       remote_url=http://seleniumffhost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Test cases ***
@@ -18,7 +18,7 @@ Sign in to Vault
 
 ${BROWSER1}         headlessfirefox
 ${DELAY}            0
-${URL}              https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200
+${URL}              https://vault.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8200
 
 *** Keywords ***
 Open vault site

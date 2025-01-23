@@ -10,7 +10,7 @@ Documentation       Validating login for each LDAP group
 ...                 - Are explicitly disallowed roles not secretly present
 ...                 - Are any other roles not secretly present
 
-Test Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
+Test Setup       Open Browser   ${JENKINS URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Test Teardown    Close Browser
 
 Test Template    Login with correct role provides correct authorization
@@ -69,9 +69,9 @@ field_services_eng group can login                      mechanicjoe         ${VA
 field_services_floor_management group can login         patchhero           ${VALID_PASSWORD}       jenkins-user                                                                        jenkins-netcicd-run,jenkins-netcicd-dev,jenkins-cicdtoolbox-run,jenkins-cicdtoolbox-dev
 
 *** Variables ***
-${JENKINS URL}      https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/
-${JENKINS whoAmI}   https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/whoAmI
-${JENKINS LOGOUT}   https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/logout 
+${JENKINS URL}      https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/
+${JENKINS whoAmI}   https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/whoAmI
+${JENKINS LOGOUT}   https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/logout 
 
 *** Keywords ***
 Login with correct role provides correct authorization
