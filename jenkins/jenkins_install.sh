@@ -42,22 +42,22 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Copy CA certificates into Jenkins keystore"
 echo "****************************************************************************************************************"
-docker cp jenkins:/opt/java/openjdk/lib/security/cacerts ./jenkins/keystore/cacerts
+docker cp jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/java/openjdk/lib/security/cacerts ./jenkins/keystore/cacerts
 chmod +w ./jenkins/keystore/cacerts
 keytool -import -alias vault.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} -keystore ./jenkins/keystore/cacerts -file ./jenkins/ca.crt -storepass $jenkins_storepass -noprompt
-docker cp ./jenkins/keystore/cacerts jenkins:/opt/java/openjdk/lib/security/cacerts
+docker cp ./jenkins/keystore/cacerts jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/java/openjdk/lib/security/cacerts
 echo " " 
 echo "****************************************************************************************************************"
 echo " putting Jenkins secret in casc file"
 echo "****************************************************************************************************************"
 #config for oic_auth plugin: need to replace secrets in casc.yaml
 jenkins_client_id=$(grep JENKINS_token: install_log/keycloak_create.log | cut -d' ' -f2 | tr -d '\r' )
-docker exec -it jenkins sh -c "sed -i -e 's/oic_secret/\"${jenkins_client_id}\"/' /var/jenkins_conf/casc.yaml"
+docker exec -it jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "sed -i -e 's/oic_secret/\"${jenkins_client_id}\"/' /var/jenkins_conf/casc.yaml"
 echo " " 
 echo "****************************************************************************************************************"
 echo " Restarting Jenkins"
 echo "****************************************************************************************************************"
-docker restart jenkins
+docker restart jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 let t=0
 until $(curl --output /dev/null --insecure --silent --head --fail https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/whoAmI); do
     spin
