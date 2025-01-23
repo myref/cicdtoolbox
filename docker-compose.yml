@@ -7,7 +7,7 @@ networks:
 
 include:
   - cicdtoolbox-db/compose.yaml
-  - gitea/compose.yaml
+  # - gitea/compose.yaml
   - jenkins/compose.yaml
   - jenkins_buildnode/compose.yaml
   - keycloak/compose.yaml
