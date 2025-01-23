@@ -27,7 +27,7 @@ sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Starting Keycloak "
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --no-deps keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+docker compose --project-name cicd-toolbox up -d --build --no-deps keycloak
 echo "****************************************************************************************************************"
 echo " Wait until keycloak is running (~45 sec.)"
 echo "****************************************************************************************************************"
