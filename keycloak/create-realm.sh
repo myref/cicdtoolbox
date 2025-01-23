@@ -28,8 +28,8 @@ echo "Realm created"
     -s directAccessGrantsEnabled=true \
     -s rootUrl=https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200 \
     -s adminUrl=https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/ \
-    -s 'redirectUris=[ "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/oidc/oidc/callback","https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/ui/vault/auth/oidc/oidc/callback" ]' \
-    -s 'webOrigins=[ "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/" ]' \
+    -s "redirectUris=[ \"https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/oidc/oidc/callback\",\"https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/ui/vault/auth/oidc/oidc/callback\" ]" \
+    -s "webOrigins=[ \"https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/\" ]" \
     -o --fields id >cicdtoolbox_VAULT
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -114,8 +114,8 @@ echo "Created keycloak-vault installation json"
     -s directAccessGrantsEnabled=true \
     -s rootUrl=https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000 \
     -s adminUrl=https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/ \
-    -s 'redirectUris=[ "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/" ]' \
+    -s "redirectUris=[\"https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/user/oauth2/keycloak/callback\"]" \
+    -s "webOrigins=[\"https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/\"]" \
     -o --fields id >cicdtoolbox_GITEA
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -181,8 +181,8 @@ echo "Created role-group mapper in the Client Scope"
     -s authorizationServicesEnabled=true \
     -s rootUrl=https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084 \
     -s adminUrl=https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/ \
-    -s 'redirectUris=[ "https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/*" ]' \
-    -s 'webOrigins=[ "https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/" ]' \
+    -s "redirectUris=[ \"https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/*\" ]" \
+    -s "webOrigins=[\"https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/\" ]" \
     -o --fields id >cicdtoolbox_JENKINS
 
 # output is Created new client with id, we now need to grep the ID out of it
