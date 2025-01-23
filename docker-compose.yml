@@ -7,12 +7,12 @@ networks:
 
 include:
   - cicdtoolbox-db/compose.yaml
-  # - gitea/compose.yaml
-  # - jenkins/compose.yaml
-  # - jenkins_buildnode/compose.yaml
-  # - keycloak/compose.yaml
+  - gitea/compose.yaml
+  - jenkins/compose.yaml
+  - jenkins_buildnode/compose.yaml
+  - keycloak/compose.yaml
   - lldap/compose.yaml
-  # - pulp/compose.yaml
+  - pulp/compose.yaml
   - vault/compose.yaml
 
 secrets:
