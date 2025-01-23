@@ -27,6 +27,8 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
+      - GITEA__server__DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - GITEA__server__DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
       - GITEA__server__DOMAIN=gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
       - 'GITEA__database__USER=${gitea_db_user}'
       - 'GITEA__database__PASSWD=${gitea_db_password}'
