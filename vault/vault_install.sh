@@ -120,15 +120,9 @@ rm -f certs/*.csr
 rm -f *.txt
 echo " " 
 echo "****************************************************************************************************************"
-echo " Configuring Consul backend" 
-echo "****************************************************************************************************************"
-cp vault/conf/consul/consul-config.json.org vault/conf/consul/consul-config.json
-sed -i "s/\${DOMAIN_NAME_TL}/${DOMAIN_NAME_TL}/" vault/conf/consul/consul-config.json
-sed -i "s/\${DOMAIN_NAME_SL}/${DOMAIN_NAME_SL}/" vault/conf/consul/consul-config.json
-echo "****************************************************************************************************************"
 echo " Configuring Vault backend" 
 echo "****************************************************************************************************************"
-cp vault/conf/vault/vault-config.json.org vault/conf/vault/vault-config-ssl.json
+cp vault/conf/vault/vault-config-ssl.json.org vault/conf/vault/vault-config-ssl.json
 sed -i "s/\${DOMAIN_NAME_TL}/${DOMAIN_NAME_TL}/" vault/conf/vault/vault-config-ssl.json
 sed -i "s/\${DOMAIN_NAME_SL}/${DOMAIN_NAME_SL}/" vault/conf/vault/vault-config-ssl.json
 cp vault/conf/vault/vault-config.json.org vault/conf/vault/vault-config.json
@@ -242,6 +236,22 @@ docker exec -it vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "chown 
 docker exec -it vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "chmod 600 /vault/config/vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem"
 echo " " 
 echo "****************************************************************************************************************"
+echo " Saving CA self-signed certificate"
+echo "****************************************************************************************************************"
+cp vault/certs/ca.crt cicdtoolbox-db/ca.crt
+cp vault/certs/ca.crt gitea/ca.crt
+cp vault/certs/ca.crt jenkins/ca.crt
+cp vault/certs/ca.crt jenkins_buildnode/ca.crt
+cp vault/certs/ca.crt keycloak/ca.crt
+cp vault/certs/ca.crt pulp/ca.crt
+echo "****************************************************************************************************************"
+echo " Saving database certificates"
+echo "****************************************************************************************************************"
+cp vault/certs/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem cicdtoolbox-db/docker-entrypoint-initdb-resources/server.key
+cp vault/certs/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt cicdtoolbox-db/docker-entrypoint-initdb-resources/server.crt
+cp vault/certs/ca.crt cicdtoolbox-db/docker-entrypoint-initdb-resources/root.crt
+echo " "
+echo "****************************************************************************************************************"
 echo " Copy SSL config to vault" 
 echo "****************************************************************************************************************"
 echo " " 
@@ -270,19 +280,3 @@ echo pwd
 echo " "
 vault operator unseal -address="https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200" $(cat ./vault/key.txt)
 echo " " 
-echo "****************************************************************************************************************"
-echo " Saving CA self-signed certificate"
-echo "****************************************************************************************************************"
-cp vault/certs/ca.crt cicdtoolbox-db/ca.crt
-cp vault/certs/ca.crt gitea/ca.crt
-cp vault/certs/ca.crt jenkins/ca.crt
-cp vault/certs/ca.crt jenkins_buildnode/ca.crt
-cp vault/certs/ca.crt keycloak/ca.crt
-cp vault/certs/ca.crt pulp/ca.crt
-echo "****************************************************************************************************************"
-echo " Saving database certificates"
-echo "****************************************************************************************************************"
-cp vault/certs/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem cicdtoolbox-db/docker-entrypoint-initdb-resources/server.key
-cp vault/certs/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt cicdtoolbox-db/docker-entrypoint-initdb-resources/server.crt
-cp vault/certs/ca.crt cicdtoolbox-db/docker-entrypoint-initdb-resources/root.crt
-echo " "
