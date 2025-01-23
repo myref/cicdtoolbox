@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash +x
 
 # shell script to be copied into $KEYCLOAK_HOME/bin
 cd $HOME/bin
