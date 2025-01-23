@@ -101,7 +101,7 @@ echo "**************************************************************************
 pwd
 cp vault/certs/gitea* gitea/
 
-DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build --no-deps gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build --no-deps gitea
 echo " "
 echo "****************************************************************************************************************"
 echo " Installing CA certificate"
