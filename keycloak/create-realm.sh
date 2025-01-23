@@ -288,8 +288,8 @@ echo ""
     -s authorizationServicesEnabled=true \
     -s rootUrl=https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443 \
     -s adminUrl=https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/ \
-    -s 'redirectUris=[ "https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/*" ]' \
-    -s 'webOrigins=[ "https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/" ]' \
+    -s "redirectUris=[\"https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/*\" ]" \
+    -s "webOrigins=[\"https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/\" ]" \
     -o --fields id >cicdtoolbox_PULP
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -350,8 +350,8 @@ echo ""
     -s directAccessGrantsEnabled=true \
     -s rootUrl=https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
     -s adminUrl=https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
-    -s 'redirectUris=[ "https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
+    -s "redirectUris=[\"https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback\" ]" \
+    -s "webOrigins=[\"https://build_dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/\" ]" \
     -o --fields id >cicdtoolbox_build_dev
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -381,8 +381,8 @@ echo ""
     -s directAccessGrantsEnabled=true \
     -s rootUrl=https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
     -s adminUrl=https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
-    -s 'redirectUris=[ "https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
+    -s "redirectUris=[\"https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback\" ]" \
+    -s "webOrigins=[\"https://build_test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/\" ]" \
     -o --fields id >cicdtoolbox_build_test
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -412,8 +412,8 @@ echo ""
     -s directAccessGrantsEnabled=true \
     -s rootUrl=https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
     -s adminUrl=https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
-    -s 'redirectUris=[ "https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
+    -s "redirectUris=[\"https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback\" ]" \
+    -s "webOrigins=[\"https://build_acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/\" ]" \
     -o --fields id >cicdtoolbox_build_acc
 
 # output is Created new client with id, we now need to grep the ID out of it
@@ -441,8 +441,8 @@ echo "Build_acc_token: ${BUILD_ACC_token}"
     -s directAccessGrantsEnabled=true \
     -s rootUrl=https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} \
     -s adminUrl=https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/ \
-    -s 'redirectUris=[ "https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback" ]' \
-    -s 'webOrigins=[ "https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/" ]' \
+    -s "redirectUris=[\"https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/user/oauth2/keycloak/callback\" ]" \
+    -s "webOrigins=[\"https://build_prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3100/\" ]" \
     -o --fields id >cicdtoolbox_build_prod
 
 # output is Created new client with id, we now need to grep the ID out of it
