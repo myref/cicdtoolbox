@@ -98,7 +98,7 @@ sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Saving gitea certificates"
 echo "****************************************************************************************************************"
-pwd
+echo $(pwd)
 cp vault/certs/gitea* gitea/
 
 DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build --no-deps gitea

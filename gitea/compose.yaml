@@ -11,7 +11,12 @@ secrets:
 services:
   gitea:
     container_name: gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+        - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
     depends_on:
       - cicdtoolbox-db
       - keycloak

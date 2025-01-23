@@ -5,6 +5,8 @@ COPY app.ini /data/gitea/conf/app.ini
 RUN mkdir /data/gitea/templates/
 COPY home.tmpl /data/gitea/templates/home.tmpl
 
+ARG DOMAIN_NAME_SL
+ARG DOMAIN_NAME_TL
 COPY gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem /data/gitea/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
 RUN mkdir /home/git
 RUN chown git:git /home/git
