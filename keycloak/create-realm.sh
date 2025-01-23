@@ -627,7 +627,7 @@ echo "Added roles to Tooling Specialist."
     -s 'config.rdnLDAPAttribute=["uid"]' \
     -s 'config.uuidLDAPAttribute=["uid"]' \
     -s 'config.userObjectClasses=["person"]' \
-    -s 'config.connectionUrl=["ldap://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3890"]' \
+    -s "config.connectionUrl=[\"ldap://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3890\"]" \
     -s 'config.usersDn=["ou=people,dc=provider,dc=test"]' \
     -s 'config.searchScope=["1"]' \
     -s 'config.authType=["simple"]' \

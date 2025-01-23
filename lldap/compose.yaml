@@ -30,7 +30,7 @@ services:
       - TZ=Europe/Amsterdam
       - LLDAP_LDAP_BASE_DN=dc=provider,dc=test
       - LLDAP_HTTP_URL = "http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}"
-      # - LLDAP_LDAP_USER_PASS='${ldap_admin_password}'
+      - LLDAP_LDAP_USER_PASS='${ldap_admin_password}'
       # - LLDAP_KEY_FILE = "/data/key.pem"
       # - LLDAP_LDAPS_OPTIONS__ENABLED = TRUE
       # - LLDAP_LDAPS_OPTIONS__PORT = 6360
