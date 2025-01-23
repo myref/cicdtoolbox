@@ -56,6 +56,7 @@ pulp --no-verify-ssl config create --username admin --base-url https://pulp.tool
 echo "****************************************************************************************************************"
 echo " Creating repository and distribution"
 echo "****************************************************************************************************************"
+create_file_repo "file" "toolbox_install" "install_logs"
 create_file_repo "file" "testreports-dev" "dev-reports"
 create_file_repo "file" "testreports-test" "test-reports"
 create_file_repo "file" "testreports-acc" "acc-reports"

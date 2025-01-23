@@ -3,10 +3,10 @@ volumes:
     driver: local
 
 secrets:
-  gitea_key:
-    file: ../vault/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   gitea_crt:
     file: ../vault/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
+  gitea_key:
+    file: ../vault/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
 
 services:
   gitea:
@@ -31,8 +31,8 @@ services:
       - 'GITEA__database__HOST=cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}'
       - 'GITEA__database__USER=${gitea_db_user}'
       - 'GITEA__database__PASSWD=${gitea_db_password}'
-      - 'GITEA__server__CERT_FILE=/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt'
-      - 'GITEA__server__KEY_FILE=/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem'
+      - 'GITEA__server__CERT_FILE=gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt'
+      - 'GITEA__server__KEY_FILE=gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem'
       - 'GITEA__server__SSH_DOMAIN=gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}'
     secrets:
       - source: ca_crt
