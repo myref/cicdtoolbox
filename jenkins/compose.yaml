@@ -43,7 +43,7 @@ services:
     ports:
       - '8084:8084'
     depends_on:
-      - keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - keycloak
     healthcheck:
       test: 'curl --insecure -fSs https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/static/%3Canystring%3E/images/svgs/logo.svg'
       start_period: 60s
