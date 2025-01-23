@@ -36,5 +36,5 @@ cp terraform/vault/variables.tf.org terraform/vault/variables.tf
 sed -i "s/\${DOMAIN_NAME_TL}/${DOMAIN_NAME_TL}/" terraform/vault/variables.tf
 sed -i "s/\${DOMAIN_NAME_SL}/${DOMAIN_NAME_SL}/" terraform/vault/variables.tf
 
-terraform -chdir=terraform/vault init -input=false -e DOMAIN_NAME_SL=${DOMAIN_NAME_SL} -e DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
+terraform -chdir=terraform/vault init -input=false -var DOMAIN_NAME_SL=${DOMAIN_NAME_SL} -var DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
 terraform -chdir=terraform/vault apply --auto-approve

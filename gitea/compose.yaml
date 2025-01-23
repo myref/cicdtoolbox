@@ -9,7 +9,7 @@ secrets:
     file: ../vault/certs/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
-  gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:
+  gitea:
     container_name: gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     depends_on:
