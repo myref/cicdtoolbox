@@ -80,7 +80,7 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Creating LDAP server" 
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --remove-orphans ldap
+lldap/install.sh | tee install_log/lldap_create.log
 echo " "
 echo "****************************************************************************************************************"
 echo " Creating Keycloak "
@@ -89,7 +89,7 @@ keycloak/install.sh ${local_admin_user} ${local_admin_password} | tee install_lo
 echo "****************************************************************************************************************"
 echo " Creating keycloak-vault integration"
 echo "****************************************************************************************************************"
-vault/vault_install_post_keycloak.sh
+vault/vault_install_post_keycloak.sh | tee install_log/vault_keycloak.log
 echo "****************************************************************************************************************"
 echo " Saving gitea certificates"
 echo "****************************************************************************************************************"

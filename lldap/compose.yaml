@@ -35,7 +35,7 @@ services:
       - LLDAP_LDAP_USER_EMAIL='${local_admin_user}@${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}'
       - LLDAP_LDAP_USER_PASS = '${local_admin_password}'
       - LLDAP_FORCE_LDAP_USER_PASS_RESET = FALSE
-      - LLDAP_DATABASE_URL="postgres://${ldap_db_user}:${ldap_db_password}@cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/ldap"
+      - LLDAP_DATABASE_URL="postgres://${ldap_db_user}:${ldap_db_pwd}@cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/ldap"
       - LLDAP_KEY_SEED = '${LLDAP_KEY_SEED}'
       - LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET = FALSE
       - LLDAP_SMTP_OPTIONS__SERVER = "smtp.gmail.com"
