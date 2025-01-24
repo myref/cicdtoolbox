@@ -19,9 +19,7 @@ EOSQL
 if [ -n "$POSTGRES_MULTIPLE_DATABASES" ]; then
 	echo "Multiple database creation requested: $POSTGRES_MULTIPLE_DATABASES"
 	for db in $(echo $POSTGRES_MULTIPLE_DATABASES | tr ',' ' '); do
-		local dbuser=$(echo ${db}"_db_user")
-		local dbpwd=$(echo ${db}"_db_pwd")
-		create_user_and_database $db $dbuser $dbpwd	
+		create_user_and_database $db $(echo ${db}"_db_user") $(echo ${db}"_db_pwd")
 	done
 	echo "Multiple databases created"
 fi
