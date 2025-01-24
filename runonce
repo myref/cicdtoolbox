@@ -69,7 +69,7 @@ docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumffhos
 echo "****************************************************************************************************************"
 echo " Setting up Vault" 
 echo "****************************************************************************************************************"
-vault/vault_install.sh | tee install_log/vault_create.log
+vault/install.sh | tee install_log/vault_create.log
 echo " " 
 echo "****************************************************************************************************************"
 echo " Creating LDAP server" 
@@ -85,7 +85,7 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Creating Keycloak "
 echo "****************************************************************************************************************"
-keycloak/keycloak_install.sh ${local_admin_user} ${local_admin_password} | tee install_log/keycloak_install.log
+keycloak/install.sh ${local_admin_user} ${local_admin_password} | tee install_log/keycloak_install.log
 echo "****************************************************************************************************************"
 echo " Creating keycloak-vault integration"
 echo "****************************************************************************************************************"
@@ -97,18 +97,18 @@ cp vault/certs/gitea* gitea/
 echo "****************************************************************************************************************"
 echo " Creating gitea setup"
 echo "****************************************************************************************************************"
-gitea/gitea_install.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_create.log
-gitea/gitea_users.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_users.log
+gitea/install.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_create.log
+gitea/users.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_users.log
 echo " " 
 echo "****************************************************************************************************************"
 echo " Starting Jenkins"
 echo "****************************************************************************************************************"
-jenkins/jenkins_install.sh
+jenkins/install.sh
 echo " "
 echo "****************************************************************************************************************"
 echo " Starting Pulp"
 echo "****************************************************************************************************************"
-pulp/pulp_install.sh ${local_admin_password} | tee install_log/pulp_create.log
+pulp/install.sh ${local_admin_password} | tee install_log/pulp_create.log
 echo " "
 echo "****************************************************************************************************************"
 echo " Finalizing install via ROBOT"

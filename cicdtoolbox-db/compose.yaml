@@ -22,6 +22,16 @@ services:
       - 'POSTGRES_MULTIPLE_DATABASES=ldap,gitea,keycloak,terraform,pulp'
       - 'POSTGRES_USER=${postgres_user}'
       - 'POSTGRES_PASSWORD=${postgres_password}'
+      - 'ldap_db_user=${ldap_db_user}'
+      - 'ldap_db_pwd=${ldap_db_pwd}'
+      - 'gitea_db_user=${gitea_db_user}'
+      - 'gitea_db_pwd=${gitea_db_pwd}'
+      - 'keycloak_db_user=${keycloak_db_user}'
+      - 'keycloak_db_pwd=${keycloak_db_pwd}'
+      - 'terraform_db_user=${terraform_db_user}'
+      - 'terraform_db_pwd=${terraform_db_pwd}'
+      - 'pulp_db_user=${pulp_db_user}'
+      - 'pulp_db_pwd=${pulp_db_pwd}'
     secrets:
       - source: cicdtoolbox-db_key
         target: /var/lib/postgresql/server1.key

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Started with sh -c "jenkins-install.sh ${jenkins_storepass}"
+# Started with sh -c "install.sh ${jenkins_storepass}"
 
 sp="/-\|"
 sc=0
