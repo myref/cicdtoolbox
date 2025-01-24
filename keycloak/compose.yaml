@@ -24,7 +24,7 @@ services:
       KC_DB_URL_PORT: 5432 
       KC_DB_SCHEMA: public
       KC_DB_USERNAME: '${keycloak_db_user}'
-      KC_DB_PASSWORD: '${keycloak_db_password}' 
+      KC_DB_PASSWORD: '${keycloak_db_pwd}' 
       KC_HOSTNAME: keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} 
       KC_HTTPS_CERTIFICATE_FILE: '/etc/x509/https/tls.crt'
       KC_HTTPS_CERTIFICATE_KEY_FILE: '/etc/x509/https/tls.key'
