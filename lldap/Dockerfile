@@ -1,1 +1,1 @@
-FROM lldap:lldap
+FROM lldap/lldap
