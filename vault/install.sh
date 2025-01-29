@@ -67,6 +67,9 @@ function create_approle() {
     my_id=$(vault read -address="http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200" auth/approle/role/$1/role-id | grep role_id | cut -d " " -f 5)
     echo "$1 role_id = " $my_id
     echo $my_id > vault/ids/$1_vault_id.txt
+    my_secret_id=$(vault write -f -address="http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200" -f auth/approle/role/$1/secret-id | grep secret_id | cut -d " " -f 5)
+    echo "$1 secret_id = " $my_secret_id
+    echo $my_secret_id > vault/ids/$1_vault_secret_id.txt
 }
 echo "****************************************************************************************************************"
 echo " Cleanup Consul and Vault"
@@ -74,38 +77,42 @@ echo "**************************************************************************
 rm -f vault/conf/vault/vault-config-ssl.json
 rm -f vault/conf/vault/vault-config.json
 echo "****************************************************************************************************************"
-echo " Ensure reachability of Consul through the hosts_additions.txt file"
+echo " Ensure reachability of Consul"
 echo "****************************************************************************************************************"
 if grep -q "consul" /etc/hosts; then
-    if [ $install_mode == "vm" ]; then
+    if [ "$install_mode" = "vm" ]; then
         echo " Consul exists in /etc/hosts, removing..."
         echo "sudo sed -i '/consul.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
         echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ $install_mode == "local" ]; then
-        echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" =  "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
     fi
 else
-    if [ $install_mode == "vm" ]; then
+    if [ "$install_mode" = "vm" ]; then
         echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ $install_mode == "local" ]; then
-        echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" = "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
     fi
 fi
 echo "****************************************************************************************************************"
-echo " Ensure reachability of Vault through the hosts_additions.txt file"
+echo " Ensure reachability of Vault"
 echo "****************************************************************************************************************"
 if grep -q "Vault" /etc/hosts; then
-    if [ $install_mode == "vm" ]; then
+    if [ "$install_mode" = "vm" ]; then
         echo " Vault exists in /etc/hosts, removing..."
         echo "sudo sed -i '/vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
         echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ $install_mode == "local" ]; then
+    elif [ "$install_mode" = "local" ]; then
         echo "172.16.9.4   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
     fi
 else
-    if [ $install_mode == "vm" ]; then
+    if [ "$install_mode" = "vm" ]; then
         echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ $install_mode == "local" ]; then
+    elif [ "$install_mode" = "local" ]; then
         echo "172.16.9.4   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
     fi
 fi
@@ -144,7 +151,7 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Initialize Vault, unseal and create secrets engines."
 echo "****************************************************************************************************************"
-robot -d ./install_log -o 00_vault.xml -l 00_vault_log.html -r 00_vault_report.html ./vault/vault-setup.robot
+robot -d ./install/log -o 00_vault.xml -l 00_vault_log.html -r 00_vault_report.html ./vault/vault-setup.robot
 echo "****************************************************************************************************************"
 echo " " 
 echo "****************************************************************************************************************"
@@ -207,7 +214,7 @@ vault auth enable -address="http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAM
 create_approle git-jenkins
 create_approle jenkins-git
 create_approle jenkins-jenkins
-create_approle jenkins-nexus
+create_approle jenkins-pulp
 create_approle jenkins-ansible
 echo "****************************************************************************************************************"
 echo " Preparing PostgreSQL database use" 

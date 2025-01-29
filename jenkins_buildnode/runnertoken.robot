@@ -3,7 +3,7 @@ Library           SeleniumLibrary
 Library           OperatingSystem
 Documentation     Creating gitea runner   
 
-Suite Setup       Open Browser   ${GITEA URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${GITEA URL}      ${BROWSER}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Tasks ***
@@ -13,7 +13,7 @@ Create Gitea Runner tokens
 
 *** Variables ***
 
-${BROWSER1}         chrome
+${BROWSER}         chrome
 ${DELAY}            0
 ${GITEA URL}        https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000
 ${GITEA LOGIN}      https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/login?redirect_to=%2f
@@ -33,7 +33,7 @@ Login to Gitea as netcicd
     Go To                       https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/oauth2/keycloak
     Keycloak Page Should Be Open
     Input Text                  username              netcicd
-    Input Text                  password              ${VALID_PASSWORD}
+    Input Text                  password              %{default_user_password}
     Submit Credentials
 
 Create runner token

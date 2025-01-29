@@ -1,12 +1,20 @@
 secrets:
   dev_jenkins_secret:
     file: ./Dev_secret.txt
+  dev_jenkins_token:
+    file: ./dev_runner_token
   test_jenkins_secret:
     file: ./Test_secret.txt
+  test_jenkins_token:
+    file: ./test_runner_token
   acc_jenkins_secret:
     file: ./Acc_secret.txt
+  acc_jenkins_token:
+    file: ./acc_runner_token
   prod_jenkins_secret:
     file: ./Prod_secret.txt
+  prod_jenkins_token:
+    file: ./prod_runner_token
   build-dev_key:
     file: ./vault/certs/build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   build-dev_crt:
@@ -38,13 +46,17 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      BUILD_ENVIRONMENT: Dev
-      ANSIBLE_TF_DIR: AppCICD
-      ARM_SKIP_PROVIDER_REGISTRATION: 'true'
-      RUNNER_TOKEN: '${RUNNER_TOKEN}'
+      - BUILD_ENVIRONMENT=Dev
+      - ANSIBLE_TF_DIR=AppCICD
+      - ARM_SKIP_PROVIDER_REGISTRATION='true'
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
+      - ORG_NAME=${ORG_NAME}
     secrets:
       - source: dev_jenkins_secret
         target: /home/jenkins/secret-file.txt
+      - source: dev_jenkins_token
+        target: /home/jenkins/git-token.txt
     volumes: 
       - '~/images:/home/jenkins/images'
     depends_on:
@@ -68,13 +80,18 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      BUILD_ENVIRONMENT: Test
-      ANSIBLE_TF_DIR: AppCICD
-      ARM_SKIP_PROVIDER_REGISTRATION: 'true'
-      RUNNER_TOKEN: '${RUNNER_TOKEN}'
+      - BUILD_ENVIRONMENT=Test
+      - ANSIBLE_TF_DIR=AppCICD
+      - ARM_SKIP_PROVIDER_REGISTRATION='true'
+      - RUNNER_TOKEN=${RUNNER_TOKEN}
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
+      - ORG_NAME=${ORG_NAME}
     secrets:
       - source: test_jenkins_secret
         target: /home/jenkins/secret-file.txt
+      - source: test_jenkins_token
+        target: /home/jenkins/git-token.txt
     volumes: 
       - '~/images:/home/jenkins/images'
     depends_on:
@@ -99,13 +116,18 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      BUILD_ENVIRONMENT: Acc
-      ANSIBLE_TF_DIR: AppCICD
-      ARM_SKIP_PROVIDER_REGISTRATION: 'true'
-      RUNNER_TOKEN: '${RUNNER_TOKEN}'
+      - BUILD_ENVIRONMENT=Acc
+      - ANSIBLE_TF_DIR=AppCICD
+      - ARM_SKIP_PROVIDER_REGISTRATION='true'
+      - RUNNER_TOKEN=${RUNNER_TOKEN}
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
+      - ORG_NAME=${ORG_NAME}
     secrets:
       - source: acc_jenkins_secret
         target: /home/jenkins/secret-file.txt
+      - source: acc_jenkins_token
+        target: /home/jenkins/git-token.txt
     volumes: 
       - '~/images:/home/jenkins/images'
     depends_on:
@@ -130,10 +152,13 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      BUILD_ENVIRONMENT: Prod
-      ANSIBLE_TF_DIR: AppCICD
-      ARM_SKIP_PROVIDER_REGISTRATION: 'true'
-      RUNNER_TOKEN: '${RUNNER_TOKEN}'
+      - BUILD_ENVIRONMENT=Prod
+      - ANSIBLE_TF_DIR=AppCICD
+      - ARM_SKIP_PROVIDER_REGISTRATION='true'
+      - RUNNER_TOKEN'${RUNNER_TOKEN}'
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
+      - ORG_NAME=${ORG_NAME}
     volumes: 
       - '~/images:/home/jenkins/images'
     depends_on:
@@ -142,6 +167,8 @@ services:
     secrets:
       - source: prod_jenkins_secret
         target: /home/jenkins/secret-file.txt
+      - source: prod_jenkins_token
+        target: /home/jenkins/git-token.txt
     expose:
       - '50000'
     networks:

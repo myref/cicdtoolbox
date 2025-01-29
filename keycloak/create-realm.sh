@@ -47,7 +47,7 @@ echo "VAULT_token: ${VAULT_token}"
 
 # Now we can add client specific roles (Clientroles)
 ./kcadm.sh create clients/$VAULT_ID/roles -r cicdtoolbox -s name='vault-admin' -s description='The admin role for the Infra Automators organization'
-./kcadm.sh create clients/$VAULT_ID/roles -r cicdtoolbox -s name='infraautomator' -s description='Organization owner role in the Infraautomator organization'
+./kcadm.sh create clients/$VAULT_ID/roles -r cicdtoolbox -s name=$ORG_NAME -s description="Organization owner role in the ${ORG_NAME} organization"
 ./kcadm.sh create clients/$VAULT_ID/roles -r cicdtoolbox -s name='vault-cicdtoolbox-read' -s description='A read-only role on the CICD toolbox'
 ./kcadm.sh create clients/$VAULT_ID/roles -r cicdtoolbox -s name='vault-cicdtoolbox-write' -s description='A read-write role on the CICD toolbox'
 ./kcadm.sh create clients/$VAULT_ID/roles -r cicdtoolbox -s name='vault-cicdtoolbox-admin' -s description='A read-write role on the CICD toolbox'
@@ -133,10 +133,10 @@ echo "GITEA_token: ${GITEA_token}"
 
 # Now we can add client specific roles (Clientroles)
 ./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name=giteaAdmin -s description='The admin role for the Infra Automators organization'
-./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='infraautomator' -s description='Organization owner role in the Infraautomator organization'
-./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-CICDtoolbox-read' -s description='A read-only role on the CICD toolbox'
-./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-CICDtoolbox-write' -s description='A read-write role on the CICD toolbox'
-./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-CICDtoolbox-admin' -s description='A read-write role on the CICD toolbox'
+./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name=$ORG_NAME -s description="Organization owner role in the ${ORG_NAME} organization"
+./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-cicdtoolbox-read' -s description='A read-only role on the CICD toolbox'
+./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-cicdtoolbox-write' -s description='A read-write role on the CICD toolbox'
+./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-cicdtoolbox-admin' -s description='A read-write role on the CICD toolbox'
 ./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-netcicd-read' -s description='A read-only role on NetCICD'
 ./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-netcicd-write' -s description='A read-write role on NetCICD'
 ./kcadm.sh create clients/$GITEA_ID/roles -r cicdtoolbox -s name='gitea-netcicd-admin' -s description='A admin role on NetCICD'
@@ -526,19 +526,39 @@ echo "Created Tooling Designer Group with ID: ${tool_dev_designer_id}"
 ./kcadm.sh add-roles \
     -r cicdtoolbox \
     --gid $tool_dev_designer_id \
+    --cclientid Vault \
+    --rolename vault-appcicd-admin \
+    --rolename vault-templateapp-admin \
+    --rolename vault-cicdtoolbox-admin \
+    --rolename vault-oscicd-admin \
+    --rolename vault-ostest-admin \
+    --rolename vault-osdeploy-admin \
+    --rolename vault-netcicd-admin 
+
+./kcadm.sh add-roles \
+    -r cicdtoolbox \
+    --gid $tool_dev_designer_id \
     --cclientid Gitea \
-    --rolename gitea-oscicd-write \
-    --rolename gitea-ostest-write \
-    --rolename gitea-osdeploy-write 
+    --rolename gitea-appcicd-admin \
+    --rolename gitea-templateapp-admin \
+    --rolename gitea-cicdtoolbox-admin \
+    --rolename gitea-oscicd-admin \
+    --rolename gitea-ostest-admin \
+    --rolename gitea-osdeploy-admin \
+    --rolename gitea-netcicd-admin 
 
 ./kcadm.sh add-roles \
     -r cicdtoolbox \
     --gid $tool_dev_designer_id \
     --cclientid Jenkins \
     --rolename jenkins-user \
+    --rolename jenkins-appcicd-dev \
+    --rolename jenkins-templateapp-dev \
+    --rolename jenkins-cicdtoolbox-dev \
     --rolename jenkins-oscicd-dev \
     --rolename jenkins-ostest-dev \
-    --rolename jenkins-osdeploy-dev    
+    --rolename jenkins-osdeploy-dev \
+    --rolename jenkins-netcicd-dev    
 
 ./kcadm.sh add-roles \
     -r cicdtoolbox \
@@ -546,7 +566,14 @@ echo "Created Tooling Designer Group with ID: ${tool_dev_designer_id}"
     --cclientid Pulp \
     --rolename pulp-docker-pull \
     --rolename pulp-read \
-    --rolename pulp-apt-ubuntu-read
+    --rolename pulp-apt-ubuntu-read \
+    --rolename pulp-cicdtoolbox-agent \
+    --rolename pulp-appcicd-agent \
+    --rolename pulp-netcicd-agent \
+    --rolename pulp-oscicd-agent \
+    --rolename pulp-osdeploy-agent \
+    --rolename pulp-ostest-agent \
+    --rolename pulp-templateapp-agent
 
 echo "Added roles to Tooling Designer."
 

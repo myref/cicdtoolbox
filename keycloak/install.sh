@@ -14,16 +14,27 @@ endspin() {
 }
 
 echo "****************************************************************************************************************"
-echo " Ensure reachability of Keycloak through the hosts file"
+echo " Ensure reachability of Keycloak"
 echo "****************************************************************************************************************"
-sudo chmod o+w /etc/hosts
 if grep -q "keycloak" /etc/hosts; then
-    echo " Keycloak exists in /etc/hosts, removing..."
-    sudo sed -i '/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
+    if [ "$install_mode" = "vm" ]; then
+        echo " KEYCLOAK exists in /etc/hosts, removing..."
+        echo "sudo sed -i '/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
+        echo $host_ip"   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" =  "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.10.11   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
+else
+    if [ "$install_mode" = "vm" ]; then
+        echo $host_ip"   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" = "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.10.11   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
 fi
-echo " Add Keycloak to /etc/hosts"
-sudo echo "172.16.10.11   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Starting Keycloak "
 echo "****************************************************************************************************************"
@@ -40,7 +51,7 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Creating keycloak setup. This will take time..."
 echo "****************************************************************************************************************"
-docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/create-realm.sh ${keycloak_pwd} ${keycloak_storepass} ${keycloak_pwd} ${local_admin_user}" | tee install_log/keycloak_create.log
+docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/create-realm.sh ${keycloak_pwd} ${keycloak_storepass} ${keycloak_pwd} ${local_admin_user}" | tee install/log/keycloak_create.log
 echo " "
 docker restart keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "****************************************************************************************************************"

@@ -49,9 +49,6 @@ lockable-resources:latest
 mailer:latest
 matrix-auth:latest
 matrix-project:latest
-maven-plugin:latest
-nexus-artifact-uploader:latest
-nexus-task-runner:latest
 oic-auth:latest
 pam-auth:latest
 parameterized-trigger:latest

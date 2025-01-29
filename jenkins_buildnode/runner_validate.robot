@@ -3,7 +3,7 @@ Library           SeleniumLibrary
 Library           OperatingSystem
 Documentation     Validate gitea runner
 
-Suite Setup       Open Browser   ${GITEA URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${GITEA URL}      ${BROWSER}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Tasks ***
@@ -13,7 +13,7 @@ Validate runner operation
 
 *** Variables ***
 
-${BROWSER1}         chrome
+${BROWSER}         chrome
 ${DELAY}            0
 ${GITEA URL}        https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000
 ${GITEA LOGIN}      https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/login?redirect_to=%2f
@@ -33,12 +33,12 @@ Login to Gitea as netcicd
     Go To                       https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/oauth2/keycloak
     Keycloak Page Should Be Open
     Input Text                  username              netcicd
-    Input Text                  password              ${VALID_PASSWORD}
+    Input Text                  password              %{default_user_password}
     Submit Credentials
 
 Open Runner page and check status    
     [Arguments]  ${ENVIRONMENT}    ${NAME}    ${SEQ_NR} 
-    Go To                       ${GITEA URL}/admin/actions/runners/${SEQ_NR}
+    Go To                       ${GITEA URL}/-/admin/actions/runners/${SEQ_NR}
     Page Should Contain         ${NAME}
     Page Should Not Contain     Offline
     Page Should Contain         Idle

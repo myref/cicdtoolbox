@@ -21,3 +21,15 @@ variable "authorized_redirects" {
   type        = list(string)
   default     = ["http://localhost:8250/oidc/callback", "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/ui/vault/auth/oidc/oidc/callback"]
 }
+
+variable "DOMAIN_NAME_SL" {
+  description = "dns subdomain"
+  type        = string
+  default     = "provider"
+}
+
+variable "DOMAIN_NAME_TL" {
+  description = "dns domain"
+  type        = string
+  default     = "provider"
+}

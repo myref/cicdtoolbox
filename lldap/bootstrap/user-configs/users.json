@@ -1,0 +1,331 @@
+{
+  "id": "admin",
+  "email": "admin@provider.test",
+  "password": "Pa55w0rd",
+  "displayName": "Administrator",
+  "firstName": "Admin",
+  "lastName": "Administrator",
+  "groups": [
+    "lldap_admin"
+  ]
+}
+{
+  "id": "local-admin",
+  "email": "local-admin@provider.test",
+  "password": "Pa55w0rd",
+  "displayName": "Administrator",
+  "firstName": "Admin",
+  "lastName": "Administrator",
+  "groups": [
+    "lldap_admin"
+  ]
+}
+{
+  "id": "patchhero",
+  "email": "patchhero@provider.test",
+  "password": "netcicd01",
+  "displayName": "Patchhero",
+  "firstName": "Patch",
+  "lastName": "Hero",
+  "groups": [
+    "field_services_floor_management"
+  ]
+}
+{
+  "id": "mechanicjoe",
+  "email": "mechanicjoe@provider.test",
+  "password": "netcicd01",
+  "displayName": "mechanicjoe",
+  "firstName": "Mechanic",
+  "lastName": "Joe",
+  "groups": [
+    "field_services_eng"
+  ]
+}
+{
+  "id": "blackhat",
+  "email": "blackhat@provider.test",
+  "password": "netcicd01",
+  "displayName": "blackhat",
+  "firstName": "Black",
+  "lastName": "Hat",
+  "groups": [
+    "security_dev_design"
+  ]
+}
+{
+  "id": "whitehat",
+  "email": "whitehat@provider.test",
+  "password": "netcicd01",
+  "displayName": "whitehat",
+  "firstName": "White",
+  "lastName": "Hat",
+  "groups": [
+    "security_ops_spec"
+  ]
+}
+{
+  "id": "happyhacker",
+  "email": "happyhacker@provider.test",
+  "password": "netcicd01",
+  "displayName": "happyhacker",
+  "firstName": "Happy",
+  "lastName": "Hacker",
+  "groups": [
+    "security_ops_oper"
+  ]
+}
+{
+  "id": "blacksmith",
+  "email": "blacksmith@provider.test",
+  "password": "netcicd01",
+  "displayName": "blacksmith",
+  "firstName": "Black",
+  "lastName": "Smith",
+  "groups": [
+    "tooling_dev_design"
+  ]
+}
+{
+  "id": "toolmaster",
+  "email": "toolmaster@provider.test",
+  "password": "netcicd01",
+  "displayName": "toolmaster",
+  "firstName": "Tool",
+  "lastName": "Master",
+  "groups": [
+    "tooling_ops_spec"
+  ]
+}
+{
+  "id": "tooltiger",
+  "email": "tooltiger@provider.test",
+  "password": "netcicd01",
+  "displayName": "tooltiger",
+  "firstName": "Tool",
+  "lastName": "Tiger",
+  "groups": [
+    "tooling_ops_oper"
+  ]
+}
+{
+  "id": "diskarchitect",
+  "email": "diskarchitect@provider.test",
+  "password": "netcicd01",
+  "displayName": "diskarchitect",
+  "firstName": "Disk",
+  "lastName": "Architect",
+  "groups": [
+    "dc_dev_storage"
+  ]
+}
+{
+  "id": "netarchitect",
+  "email": "netarchitect@provider.test",
+  "password": "netcicd01",
+  "displayName": "netarchitect",
+  "firstName": "Net",
+  "lastName": "Architect",
+  "groups": [
+    "wan_dev_design"
+  ]
+}
+{
+  "id": "compuarchitect",
+  "email": "compuarchitect@provider.test",
+  "password": "netcicd01",
+  "displayName": "compuarchitect",
+  "firstName": "Compu",
+  "lastName": "Architect",
+  "groups": [
+    "dc_dev_compute"
+  ]
+}
+{
+  "id": "diskspecialist",
+  "email": "diskspecialist@provider.test",
+  "password": "netcicd01",
+  "displayName": "diskspecialist",
+  "firstName": "Disk",
+  "lastName": "Specialist",
+  "groups": [
+    "dc_ops_storage_spec"
+  ]
+}
+{
+  "id": "diskdude",
+  "email": "diskdude@provider.test",
+  "password": "netcicd01",
+  "displayName": "diskdude",
+  "firstName": "Disk",
+  "lastName": "Dude",
+  "groups": [
+    "dc_ops_storage_oper"
+  ]
+}
+{
+  "id": "netspecialist",
+  "email": "netspecialist@provider.test",
+  "password": "netcicd01",
+  "displayName": "netspecialist",
+  "firstName": "Net",
+  "lastName": "Specialist",
+  "groups": [
+    "wan_ops_spec"
+  ]
+}
+{
+  "id": "netdude",
+  "email": "netdude@provider.test",
+  "password": "netcicd01",
+  "displayName": "netdude",
+  "firstName": "Net",
+  "lastName": "Dude",
+  "groups": [
+    "wan_ops_oper"
+  ]
+}
+{
+  "id": "compuspecialist",
+  "email": "compuspecialist@provider.test",
+  "password": "netcicd01",
+  "displayName": "compuspecialist",
+  "firstName": "Net",
+  "lastName": "Specialist",
+  "groups": [
+    "dc_ops_compute_spec"
+  ]
+}
+{
+  "id": "compudude",
+  "email": "compudude@provider.test",
+  "password": "netcicd01",
+  "displayName": "compudude",
+  "firstName": "Compu",
+  "lastName": "Dude",
+  "groups": [
+    "dc_ops_compute_oper"
+  ]
+}
+{
+  "id": "corearchitect",
+  "email": "corearchitect@provider.test",
+  "password": "netcicd01",
+  "displayName": "corearchitect",
+  "firstName": "Core",
+  "lastName": "Architect",
+  "groups": [
+    "wan_dev_design"
+  ]
+}
+{
+  "id": "wanspec",
+  "email": "wanspec@provider.test",
+  "password": "netcicd01",
+  "displayName": "wanspec",
+  "firstName": "WAN",
+  "lastName": "Specialist",
+  "groups": [
+    "wan_ops_spec"
+  ]
+}
+{
+  "id": "wanoper",
+  "email": "wanoper@provider.test",
+  "password": "netcicd01",
+  "displayName": "wanoper",
+  "firstName": "WAN",
+  "lastName": "Dude",
+  "groups": [
+    "wan_ops_oper"
+  ]
+}
+{
+  "id": "campusspec",
+  "email": "campusspec@provider.test",
+  "password": "netcicd01",
+  "displayName": "campusspec",
+  "firstName": "Campus",
+  "lastName": "Specialist",
+  "groups": [
+    "campus_ops_spec"
+  ]
+}
+{
+  "id": "campusoper",
+  "email": "campusoper@provider.test",
+  "password": "netcicd01",
+  "displayName": "campusoper",
+  "firstName": "Campus",
+  "lastName": "Dude",
+  "groups": [
+    "campus_ops_oper"
+  ]
+}
+{
+  "id": "campuswifidev",
+  "email": "campuswifidev@provider.test",
+  "password": "netcicd01",
+  "displayName": "campuswifidev",
+  "firstName": "Campus",
+  "lastName": "Wifidev",
+  "groups": [
+    "campus_dev_wifi"
+  ]
+}
+{
+  "id": "campuslandev",
+  "email": "campuslandev@provider.test",
+  "password": "netcicd01",
+  "displayName": "campuslandev",
+  "firstName": "Campus",
+  "lastName": "LAN Dev",
+  "groups": [
+    "campus_dev_lan"
+  ]
+}
+{
+  "id": "jenkins-jenkins",
+  "email": "jenkins-jenkins@provider.test",
+  "password": "netcicd01",
+  "displayName": "jenkins-jenkins",
+  "firstName": "Jenkins",
+  "lastName": "Jenkins",
+  "groups": [
+    "cicd_agents"
+  ]
+}
+{
+  "id": "jenkins-git",
+  "email": "jenkins-git@provider.test",
+  "password": "netcicd01",
+  "displayName": "jenkins-git",
+  "firstName": "Jenkins",
+  "lastName": "Git",
+  "groups": [
+    "git_from_jenkins"
+  ]
+}
+{
+  "id": "jenkins-pulp",
+  "email": "jenkins-pulp@provider.test",
+  "password": "netcicd01",
+  "displayName": "jenkins-pulp",
+  "firstName": "Jenkins",
+  "lastName": "Pulp",
+  "groups": [
+    "cicd_agents"
+  ]
+}
+{
+  "id": "netcicd",
+  "email": "netcicd@provider.test",
+  "password": "netcicd01",
+  "displayName": "netcicd",
+  "firstName": "Net",
+  "lastName": "CICD",
+  "groups": [
+    "lldap_admin",
+    "toolbox_admin"
+  ]
+}

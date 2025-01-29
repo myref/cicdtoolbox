@@ -93,28 +93,9 @@ You need to be able to run docker as non-root. See [here](https://docs.docker.co
 * Networks are preconfigured to enable the connect-back from CML
 * Running or starting twice will create failing networks and/or containers, duplicate IP addresses and all kinds of other mayhem.
 
-## Cisco Devnet Sandbox use
-You should be able to run the lab in a Cisco Devnet Sandbox. Install takes abount 1 hour due to CPU limitations.
-
-* Go to: [the Devnet Sandbox](https://devnetsandbox.cisco.com/RM/Diagram/Index/685f774a-a5d6-4df5-a324-3774217d0e6b?diagramType=Topology) and log in with the credentials of your choice.
-* clone this repo: git clone https://github.com/Devoteam/CICD-toolbox.git
-* Go to the repo: cd CICD-toolbox
-* Run the startup script: ./runonce-devnet-sandbox.sh
-
-You need to have a local reference to Keycloak and the other systems by name. Run the **devnet-sandbox-reachability.sh** script to accomplish this (the script is designed for use in Ubuntu Linux, there are no plans to add other versions). 
-
-If all goes well, it installs the containers and you are **almost** good to go. In order to make everything work properly, get the rdp session going and execute the robot script:
-
-robot -d install_log/ finalize_install.robot
-
-to configure all kinds of default passwords. If everything works as designed, you should see browsers popping up, opening Jenkins, Gitea and Keycloak for the creation of the required keys and tokens. 
-
-All steps should PASS!
-
-If you now log into Jenkins, you should see Jenkins scanning Gitea, finding two repositories, and starting a test on NetCICD. At the moment this lab fails. It is most probably due to having incorrect IP addresses in the NetCICD_agent. We are working on a fix.
 
 ## Users ##
-All users are configured in Keycloak. [The wiki](https://github.com/Devoteam/CICD-toolbox/wiki/Users-and-passwords) has the complete list.
+All users are configured in LLDAP. [The wiki](https://github.com/Devoteam/CICD-toolbox/wiki/Users-and-passwords) has the complete list.
 
 ### Wat the Robot script does ###
 In order for Jenkins to be able to run the jenkinsfiles, jenkins needs the jenkins-jenkins user to have a token.

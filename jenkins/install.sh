@@ -14,8 +14,42 @@ spin() {
 endspin() {
    printf "\r%s\n" "$@"
 }
-pwd 
-echo $jenkins_storepass
+
+echo "****************************************************************************************************************"
+echo " Cleaning Jenkins" 
+echo "****************************************************************************************************************"
+rm -f jenkins/jenkins.tooling*
+echo " " 
+echo "****************************************************************************************************************"
+echo " Cleaning Jenkins buildnodes" 
+echo "****************************************************************************************************************"
+rm -f jenkins_buildnode/*_secret.txt
+rm -f jenkins_buildnode/agent.jar
+rm -f jenkins_buildnode/jenkins-cli.jar
+rm -f jenkins_buildnode/*_token
+echo " " 
+echo "****************************************************************************************************************"
+echo " Ensure reachability of Jenkins"
+echo "****************************************************************************************************************"
+if grep -q "jenkins" /etc/hosts; then
+    if [ "$install_mode" = "vm" ]; then
+        echo " Jenkins exists in /etc/hosts, removing..."
+        echo "sudo sed -i '/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
+        echo $host_ip"   jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" =  "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.11.8   jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
+else
+    if [ "$install_mode" = "vm" ]; then
+        echo $host_ip"   jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" = "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.11.8   jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
+fi
 echo "****************************************************************************************************************"
 echo " Copying Jenkins certificates"
 echo "****************************************************************************************************************"
@@ -51,7 +85,7 @@ echo "**************************************************************************
 echo " putting Jenkins secret in casc file"
 echo "****************************************************************************************************************"
 #config for oic_auth plugin: need to replace secrets in casc.yaml
-jenkins_client_id=$(grep JENKINS_token: install_log/keycloak_create.log | cut -d' ' -f2 | tr -d '\r' )
+jenkins_client_id=$(grep JENKINS_token: install/log/keycloak_create.log | cut -d' ' -f2 | tr -d '\r' )
 docker exec -it jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "sed -i -e 's/oic_secret/\"${jenkins_client_id}\"/' /var/jenkins_conf/casc.yaml"
 echo " " 
 echo "****************************************************************************************************************"
@@ -82,54 +116,9 @@ cp ./jenkins/keystore/cacerts ./jenkins_buildnode/cacerts
 echo "****************************************************************************************************************"
 echo " Configuring Jenkins for jenkins-jenkins login and storing token"
 echo "****************************************************************************************************************"
-robot --variable VALID_PASSWORD:$netcicd_pwd -d install_log -o 20_configure_jenkins.xml -l 20_configure_jenkins_log.html -r 20_configure_jenkins_report.html jenkins/configure_jenkins.robot
-echo "****************************************************************************************************************"
-echo " Retrieving Jenkins CSRF"
-echo "****************************************************************************************************************"
-if [ -f "jtoken.txt" ]; then
-    echo "Token exists"
-    jtoken=$(cat jtoken.txt)
-    echo "jtoken: ${jtoken}"
-    echo "****************************************************************************************************************"
-    echo " Wait until we can retrieve the CSRF"
-    echo "****************************************************************************************************************"
-
-    if curl -u "jenkins-jenkins:${jtoken}" --insecure 'https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'; then
-        crumb=$(curl -u "jenkins-jenkins:${jtoken}" --insecure 'https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-        echo "crumb: ${crumb}"
-        csrf=$( echo $crumb | awk -F',' '{print $(1)}' | awk -F':' '{print $2}' )
-        echo "csrf: ${csrf}"
-        #rm -f jtoken.txt
-    else
-        echo "No crumb!"
-        #exit 1
-    fi
-
-else
-    echo " No token, aborting"
-    #exit 1
-fi
+robot -d install/log -o 20_configure_jenkins.xml -l 20_configure_jenkins_log.html -r 20_configure_jenkins_report.html jenkins/configure_jenkins.robot
 echo " " 
-echo "****************************************************************************************************************"
-echo " Retrieving Jenkins Agent secrets"
-echo "****************************************************************************************************************"
-curl -L --insecure -u "jenkins-jenkins:${jtoken}" -H "Jenkins-Crumb:${csrf}" https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/computer/Dev/jenkins-agent.jnlp -s | sed "s/.*<jnlp><application-desc><argument>\([a-z0-9]*\).*/\1/" > jenkins_buildnode/Dev_secret.txt
-echo "dev: " 
-cat jenkins_buildnode/Dev_secret.txt
-echo "" 
-curl -L --insecure -u "jenkins-jenkins:${jtoken}" -H "Jenkins-Crumb:${csrf}" https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/computer/Acc/jenkins-agent.jnlp -s | sed "s/.*<jnlp><application-desc><argument>\([a-z0-9]*\).*/\1/" > jenkins_buildnode/Acc_secret.txt
-echo "acc: " 
-cat jenkins_buildnode/Acc_secret.txt
-echo "" 
-curl -L --insecure -u "jenkins-jenkins:${jtoken}" -H "Jenkins-Crumb:${csrf}" https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/computer/Test/jenkins-agent.jnlp -s | sed "s/.*<jnlp><application-desc><argument>\([a-z0-9]*\).*/\1/" > jenkins_buildnode/Test_secret.txt
-echo "test: " 
-cat jenkins_buildnode/Test_secret.txt
-echo "" 
-curl -L --insecure -u "jenkins-jenkins:${jtoken}" -H "Jenkins-Crumb:${csrf}" https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/computer/Prod/jenkins-agent.jnlp -s | sed "s/.*<jnlp><application-desc><argument>\([a-z0-9]*\).*/\1/" > jenkins_buildnode/Prod_secret.txt
-echo "prod: " 
-cat jenkins_buildnode/Prod_secret.txt
-echo "" 
 echo "****************************************************************************************************************"
 echo " Building build nodes"
 echo "****************************************************************************************************************"
-jenkins_buildnode/create_runner.sh ${netcicd_pwd} | tee install_log/buildnode_create.log
+jenkins_buildnode/install.sh | tee install/log/buildnode_create.log

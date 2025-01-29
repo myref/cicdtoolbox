@@ -20,44 +20,45 @@ docker compose --project-name cicd-toolbox down --remove-orphans
 docker compose --project-name cicd-toolbox rm -f
 docker volume rm $(docker volume ls -q)
 rm -f *_token
-rm -f install_tests/log.html
-rm -f install_tests/output.xml
-rm -f install_tests/report.html
-rm -f install_tests/*.png
-rm -f install_tests/*.log
-rm -rf install_log/*
+rm -f install/tests/log.html
+rm -f install/tests/output.xml
+rm -f install/tests/report.html
+rm -f install/tests/*.png
+rm -f install/tests/*.log
+rm -rf install/log/*
 rm *_log.html
 rm *_report.html
 rm *.xml
-cat /dev/null > ./hosts_additions.txt
+cat /dev/null > hosts_additions.txt
 echo " " 
-echo "****************************************************************************************************************"
-echo " Cleaning LLDAP" 
-echo "****************************************************************************************************************"
-rm -f lldap/data/*.crt
-rm -rf lldap/data/*.pem
-echo " " 
-echo "****************************************************************************************************************"
-echo " Cleaning database" 
-echo "****************************************************************************************************************"
-rm -f cicdtoolbox-db/docker-entrypoint-initdb-resources/*
-echo " " 
-echo "****************************************************************************************************************"
-echo " Cleaning Jenkins" 
-echo "****************************************************************************************************************"
-rm -f jenkins/jenkins.tooling*
-rm -f jenkins_buildnode/*_secret.txt
-rm -f jenkins_buildnode/agent.jar
-rm -f jenkins_buildnode/jenkins-cli.jar
-rm -f jenkins_buildnode/*_token
-echo " " 
-
 echo "****************************************************************************************************************"
 echo " Making sure all containers are reachable locally with the name in the"
 echo " hosts file."
 echo "****************************************************************************************************************"
 echo " " 
-host_ip=$(hostname -I | awk '{print $1}')
+if [ $install_mode=="local" ]; then
+   echo "****************************************************************************************************************"
+   echo " Adding entries to hosts file"
+   echo "****************************************************************************************************************"
+   sudo chmod o+w /etc/hosts
+   if grep -q "seleniumffhost" /etc/hosts; then
+      echo "Selenium Firefox testhost exists in /etc/hosts, removing..."
+      sudo sed -i "/seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
+   fi
+   echo " Add Selenium Firefox testhost to /etc/hosts"
+   sudo echo "172.16.10.100 seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+
+   if grep -q "seleniumgchost" /etc/hosts; then
+      echo "Selenium Google Chrome testhost exists in /etc/hosts, removing..."
+      sudo sed -i "/seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
+   fi
+   echo " Add Selenium Google Chrome testhost to /etc/hosts"
+   sudo echo "172.16.10.101 seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+   sudo chmod o-w /etc/hosts
+else
+   export host_ip=$(hostname -I | awk '{print $1}')
+   echo $host_ip"   seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
 echo "****************************************************************************************************************"
 echo " Setting up Chrome host for Selenium" 
 echo "****************************************************************************************************************"
@@ -69,36 +70,31 @@ docker compose --project-name cicd-toolbox up -d --build --no-deps seleniumffhos
 echo "****************************************************************************************************************"
 echo " Setting up Vault" 
 echo "****************************************************************************************************************"
-vault/install.sh | tee install_log/vault_create.log
+vault/install.sh | tee install/log/vault_create.log
 echo " " 
 echo "****************************************************************************************************************"
 echo " Creating database"
 echo "****************************************************************************************************************"
-DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build cicdtoolbox-db
-sleep 10
+cicdtoolbox-db/install.sh | tee install/log/cicdtoolbox-db_create.log
 echo " " 
 echo "****************************************************************************************************************"
 echo " Creating LDAP server" 
 echo "****************************************************************************************************************"
-lldap/install.sh | tee install_log/lldap_create.log
+lldap/install.sh | tee install/log/lldap_create.log
 echo " "
 echo "****************************************************************************************************************"
 echo " Creating Keycloak "
 echo "****************************************************************************************************************"
-keycloak/install.sh ${local_admin_user} ${local_admin_password} | tee install_log/keycloak_install.log
+keycloak/install.sh | tee install/log/keycloak_install.log
 echo "****************************************************************************************************************"
 echo " Creating keycloak-vault integration"
 echo "****************************************************************************************************************"
-vault/vault_install_post_keycloak.sh | tee install_log/vault_keycloak.log
-echo "****************************************************************************************************************"
-echo " Saving gitea certificates"
-echo "****************************************************************************************************************"
-cp vault/certs/gitea* gitea/
+vault/vault_install_post_keycloak.sh | tee install/log/vault_keycloak.log
 echo "****************************************************************************************************************"
 echo " Creating gitea setup"
 echo "****************************************************************************************************************"
-gitea/install.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_create.log
-gitea/users.sh ${netcicd_pwd} ${local_admin_user} | tee install_log/gitea_users.log
+gitea/install.sh | tee install/log/gitea_create.log
+gitea/users.sh | tee install/log/gitea_users.log
 echo " " 
 echo "****************************************************************************************************************"
 echo " Starting Jenkins"
@@ -108,51 +104,46 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Starting Pulp"
 echo "****************************************************************************************************************"
-pulp/install.sh ${local_admin_password} | tee install_log/pulp_create.log
+pulp/install.sh ${local_admin_password} | tee install/log/pulp_create.log
 echo " "
-echo "****************************************************************************************************************"
-echo " Finalizing install via ROBOT"
-echo "****************************************************************************************************************"
-robot --variable VALID_PASSWORD:${netcicd_pwd} -d install_log -o 20_finalize.xml -l 20_finalize_log.html -r 20_finalize_report.html finalize_install.robot
-echo " " 
 echo "****************************************************************************************************************"
 echo " Validating install"
 echo "****************************************************************************************************************"
-robot --variable VALID_PASSWORD:${netcicd_pwd} -d install_log -o 100_install_test.xml -l 100_install_test_log.html -r 100_install_test_report.html install_tests
+robot --variable VALID_PASSWORD:${default_user_password} -d install/log -o 100_install_test.xml -l 100_install_test_log.html -r 100_install_test_report.html install/tests
 echo " " 
 echo "****************************************************************************************************************"
 echo " Running trivy vulnerability scanner (https://github.com/aquasecurity/trivy)" 
 echo "****************************************************************************************************************"
 if command -v trivy &> /dev/null
 then
-echo "****************************************************************************************************************"
-echo " Toolbox files" 
-echo "****************************************************************************************************************"
-trivy fs --security-checks vuln,config . | tee install_log/trivy_create.log
+   echo "****************************************************************************************************************"
+   echo " Toolbox files" 
+   echo "****************************************************************************************************************"
+   trivy fs --security-checks vuln,config . | tee install/log/trivy_create.log
 
-echo "****************************************************************************************************************"
-echo " Gitea" 
-echo "****************************************************************************************************************"
-trivy image gitea/gitea:rootless | tee -a install_log/trivy_create.log
-echo "****************************************************************************************************************"
-echo " Jenkins" 
-echo "****************************************************************************************************************"
-trivy image jenkins/jenkins:lts | tee -a install_log/trivy_create.log
-echo "****************************************************************************************************************"
-echo " Keycloak" 
-echo "****************************************************************************************************************"
-trivy image jboss/keycloak:latest | tee -a install_log/trivy_create.log
-echo "****************************************************************************************************************"
-echo " PostgreSQL" 
-echo "****************************************************************************************************************"
-trivy image postgres:latest | tee -a install_log/trivy_create.log
+   echo "****************************************************************************************************************"
+   echo " Gitea" 
+   echo "****************************************************************************************************************"
+   trivy image gitea/gitea:rootless >> install/log/trivy_create.log
+   echo "****************************************************************************************************************"
+   echo " Jenkins" 
+   echo "****************************************************************************************************************"
+   trivy image jenkins/jenkins:lts >> install/log/trivy_create.log
+   echo "****************************************************************************************************************"
+   echo " Keycloak" 
+   echo "****************************************************************************************************************"
+   trivy image jboss/keycloak:latest >> install/log/trivy_create.log
+   echo "****************************************************************************************************************"
+   echo " PostgreSQL" 
+   echo "****************************************************************************************************************"
+   trivy image postgres:latest >> install/log/trivy_create.log
 else
     echo "trivy is not installed"
 fi
 echo "****************************************************************************************************************"
 echo " Consolidating all robot test reports into one"
 echo "****************************************************************************************************************"
-rebot --norpa --output runonce.xml --log runonce_log.html --report runonce_report.html  ./install_log/*.xml
+rebot --norpa -d install/ --output runonce.xml --log runonce_log.html --report runonce_report.html  ./install/log/*.xml
 echo "****************************************************************************************************************"
 echo " The pipeline uses the default Cisco DevNet CML Sandbox credentials developer/C1sco12345 to log in to CML."
 echo " You may change this to your own credentials in:"
@@ -165,8 +156,21 @@ echo " Stop the environment with ./down, start with ./up"
 echo " "
 echo "****************************************************************************************************************"
 echo "CICD-toolbox install done "
+echo "****************************************************************************************************************"
 echo " "
-echo "You can read the install test report in install_tests/report.html"
+echo "****************************************************************************************************************"
+echo "Copying logfiles to pulp"
+echo "****************************************************************************************************************"
+echo " "
+if [[ -d install/log ]]; then
+   find install/log -type f | xargs -I {} pulp --no-verify-ssl --username admin --password "${local_admin_password}" file content upload --repository toolbox_install --file "{}" --relative-path "{}" >> install/log/pulp.log
+fi
+find install/runonce?* -type f | xargs -I {} pulp --no-verify-ssl --username admin --password "${local_admin_password}" file content upload --repository toolbox_install --file "{}" --relative-path "{}" >> install/log/pulp.log
+echo "****************************************************************************************************************"
+echo "Done!"
+echo "****************************************************************************************************************"
+echo " "
+echo "You can read the install test reports in https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/pulp/content/install/logs/install/log/"
 echo " "
 echo "You can reach the servers on:"
 echo " "
@@ -181,7 +185,4 @@ echo "              http://seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NA
 echo " Chrome:      http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:4444 (Dashboard)"
 echo "              http://seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:7900 (NoVNC)"
 echo " "
-echo " The installation test report generated by Robotframework can be found here: file:///home/$USER/CICD-toolbox/runonce_report.html" 
-echo "****************************************************************************************************************"
-echo "Cleaning up"
 echo "****************************************************************************************************************"

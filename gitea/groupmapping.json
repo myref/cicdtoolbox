@@ -1,12 +1,12 @@
 \{
-    \"gitea-CICDtoolbox-read\": {
-        \"infraautomator\": [\"gitea-CICDtoolbox-read\"]
+    \"gitea-cicdtoolbox-read\": {
+        \"infraautomator\": [\"gitea-cicdtoolbox-read\"]
     }\,
-    \"gitea-CICDtoolbox-write\": {
-        \"infraautomator\": [\"gitea-CICDtoolbox-write\"]
+    \"gitea-cicdtoolbox-write\": {
+        \"infraautomator\": [\"gitea-cicdtoolbox-write\"]
     }\,
-    \"gitea-CICDtoolbox-admin\": {
-        \"infraautomator\": [\"gitea-CICDtoolbox-admin\"]
+    \"gitea-cicdtoolbox-admin\": {
+        \"infraautomator\": [\"gitea-cicdtoolbox-admin\"]
     }\,
     \"gitea-netcicd-read\": {
         \"infraautomator\": [\"gitea-netcicd-read\"]
@@ -35,31 +35,31 @@
     \"gitea-templateapp-admin\": {
         \"infraautomator\": [\"gitea-templateapp-admin\"]
     }\,
-    \"gitea-OsCICD-read\": {
-        \"infraautomator\": [\"gitea-OsCICD-read\"]
+    \"gitea-oscicd-read\": {
+        \"infraautomator\": [\"gitea-oscicd-read\"]
     }\,
-    \"gitea-OsCICD-write\": {
-        \"infraautomator\": [\"gitea-OsCICD-write\"]
+    \"gitea-oscicd-write\": {
+        \"infraautomator\": [\"gitea-oscicd-write\"]
     }\,
-    \"gitea-OsCICD-admin\": {
-        \"infraautomator\": [\"gitea-OsCICD-admin\"]
+    \"gitea-oscicd-admin\": {
+        \"infraautomator\": [\"gitea-oscicd-admin\"]
     }\,
-    \"gitea-OsDeploy-read\": {
-        \"infraautomator\": [\"gitea-OsDeploy-read\"]
+    \"gitea-osdeploy-read\": {
+        \"infraautomator\": [\"gitea-osdeploy-read\"]
     }\,
-    \"gitea-OsDeploy-write\": {
-        \"infraautomator\": [\"gitea-OsDeploy-write\"]
+    \"gitea-osdeploy-write\": {
+        \"infraautomator\": [\"gitea-osdeploy-write\"]
     }\,
-    \"gitea-OsDeploy-admin\": {
-        \"infraautomator\": [\"gitea-OsDeploy-admin\"]
+    \"gitea-osdeploy-admin\": {
+        \"infraautomator\": [\"gitea-osdeploy-admin\"]
     }\,
-    \"gitea-OsTest-read\": {
-        \"infraautomator\": [\"gitea-OsTest-read\"]
+    \"gitea-ostest-read\": {
+        \"infraautomator\": [\"gitea-ostest-read\"]
     }\,
-    \"gitea-OsTest-write\": {
-        \"infraautomator\": [\"gitea-OsTest-write\"]
+    \"gitea-ostest-write\": {
+        \"infraautomator\": [\"gitea-ostest-write\"]
     }\,
-    \"gitea-OsTest-admin\": {
-        \"infraautomator\": [\"gitea-myapp-deptestloy-admin\"]
+    \"gitea-ostest-admin\": {
+        \"infraautomator\": [\"gitea-ostest-admin\"]
     }
 \}

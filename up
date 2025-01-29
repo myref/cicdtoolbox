@@ -1,5 +1,5 @@
 #!/bin/bash
-netcicd_pwd="netcicd01"
+default_user_password="netcicd01"
 sp="/-\|"
 sc=0
 spin() {
@@ -25,7 +25,7 @@ unseal_key=(cat ./vault/key.txt)
 =======
 unseal_key=$(cat ./vault/key.txt)
 >>>>>>> e86c637 (bare rr version)
-robot --variable key:${unseal_key} -d install_log ./vault/unseal.robot
+robot --variable key:${unseal_key} -d install/log ./vault/unseal.robot
 
 docker-compose start cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "Waiting for Keycloak to come online"
@@ -37,7 +37,7 @@ echo " "
 # echo "****************************************************************************************************************"
 # echo " Creating Grafana Keycloak Client secret"
 # echo "****************************************************************************************************************"
-# export Grafana_CLIENT_SECRET=$(grep Grafana_token install_log/grafana_create.log | cut -d' ' -f2 | tr -d '\r')
+# export Grafana_CLIENT_SECRET=$(grep Grafana_token install/log/grafana_create.log | cut -d' ' -f2 | tr -d '\r')
 # echo $Grafana_CLIENT_SECRET
 
 docker-compose start 
@@ -67,5 +67,5 @@ endspin
 echo "****************************************************************************************************************"
 echo " Validating install"
 echo "****************************************************************************************************************"
-robot --variable VALID_PASSWORD:${netcicd_pwd} -d install_tests/ install_tests
-robot --variable VALID_PASSWORD:${netcicd_pwd} -d install_tests/ -o ./install_log/runner.xml -l ./install_log/runner_log.html -r ./install_log/runner_report.html ./jenkins_buildnode/runner_validate.robot
+robot --variable VALID_PASSWORD:${default_user_password} -d install/tests/ install_tests
+robot --variable VALID_PASSWORD:${default_user_password} -d install/tests/ -o ./install/log/runner.xml -l ./install/log/runner_log.html -r ./install/log/runner_report.html ./jenkins_buildnode/runner_validate.robot

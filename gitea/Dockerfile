@@ -1,8 +1,7 @@
 # pulling offical image
 FROM gitea/gitea:1
 
-COPY app.ini /data/gitea/conf/app.ini
-RUN mkdir /data/gitea/templates/
+#RUN mkdir /data/gitea/templates/
 COPY home.tmpl /data/gitea/templates/home.tmpl
 
 ARG DOMAIN_NAME_SL

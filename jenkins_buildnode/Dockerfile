@@ -1,0 +1,57 @@
+FROM ubuntu:noble-20241015
+
+ENV JAVA_HOME "/usr"
+
+RUN apt update 
+RUN apt install -y mkisofs gpg wget openjdk-17-jre-headless git openssh-server openssh-client direnv libxml2-dev libxslt1-dev sshpass curl python3-full python3-pip ansible iproute2 vim iputils-ping bash-completion python-is-python3 ca-certificates curl docker.io docker-compose docker-buildx
+RUN wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+RUN apt-get update 
+RUN apt-get upgrade -y
+RUN apt install -y  terraform 
+RUN pip3 install robotframework robotframework-selenium2library robotframework-requests pulp-cli[pygments] --break-system-packages
+
+
+RUN echo """\
+\n\
+Host *\n\
+    PasswordAuthentication yes\n\
+    StrictHostKeyChecking no\n\
+    UserKnownHostsFile ~/.ssh/known_hosts\n\
+""" >> /etc/ssh/ssh_config
+
+RUN echo "export JAVA_HOME=/usr" >> /etc/profile
+
+RUN ansible-galaxy collection install ansible.posix
+RUN ansible-galaxy collection install ansible.utils
+RUN ansible-galaxy collection install community.docker
+RUN ansible-galaxy collection install community.general
+RUN ansible-galaxy collection install community.postgresql
+RUN ansible-galaxy collection install hpe.ilo
+
+RUN adduser --quiet jenkins && (echo "jenkins:jenkins" | chpasswd) && (echo "root:root" | chpasswd)
+RUN echo "[defaults]" > /home/jenkins/.ansible.cfg
+RUN echo "host_key_checking = False" >> /home/jenkins/.ansible.cfg
+COPY act_runner-0.2.11-linux-amd64 /home/jenkins/act_runner
+COPY agent.jar /home/jenkins/
+RUN mkdir /home/jenkins/.ssh
+RUN touch /home/jenkins/.ssh/known_hosts
+
+RUN chown -R jenkins:jenkins /home/jenkins
+
+RUN echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
+
+COPY docker-entrypoint.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN rm -rf /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_dsa_key
+COPY TEMPLATE.qemu /etc/apparmor.d/libvirt/TEMPLATE.qemu
+
+COPY ca.crt /usr/local/share/ca-certificates/ca.crt
+RUN update-ca-certificates
+COPY cacerts /etc/ssl/certs/java/cacerts 
+USER root
+CMD ["/usr/sbin/sshd", "-D"]
+COPY rc.local /etc/rc.local
+EXPOSE 22 
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

@@ -20,14 +20,21 @@ services:
       internal:
         ipv4_address: 172.16.11.8
     environment:
-      - 'JENKINS_ADMIN_ID=${jenkins_admin}'
-      - 'JENKINS_ADMIN_PASSWORD=${jenkins_admin_password}'
-      - 'NETCICD_PASSWORD=${default_user_password}'
-      - 'GIT_PASSWORD=${git_password}'
+      - CML_USER=${cml_user}
+      - CML_PASSWORD=${cml_password}
+      - CML_URL=https://192.168.32.161
+      - JENKINS_PULP_PASSWORD=${jenkins_pulp_password}
+      - JENKINS_GIT_PASSWORD=${jenkins_git_password}
+      - JENKINS_DEV_LOGON_PASSWORD=${jenkins_dev_logon_password}
+      - JENKINS_ADMIN_ID=${jenkins_admin}
+      - JENKINS_ADMIN_PASSWORD=${jenkins_admin_password}
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
+      - NETCICD_PASSWORD=${default_user_password}
+      - GIT_PASSWORD=${git_password}
       - GITEA_IP=172.16.11.3
       - JENKINS_IP=172.16.11.8
-      - NEXUS_IP=172.16.11.9
-      - 'JENKINS_NEXUS_PASSWORD=${jenkins_nexus_password}'
+      - PULP_IP=172.16.11.9
     secrets:
       - source: jenkins_key
         target: /var/jenkins_home/jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem

@@ -1,6 +1,4 @@
 #!/bin/bash
-user=$2
-pwd=$1
 
 #First define functions
 
@@ -27,7 +25,7 @@ function CreateRepo () {
         "uid": 0,  
         "wiki": false
         }'
-    curl -s --insecure --user $user:$pwd -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/repos/migrate" -H  "accept: application/json" -H  "Content-Type: application/json" -d "${repo_payload}"
+    curl -s --insecure --user ${local_admin_user}:${local_admin_password} -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/repos/migrate" -H  "accept: application/json" -H  "Content-Type: application/json" -d "${repo_payload}"
     echo " "
     echo "****************************************************************************************************************"
     echo " Creating webhook for the ${2} repo"
@@ -42,7 +40,7 @@ function CreateRepo () {
         "events": [ "push" ],
         "type": "gitea"
         }'
-    curl -s --insecure --user $user:$pwd -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/repos/${1}/${2}/hooks" -H  "accept: application/json" -H  "Content-Type: application/json" -d "${webhook_payload}"
+    curl -s --insecure --user ${local_admin_user}:${local_admin_password} -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/repos/${1}/${2}/hooks" -H  "accept: application/json" -H  "Content-Type: application/json" -d "${webhook_payload}"
     echo " "    
 }
 
@@ -67,13 +65,13 @@ function CreateTeam () {
             "repo.ext_wiki" 
             ] 
         }'
-    local team_data=$(curl -s --insecure --user $user:$pwd -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/orgs/${1}/teams" -H "accept: application/json" -H "Content-Type: application/json" -d "${team_payload}")
+    local team_data=$(curl -s --insecure --user ${local_admin_user}:${local_admin_password} -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/orgs/${1}/teams" -H "accept: application/json" -H "Content-Type: application/json" -d "${team_payload}")
     local team_id=$( echo $team_data | awk -F',' '{print $(1)}' | awk -F':' '{print $2}' )
     echo " "
     echo "****************************************************************************************************************"
     echo " Adding ${5} repo to ${2} team in Gitea "
     echo "****************************************************************************************************************"
-    curl -s --insecure --user $user:$pwd -X PUT "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/teams/${team_id}/repos/infraautomator/${5}" -H  "accept: application/json"
+    curl -s --insecure --user ${local_admin_user}:${local_admin_password} -X PUT "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/teams/${team_id}/repos/${ORG_NAME}/${5}" -H  "accept: application/json"
     echo " "
 
     team=$team_id
@@ -85,22 +83,39 @@ rm -f gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}*
 sudo rm -rf data/*
 echo " " 
 echo "****************************************************************************************************************"
-echo " Ensure reachability of Gitea through the hosts file"
+echo " Ensure reachability of Gitea"
 echo "****************************************************************************************************************"
-sudo chmod o+w /etc/hosts
 if grep -q "gitea" /etc/hosts; then
-    echo " Gitea exists in /etc/hosts, removing..."
-    sudo sed -i '/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts
+    if [ "$install_mode" = "vm" ]; then
+        echo " Gitea exists in /etc/hosts, removing..."
+        echo "sudo sed -i '/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
+        echo $host_ip"   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" =  "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.11.3   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
+else
+    if [ "$install_mode" = "vm" ]; then
+        echo $host_ip"   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" = "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.11.3   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
 fi
-echo " Add Gitea to /etc/hosts"
-sudo echo "172.16.11.3   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Saving gitea certificates"
 echo "****************************************************************************************************************"
-echo $(pwd)
 cp vault/certs/gitea* gitea/
-
+echo "****************************************************************************************************************"
+echo " Substituting org_name in groupmapping.json"
+echo "****************************************************************************************************************"
+cp gitea/groupmapping.json.org gitea/groupmapping.json
+sed -i "s/org_name/${ORG_NAME}/" gitea/groupmapping.json
+echo "****************************************************************************************************************"
+echo " Starting Gitea"
+echo "****************************************************************************************************************"
 DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build --no-deps gitea
 echo " "
 echo "****************************************************************************************************************"
@@ -118,62 +133,62 @@ until $(curl --output /dev/null --silent --head --insecure --fail https://gitea.
 done
 echo " "
 echo "****************************************************************************************************************"
-echo " Create local gituser (admin role: $user)"
+echo " Create local gituser (admin role: ${local_admin_user})"
 echo "****************************************************************************************************************"
-docker exec -it gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "su git -c '/usr/local/bin/gitea admin user create --username $user --password $pwd --admin --email gitea-local-admin@tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}'"
+docker exec -it gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "su git -c '/usr/local/bin/gitea admin user create --username ${local_admin_user} --password ${local_admin_password} --admin --email gitea-local-admin@tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}'"
 echo " "
 echo "****************************************************************************************************************"
-echo " Creating InfraAutomators organization in Gitea "
+echo " Creating ${ORG_NAME}s organization in Gitea "
 echo "****************************************************************************************************************"
-ORG_PAYLOAD='{ 
-    "description": "Infrastructure automation transformation team", 
-    "full_name": "InfraAutomators", 
-    "location": "Github",
-    "repo_admin_change_team_access": true,
-    "username": "infraautomator",
-    "visibility": "public", 
-    "website": ""
-    }'
-org_data=$(curl -s --insecure --user $user:$pwd -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/orgs" -H "accept: application/json" -H "Content-Type: application/json" --data "${ORG_PAYLOAD}")
-echo " "
+ORG_PAYLOAD="{ 
+    \"description\": \"Automation transformation team\", 
+    \"full_name\": \"${ORG_NAME}\", 
+    \"location\": \"Github\",
+    \"repo_admin_change_team_access\": true,
+    \"username\": \"${ORG_NAME}\",
+    \"visibility\": \"public\", 
+    \"website\": \"\"
+    }"
+org_data=$(curl -s --insecure --user ${local_admin_user}:${local_admin_password} -X POST "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/api/v1/orgs" -H "accept: application/json" -H "Content-Type: application/json" --data "${ORG_PAYLOAD}")
+echo $org_data
 
-CreateRepo "Infraautomator" "CICD-toolbox" "https://github.com/Devoteam/CICD-toolbox.git" "The CICD-toolbox"
-CreateRepo "Infraautomator" "NetCICD" "https://github.com/Devoteam/NetCICD.git" "The NetCICD pipeline"
-CreateRepo "Infraautomator" "OsCICD" "https://github.com/myref/OsCICD.git" "OsCICD"
-CreateRepo "Infraautomator" "OsDeploy" "https://github.com/myref/OsDeploy.git" "OS configuration"
-CreateRepo "Infraautomator" "OsTest" "https://github.com/myref/OsTest.git" "OS test"
-CreateRepo "Infraautomator" "AppCICD" "https://github.com/DevoteamNL/AppCICD.git" "The AppCICD pipeline"
-CreateRepo "Infraautomator" "templateApp" "https://github.com/DevoteamNL/templateApp.git" "Some Application"
+CreateRepo "${ORG_NAME}" "CICD-toolbox" "https://github.com/Devoteam/CICD-toolbox.git" "The CICD-toolbox"
+CreateRepo "${ORG_NAME}" "NetCICD" "https://github.com/Devoteam/NetCICD.git" "The NetCICD pipeline"
+CreateRepo "${ORG_NAME}" "OsCICD" "https://github.com/myref/OsCICD.git" "OsCICD"
+CreateRepo "${ORG_NAME}" "OsDeploy" "https://github.com/myref/OsDeploy.git" "OS configuration"
+CreateRepo "${ORG_NAME}" "OsTest" "https://github.com/myref/OsTest.git" "OS test"
+CreateRepo "${ORG_NAME}" "AppCICD" "https://github.com/DevoteamNL/AppCICD.git" "The AppCICD pipeline"
+CreateRepo "${ORG_NAME}" "templateApp" "https://github.com/DevoteamNL/templateApp.git" "Some Application"
 
-CreateTeam infraautomator "gitea-CICDtoolbox-read" "The CICDtoolbox repo read role" "read" "CICD-toolbox"
-CreateTeam infraautomator "gitea-CICDtoolbox-write" "The CICDtoolbox repo read-write role" "write" "CICD-toolbox"
-CreateTeam infraautomator "gitea-CICDtoolbox-admin" "The CICDtoolbox repo admin role" "admin" "CICD-toolbox"
+CreateTeam ${ORG_NAME} "gitea-cicdtoolbox-read" "The CICDtoolbox repo read role" "read" "CICD-toolbox"
+CreateTeam ${ORG_NAME} "gitea-cicdtoolbox-write" "The CICDtoolbox repo read-write role" "write" "CICD-toolbox"
+CreateTeam ${ORG_NAME} "gitea-cicdtoolbox-admin" "The CICDtoolbox repo admin role" "admin" "CICD-toolbox"
 
-CreateTeam infraautomator "gitea-netcicd-read" "The NetCICD repo read role" "read" "NetCICD"
-CreateTeam infraautomator "gitea-netcicd-write" "The NetCICD repo read-write role" "write" "NetCICD"
-CreateTeam infraautomator "gitea-netcicd-admin" "The NetCICD repo admin role" "admin" "NetCICD"
+CreateTeam ${ORG_NAME} "gitea-netcicd-read" "The NetCICD repo read role" "read" "NetCICD"
+CreateTeam ${ORG_NAME} "gitea-netcicd-write" "The NetCICD repo read-write role" "write" "NetCICD"
+CreateTeam ${ORG_NAME} "gitea-netcicd-admin" "The NetCICD repo admin role" "admin" "NetCICD"
 
-CreateTeam infraautomator "gitea-OsCICD-admin" "The OsCICD repo admin role" "admin" "OsCICD"
-CreateTeam infraautomator "gitea-OsCICD-write" "The OsCICD repo editor role" "write" "OsCICD"
-CreateTeam infraautomator "gitea-OsCICD-read" "The OsCICD repo reader role" "read" "OsCICD"
-CreateTeam infraautomator "gitea-OsDeploy-admin" "The OsDeploy repo admin role" "admin" "OsDeploy"
-CreateTeam infraautomator "gitea-OsDeploy-write" "The OsDeploy repo editor role" "write" "OsDeploy"
-CreateTeam infraautomator "gitea-OsDeploy-read" "The OsDeploy repo reader role" "read" "OsDeploy"
-CreateTeam infraautomator "gitea-OsTest-admin" "The OsTest repo admin role" "admin" "OsTest"
-CreateTeam infraautomator "gitea-OsTest-write" "The OsTest repo editor role" "write" "OsTest"
-CreateTeam infraautomator "gitea-OsTest-read" "The OsTest repo reader role" "read" "OsTest"
+CreateTeam ${ORG_NAME} "gitea-oscicd-admin" "The OsCICD repo admin role" "admin" "OsCICD"
+CreateTeam ${ORG_NAME} "gitea-oscicd-write" "The OsCICD repo editor role" "write" "OsCICD"
+CreateTeam ${ORG_NAME} "gitea-oscicd-read" "The OsCICD repo reader role" "read" "OsCICD"
+CreateTeam ${ORG_NAME} "gitea-osdeploy-admin" "The OsDeploy repo admin role" "admin" "OsDeploy"
+CreateTeam ${ORG_NAME} "gitea-osdeploy-write" "The OsDeploy repo editor role" "write" "OsDeploy"
+CreateTeam ${ORG_NAME} "gitea-osdeploy-read" "The OsDeploy repo reader role" "read" "OsDeploy"
+CreateTeam ${ORG_NAME} "gitea-ostest-admin" "The OsTest repo admin role" "admin" "OsTest"
+CreateTeam ${ORG_NAME} "gitea-ostest-write" "The OsTest repo editor role" "write" "OsTest"
+CreateTeam ${ORG_NAME} "gitea-ostest-read" "The OsTest repo reader role" "read" "OsTest"
 
-CreateTeam infraautomator "gitea-appcicd-read" "The AppCICD repo read role" "read" "AppCICD"
-CreateTeam infraautomator "gitea-appcicd-write" "The AppCICD repo read-write role" "write" "AppCICD"
-CreateTeam infraautomator "gitea-appcicd-admin" "The AppCICD repo admin role" "admin" "AppCICD"
-CreateTeam infraautomator "gitea-templateapp-read" "The AppCICD repo read role" "read" "templateapp"
-CreateTeam infraautomator "gitea-templateapp-write" "The AppCICD repo read-write role" "write" "templateapp"
-CreateTeam infraautomator "gitea-templateapp-admin" "The AppCICD repo admin role" "admin" "templateapp"
+CreateTeam ${ORG_NAME} "gitea-appcicd-read" "The AppCICD repo read role" "read" "AppCICD"
+CreateTeam ${ORG_NAME} "gitea-appcicd-write" "The AppCICD repo read-write role" "write" "AppCICD"
+CreateTeam ${ORG_NAME} "gitea-appcicd-admin" "The AppCICD repo admin role" "admin" "AppCICD"
+CreateTeam ${ORG_NAME} "gitea-templateapp-read" "The AppCICD repo read role" "read" "templateapp"
+CreateTeam ${ORG_NAME} "gitea-templateapp-write" "The AppCICD repo read-write role" "write" "templateapp"
+CreateTeam ${ORG_NAME} "gitea-templateapp-admin" "The AppCICD repo admin role" "admin" "templateapp"
 
 echo "****************************************************************************************************************"
 echo " Adding keycloak client key to Gitea"
 echo "****************************************************************************************************************"
-gitea_client_id=$(grep GITEA_token install_log/keycloak_create.log | cut -d' ' -f2 | tr -d '\r' )
+gitea_client_id=$(grep GITEA_token install/log/keycloak_create.log | cut -d' ' -f2 | tr -d '\r' )
 docker exec -it gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "su git -c '/usr/local/bin/gitea admin auth add-oauth --name keycloak --provider openidConnect --key Gitea --secret $gitea_client_id --auto-discover-url https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/realms/cicdtoolbox/.well-known/openid-configuration --config=/data/gitea/conf/app.ini'"
 # required claim name contains the claim name required to be able to use the claim, admin-group is the claim value for admin.
 gitea_group_mapping=$(cat gitea/groupmapping.json | tr -d ' ' | tr -d '\n')

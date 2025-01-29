@@ -37,11 +37,33 @@ function create_deb_repo() {
     pulp --no-verify-ssl deb repository update --name $1 --autopublish
     pulp --no-verify-ssl deb distribution show --name $1
 }
+echo "****************************************************************************************************************"
+echo " Ensure reachability of Pulp"
+echo "****************************************************************************************************************"
+if grep -q "pulp" /etc/hosts; then
+    if [ "$install_mode" = "vm" ]; then
+        echo " Pulp exists in /etc/hosts, removing..."
+        echo "sudo sed -i '/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
+        echo $host_ip"   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" =  "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.11.10   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
+else
+    if [ "$install_mode" = "vm" ]; then
+        echo $host_ip"   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    elif [ "$install_mode" = "local" ]; then
+        sudo chmod o+w /etc/hosts
+        echo "172.16.11.10   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+        sudo chmod o-w /etc/hosts
+    fi
+fi
 
 echo "****************************************************************************************************************"
 echo " Starting Pulp"
 echo "****************************************************************************************************************"
-docker compose --project-name cicd-toolbox up -d --build --no-deps pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+docker compose --project-name cicd-toolbox up -d --build --no-deps pulp
 let t=0
 until $(curl --output /dev/null --insecure --silent --head --fail https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/pulp/api/v3/status/); do
     spin
@@ -51,12 +73,12 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Setting pulp admin password"
 echo "****************************************************************************************************************"
-docker exec -it pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "pulpcore-manager reset-admin-password --password $1"
-pulp --no-verify-ssl config create --username admin --base-url https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} --password $1
+docker exec -it pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "pulpcore-manager reset-admin-password --password ${local_admin_password}"
+pulp --no-verify-ssl config create --username admin --base-url https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} --password ${local_admin_password}
 echo "****************************************************************************************************************"
 echo " Creating repository and distribution"
 echo "****************************************************************************************************************"
-create_file_repo "file" "toolbox_install" "install_logs"
+create_file_repo "file" "toolbox_install" "install/logs"
 create_file_repo "file" "testreports-dev" "dev-reports"
 create_file_repo "file" "testreports-test" "test-reports"
 create_file_repo "file" "testreports-acc" "acc-reports"

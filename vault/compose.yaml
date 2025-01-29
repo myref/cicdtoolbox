@@ -36,7 +36,7 @@ services:
     cap_add:
       - IPC_LOCK
     healthcheck:
-      test: [ "CMD", "wget", "--spider", "--proxy", "off", "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/v1/sys/health?standbyok=true" ]
+      test: 'curl --head --insecure -fSs https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/v1/sys/health?standbyok=true'
       interval: 10s
       timeout: 3s
       retries: 10
@@ -57,7 +57,7 @@ services:
     volumes:
       - 'consul-data:/consul/data'
     healthcheck:
-      test: [ "CMD", "wget", "--spider", "--proxy", "off", "https://consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:5000/health" ]
+      test: [ "CMD", "wget", "--spider", "off", "http://consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8500/ui/" ]
       interval: 15s
       timeout: 3s
       retries: 10

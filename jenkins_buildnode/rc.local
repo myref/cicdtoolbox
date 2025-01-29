@@ -1,9 +1,16 @@
 #!/bin/sh
-if $(wget --spider https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/infraautomator/); then
-    echo "Setting git to Gitea." >>/home/jenkins/install-log.txt
-    export GIT_URL=https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/infraautomator/ >> /etc/profile
+
+GITEA_URL="https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000/${ORG_NAME}/"
+GITHUB_URL="https://github.com/Devoteam/"
+
+if wget --spider "$GITEA_URL" >/dev/null 2>&1; then
+    echo "Setting git to Gitea." >> /home/jenkins/install-log.txt
+    export GIT_URL="$GITEA_URL"
 else
-    echo "Setting git to Github." >>/home/jenkins/install-log.txt
-    export GIT_URL=https://github.com/Devoteam/ >> /etc/profile
+    echo "Setting git to Github." >> /home/jenkins/install-log.txt
+    export GIT_URL="$GITHUB_URL"
 fi
+
+echo "export GIT_URL=$GIT_URL" >> /etc/profile
+
 /usr/bin/dockerd &

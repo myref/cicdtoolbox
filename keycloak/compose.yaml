@@ -32,6 +32,7 @@ services:
       JDBC_PARAMS: ssl=true&sslmode=verify-ca&sslrootcert=/etc/pki/ca-trust/source/anchors/ca.crt
       DOMAIN_NAME_SL: '${DOMAIN_NAME_SL}'
       DOMAIN_NAME_TL: '${DOMAIN_NAME_TL}'
+      ORG_NAME: '${ORG_NAME}'
     secrets:
       - source: keycloak_key
         target: /etc/x509/https/tls.key
@@ -47,7 +48,7 @@ services:
       - '8080:8080'
       - '8443:8443'
     healthcheck:
-      test: 'curl --head --insecure -fSs https://172.16.10.11:9000/health/ready'
+      test: 'curl --head --insecure -fSs https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:9000/health/ready' 
       start_period: 60s
       interval: 5s
       timeout: 5s

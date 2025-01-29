@@ -1,3 +1,11 @@
 vault/conf/vault/vault-config.json
 vault/conf/vault/vault-config-ssl.json
-install_log/vault_create.log
+install/log/vault_create.log
+cicdtoolbox-db/docker-entrypoint-initdb-resources/
+install/log/
+*/ca.crt
+vault/certs/
+vault/ids
+vault/*.txt
+lldap/data/
+cicdtoolbox-db/ca.crt

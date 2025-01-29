@@ -1,0 +1,93 @@
+{
+  "name": "lldap_admin"
+}
+{
+  "name": "lldap_password_manager"
+}
+{
+  "name": "lldap_strict_readonly"
+}
+{
+  "name": "toolbox_admin"
+}
+{
+  "name": "lldap_admin"
+}
+{
+  "name": "tooling_dev_design"
+}
+{
+  "name": "tooling_ops_oper"
+}
+{
+  "name": "tooling_ops_spec"
+}
+{
+  "name": "git_from_jenkins"
+}
+{
+  "name": "campus_dev_lan"
+}
+{
+  "name": "campus_dev_wifi"
+}
+{
+  "name": "campus_ops_oper"
+}
+{
+  "name": "campus_ops_spec"
+}
+{
+  "name": "cicd_agents"
+}
+{
+  "name": "wan_dev_design"
+}
+{
+  "name": "wan_ops_oper"
+}
+{
+  "name": "wan_ops_spec"
+}
+{
+  "name": "dc_dev_compute"
+}
+{
+  "name": "dc_dev_network"
+}
+{
+  "name": "dc_dev_storage"
+}
+{
+  "name": "dc_ops_compute_oper"
+}
+{
+  "name": "dc_ops_compute_spec"
+}
+{
+  "name": "dc_ops_network_oper"
+}
+{
+  "name": "dc_ops_network_spec"
+}
+{
+  "name": "dc_ops_storage_oper"
+}
+{
+  "name": "dc_ops_storage_spec"
+}
+{
+  "name": "security_dev_design"
+}
+{
+  "name": "security_ops_oper"
+}
+{
+  "name": "security_ops_spec"
+}
+{
+  "name": "field_services_eng"
+}
+{
+  "name": "field_services_floor_management"
+}

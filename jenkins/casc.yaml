@@ -24,7 +24,7 @@ credentials:
       - usernamePassword:
           description: "Credentials to be used to get an access token from Keycloak."
           id: "jenkins-git"
-          password: ${JENKINS_PULP_PASSWORD}
+          password: ${JENKINS_GIT_PASSWORD}
           scope: GLOBAL
           username: "Jenkins"
       - usernamePassword:
@@ -369,17 +369,17 @@ jenkins:
       fullNameFieldName: "name"
       groupsFieldName: "groupmembership"
       logoutFromOpenidProvider: true
-      postLogoutRedirectUrl: "https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084"
+      postLogoutRedirectUrl: https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084
       sendScopesInTokenRequest: true
       serverConfiguration:
         wellKnown:
-          wellKnownOpenIDConfigurationUrl: "https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/realms/cicdtoolbox/.well-known/openid-configuration"
+          wellKnownOpenIDConfigurationUrl: https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/realms/cicdtoolbox/.well-known/openid-configuration
       userNameField: "preferred_username"
   globalNodeProperties:
     - envVars:
         env:
-        # - key: "CML_URL"
-        #   value: ${CML_URL}
+        - key: "CML_URL"
+          value: ${CML_URL}
         - key: "GITEA_IP"
           value: ${GITEA_IP}
         - key: "JENKINS_IP"
@@ -402,7 +402,7 @@ unclassified:
     servers:
     - displayName: "Gitea"
       manageHooks: false
-      serverUrl: "https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000"
+      serverUrl: https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000
   timestamper:
     allPipelines: true
     elapsedTimeFormat: "'<b>'HH:mm:ss.S'</b> '"
