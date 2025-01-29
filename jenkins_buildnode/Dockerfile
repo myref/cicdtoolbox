@@ -53,5 +53,6 @@ USER root
 CMD ["/usr/sbin/sshd", "-D"]
 COPY rc.local /etc/rc.local
 EXPOSE 22 
-
+RUN echo ${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} > /home/jenkins/domain
+RUN echo ${BUILD_ENVIRONMENT} > /home/jenkins/environment
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

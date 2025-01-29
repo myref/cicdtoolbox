@@ -47,7 +47,6 @@ services:
       - NET_RAW
     environment:
       - BUILD_ENVIRONMENT=Dev
-      - ANSIBLE_TF_DIR=AppCICD
       - ARM_SKIP_PROVIDER_REGISTRATION='true'
       - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
       - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
