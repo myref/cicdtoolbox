@@ -27,15 +27,22 @@ function create_file_repo() {
 
 function create_deb_repo() {
     echo "****************************************************************************************************************"
-    echo " Creating repository $1 with remote $2, distrbution name $3 and remote options $4[@]"
+    echo " Creating repository $1 with remote $2, distribution name $3 and remote options $4"
     echo "****************************************************************************************************************"
-    pulp --no-verify-ssl deb remote create --name=${1} ${4[@]}
-    pulp --no-verify-ssl deb repository create --name $1 --remote=${2}
-    pulp --no-verify-ssl deb repository sync --name=${1}
-    pulp --no-verify-ssl deb publication create --repository=${1}
-    pulp --no-verify-ssl deb distribution create --name $1 --base-path $1 --repository $1
-    pulp --no-verify-ssl deb repository update --name $1 --autopublish
-    pulp --no-verify-ssl deb distribution show --name $1
+    NAME=$1
+    REMOTE_OPTIONS=(
+     --url=$2
+     --distribution=$3
+     --component=nginx
+     --architecture=amd64
+    )
+    pulp --no-verify-ssl deb remote create --name=${NAME} ${REMOTE_OPTIONS[@]}
+    pulp --no-verify-ssl deb repository create --name=${NAME} --remote=${NAME}
+    pulp --no-verify-ssl deb repository sync --name=${NAME}
+    pulp --no-verify-ssl deb publication create --repository=${NAME}
+    pulp --no-verify-ssl deb distribution create --name ${NAME} --base-path ${NAME} --repository ${NAME}
+    pulp --no-verify-ssl deb repository update --name ${NAME} --autopublish
+    pulp --no-verify-ssl deb distribution show --name ${NAME}
 }
 echo "****************************************************************************************************************"
 echo " Ensure reachability of Pulp"
@@ -72,4 +79,4 @@ create_file_repo "file" "testreports-dev" "dev-reports"
 create_file_repo "file" "testreports-test" "test-reports"
 create_file_repo "file" "testreports-acc" "acc-reports"
 create_file_repo "file" "testreports-prod" "prod-reports"
-create_deb_repo "curated" "https://deb.debian.org/debian" "my-deb" "--download-concurrency 4"
+create_deb_repo "quickstart-nginx-bookworm-amd64" "http://nginx.org/packages/debian/" "bookworm" "--download-concurrency 4"

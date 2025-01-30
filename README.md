@@ -51,7 +51,7 @@ sudo apt-get update
 
 ```sudo su - ${USER}```
 
-```sudo python3 -m pip install robotframework robotframework-selenium2library robotframework-debuglibrary --break-system-packages```
+```sudo python3 -m pip install robotframework robotframework-selenium2library robotframework-debuglibrary pulp-cli[pygments] pulp-cli-deb --break-system-packages```
 
 ```echo "export COMPOSE_DOCKER_CLI_BUILD=1" >> ~/.bashrc```
 
@@ -70,6 +70,10 @@ Install [Docker Buildkit](https://docs.docker.com/build/buildkit/#getting-starte
   }
 } 
 ```
+
+Copy the pulp config:
+
+```cp pulp/cli.toml ~/.config/pulp/cli.toml```
 
 Reboot to make sure all changes are activated. You will probably get a popup to do that through the software updater anyway.
 
