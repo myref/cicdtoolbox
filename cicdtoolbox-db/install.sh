@@ -9,7 +9,7 @@ echo " Ensure reachability of CICDtoolbox-db"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "cicdtoolbox-db" /etc/hosts; then
-    echo "sudo sed -i '/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.9.2   cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then

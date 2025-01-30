@@ -42,7 +42,7 @@ echo " Ensure reachability of Pulp"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "pulp" /etc/hosts; then
-    echo "sudo sed -i '/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.11.10   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then

@@ -18,7 +18,7 @@ echo " Ensure reachability of Keycloak"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "keycloak" /etc/hosts; then
-    echo "sudo sed -i '/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.10.11   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then

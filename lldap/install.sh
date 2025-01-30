@@ -14,7 +14,7 @@ echo " Ensure reachability of LDAP"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "ldap" /etc/hosts; then
-    echo "sudo sed -i '/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.8.11   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then

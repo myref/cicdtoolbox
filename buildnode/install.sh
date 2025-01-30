@@ -21,7 +21,7 @@ echo " Ensure reachability of build-dev"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "build-dev" /etc/hosts; then
-    echo "sudo sed -i '/build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.12.2   build-dev.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then
@@ -33,7 +33,7 @@ echo " Ensure reachability of build-test"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "build-test" /etc/hosts; then
-    echo "sudo sed -i '/build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.12.3   build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then
@@ -45,7 +45,7 @@ echo " Ensure reachability of build-acc"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "build-acc" /etc/hosts; then
-    echo "sudo sed -i '/build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.12.4   build-acc.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then
@@ -57,7 +57,7 @@ echo " Ensure reachability of build-prod"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "build-prod" /etc/hosts; then
-    echo "sudo sed -i '/build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
+    sudo sed -i "/build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
 echo "172.16.12.5   build-prod.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then
