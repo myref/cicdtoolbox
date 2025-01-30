@@ -37,21 +37,21 @@ Get repositories
 
     IF  ${repo_status}
         Log to Console          %{ORG_NAME} organization found
-        ${netcicd_status}=      Run Keyword And Return Status    Page Should Contain        myapp-os
+        ${netcicd_status}=      Run Keyword And Return Status    Page Should Contain        OsCICD
 
         IF  ${netcicd_status}
-            Log to Console      myapp-os repository found
+            Log to Console      OsCICD repository found
         ELSE
-            Log to Console      myapp-os repository *NOT* found
+            Log to Console      OsCICD repository *NOT* found
             Fail
         END
 
-        ${toolbox_status}=      Run Keyword And Return Status    Page Should Contain        myapp-deploy
+        ${toolbox_status}=      Run Keyword And Return Status    Page Should Contain        OsDeploy
 
         IF  ${toolbox_status}
-            Log to Console      myapp-deploy repository found
+            Log to Console      OsDeploy repository found
         ELSE
-            Log to Console      myapp-deploy repository *NOT* found
+            Log to Console      OsDeploy repository *NOT* found
             Fail
         END
     ELSE
