@@ -1,5 +1,5 @@
 *** Settings ***
-Resource          ../install/tests/install_test.resource
+Resource          ../install_test.resource
 
 Documentation       Making sure that Jenkins has access to the myapp-os repository on gitea
 

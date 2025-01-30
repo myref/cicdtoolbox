@@ -45,7 +45,7 @@ echo \
 sudo apt-get update
 ```
 
-```sudo apt -y install openjdk-11-jre-headless git docker.io docker-compose-plugin docker-buildx curl python3 python3-pip python-is-python3 jq vim xauth iputils-ping make build-essential wget terraform vault direnv```
+```sudo apt -y install gh openjdk-17-jre-headless git docker.io docker-compose-plugin docker-buildx curl python3 python3-pip python-is-python3 jq vim xauth iputils-ping make build-essential wget terraform vault direnv```
 
 ```sudo usermod -aG docker ${USER}```
 
@@ -74,6 +74,8 @@ Install [Docker Buildkit](https://docs.docker.com/build/buildkit/#getting-starte
 Reboot to make sure all changes are activated. You will probably get a popup to do that through the software updater anyway.
 
 Install the [CICD-toolbox](https://github.com/myref/cicdtoolbox):
+
+Create gh login: ```gh auth login``` and follow the prompts.
 
 ```git clone https://github.com/myref/cicdtoolbox.git```
 

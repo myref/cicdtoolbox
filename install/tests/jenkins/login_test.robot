@@ -1,5 +1,5 @@
 *** Settings ***
-Resource          ../install/tests/install_test.resource
+Resource          ../install_test.resource
 
 Documentation       Validating login for each LDAP group
 ...                 Each LDAP group has a predefined user
