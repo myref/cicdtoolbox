@@ -23,10 +23,10 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Cleaning Jenkins buildnodes" 
 echo "****************************************************************************************************************"
-rm -f jenkins_buildnode/*_secret.txt
-rm -f jenkins_buildnode/agent.jar
-rm -f jenkins_buildnode/jenkins-cli.jar
-rm -f jenkins_buildnode/*_token
+rm -f buildnode/*_secret.txt
+rm -f buildnode/agent.jar
+rm -f buildnode/jenkins-cli.jar
+rm -f buildnode/*_token
 echo " " 
 echo "****************************************************************************************************************"
 echo " Ensure reachability of Jenkins"
@@ -103,7 +103,7 @@ echo " Downloading agent.jar from jenkins"
 echo "****************************************************************************************************************"
 if $(curl --output /dev/null --insecure --silent --head --fail https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/whoAmI); then
     wget --no-check-certificate https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/jnlpJars/agent.jar
-    mv agent.jar jenkins_buildnode/agent.jar
+    mv agent.jar buildnode/agent.jar
     echo "Retrieved agent.jar from Jenkins and copied to buildnode."
 else
     echo "Jenkins not running, no recent agent present"
@@ -112,7 +112,7 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Copying Jenkins Keystore to Jenkins buildnodes"
 echo "****************************************************************************************************************"
-cp ./jenkins/keystore/cacerts ./jenkins_buildnode/cacerts
+cp ./jenkins/keystore/cacerts ./buildnode/cacerts
 echo "****************************************************************************************************************"
 echo " Configuring Jenkins for jenkins-jenkins login and storing token"
 echo "****************************************************************************************************************"
@@ -121,4 +121,4 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Building build nodes"
 echo "****************************************************************************************************************"
-jenkins_buildnode/install.sh | tee install/log/buildnode_create.log
+buildnode/install.sh | tee install/log/buildnode_create.log

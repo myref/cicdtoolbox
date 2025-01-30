@@ -71,6 +71,15 @@ function create_approle() {
     echo "$1 secret_id = " $my_secret_id
     echo $my_secret_id > vault/ids/$1_vault_secret_id.txt
 }
+
+function create_kv_pair() {
+    vault kv put -address="http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200" kv/$1 $2=$3
+}
+
+function create_policy() {
+    vault policy write -address="http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200" $1 ./$1/policies/$1.hcl
+}
+
 echo "****************************************************************************************************************"
 echo " Cleanup Consul and Vault"
 echo "****************************************************************************************************************"
@@ -216,6 +225,20 @@ create_approle jenkins-git
 create_approle jenkins-jenkins
 create_approle jenkins-pulp
 create_approle jenkins-ansible
+create_approle jenkins-${ORG_NAME}
+echo "****************************************************************************************************************"
+echo " Creating KV pairs" 
+echo "****************************************************************************************************************"
+echo " " 
+create_kv_pair jenkins jenkins_jenkins_password ${default_user_password}
+create_kv_pair jenkins jenkins_pulp_password ${default_user_password}
+create_kv_pair jenkins jenkins_git_password ${default_user_password}
+create_kv_pair jenkins jenkins_dev_logon_password ${default_user_password}
+echo "****************************************************************************************************************"
+echo " Creating policies" 
+echo "****************************************************************************************************************"
+echo " " 
+create_policy jenkins 
 echo "****************************************************************************************************************"
 echo " Preparing PostgreSQL database use" 
 echo "****************************************************************************************************************"
@@ -247,7 +270,7 @@ echo "**************************************************************************
 cp vault/certs/ca.crt cicdtoolbox-db/ca.crt
 cp vault/certs/ca.crt gitea/ca.crt
 cp vault/certs/ca.crt jenkins/ca.crt
-cp vault/certs/ca.crt jenkins_buildnode/ca.crt
+cp vault/certs/ca.crt buildnode/ca.crt
 cp vault/certs/ca.crt keycloak/ca.crt
 cp vault/certs/ca.crt pulp/ca.crt
 echo "****************************************************************************************************************"

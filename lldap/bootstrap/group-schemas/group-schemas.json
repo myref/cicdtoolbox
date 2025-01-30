@@ -14,7 +14,7 @@
     "isVisible": true
   },
   {
-    "name": "mail_alias",
+    "name": "mailalias",
     "attributeType": "STRING",
     "isEditable": false,
     "isList": true,

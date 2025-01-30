@@ -1,9 +1,17 @@
-FROM ubuntu:noble-20241015
+FROM ubuntu:noble
 
 ENV JAVA_HOME "/usr"
 
+RUN apt update && apt upgrade -y
+RUN apt install -y mkisofs gpg wget openjdk-17-jre-headless git openssh-server openssh-client direnv libxml2-dev libxslt1-dev sshpass curl python3-full python3-pip ansible iproute2 vim iputils-ping bash-completion python-is-python3 ca-certificates curl 
+RUN install -m 0755 -d /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+RUN chmod a+r /etc/apt/keyrings/docker.asc
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 RUN apt update 
-RUN apt install -y mkisofs gpg wget openjdk-17-jre-headless git openssh-server openssh-client direnv libxml2-dev libxslt1-dev sshpass curl python3-full python3-pip ansible iproute2 vim iputils-ping bash-completion python-is-python3 ca-certificates curl docker.io docker-compose docker-buildx
+RUN apt upgrade -y
+RUN apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
 RUN apt-get update 
@@ -53,6 +61,5 @@ USER root
 CMD ["/usr/sbin/sshd", "-D"]
 COPY rc.local /etc/rc.local
 EXPOSE 22 
-RUN echo ${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} > /home/jenkins/domain
-RUN echo ${BUILD_ENVIRONMENT} > /home/jenkins/environment
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

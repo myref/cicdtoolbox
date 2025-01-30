@@ -44,4 +44,4 @@ Create runner token
     Wait Until Element Is Visible                                        xpath:/html/body/div/div/div/div[2]/div/div/h4/div/div/div/div[4]/input
     ${token}                    SeleniumLibrary.Get Element Attribute    xpath:/html/body/div/div/div/div[2]/div/div/h4/div/div/div/div[4]/input   value
     Log to Console              ${env} token created
-    Create File                 ${EXECDIR}/jenkins_buildnode/${env}_runner_token   ${token}
+    Create File                 ${EXECDIR}/buildnode/${env}_runner_token   ${token}

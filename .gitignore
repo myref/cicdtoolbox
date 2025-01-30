@@ -9,3 +9,15 @@ vault/ids
 vault/*.txt
 lldap/data/
 cicdtoolbox-db/ca.crt
+jtoken.txt
+buildnode/*_runner_token
+buildnode/*_secret.txt
+buildnode/cacerts
+buildnode/agent.jar
+gitea/gitea.tooling.provider.test.*
+jenkins/import.pem
+jenkins/jenkins.p12
+terraform/vault/terraform.tfstate
+jenkins/jenkins.tooling.provider.test.*
+jenkins/keystore/jenkins.jks
+install/runonce*

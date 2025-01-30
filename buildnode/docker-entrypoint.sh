@@ -27,19 +27,17 @@ if [ ! -f "/home/jenkins/.ssh/id_rsa"]; then
 	ssh-keygen -t rsa -C "jenkins-user" -N '' 
 fi
 
-environment=$(cat environment)
-echo "Build environment: $environment"
+echo "Build environment: ${BUILD_ENVIRONMENT}"
 echo " "
-domain=$(cat domain)	
-git_token = $(cat git-token.txt)
-echo "Runner token: $git_token"
+RUNNER_TOKEN=$(cat git-token.txt)
+echo "Runner token: ${RUNNER_TOKEN}"
 echo "-----------------------------------------------------"
 cat secret-file.txt
 
-/home/jenkins/act_runner register --instance https://gitea.tooling.$domain:3000 --name $environment --token $git_token --no-interactive
+/home/jenkins/act_runner register --instance https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000 --name $BUILD_ENVIRONMENT --token $RUNNER_TOKEN --no-interactive
 sleep 1
 /home/jenkins/act_runner daemon >/dev/null 2>&1 &
 sleep 1
-su jenkins -c "java -jar agent.jar -url \"https://jenkins.tooling.${domain}:8084/\" -secret @secret-file.txt -name ${environment} -webSocket -workDir \"/home/jenkins\" &"
+su jenkins -c 'java -jar agent.jar -url "https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/" -secret @secret-file.txt -name $BUILD_ENVIRONMENT -webSocket -workDir "/home/jenkins" &'
 
 exec "$@"

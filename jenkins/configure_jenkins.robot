@@ -118,7 +118,7 @@ Get Jenkins agent secret
     ${secretstuff}               Evaluate    re.split("-secret ", '''${agent_page_content}''', 1)[1]
     ${my_secret}                 Evaluate    re.split(" ", '''${secretstuff}''',1)[0]
     Log to Console               The ${stage} secret is: ${my_secret}
-    Create File                  ${EXECDIR}/jenkins_buildnode/${stage}_secret.txt   ${my_secret}
+    Create File                  ${EXECDIR}/buildnode/${stage}_secret.txt   ${my_secret}
 
 Log into a system via keycloak
     [Arguments]                 ${system}    ${user}    ${password}

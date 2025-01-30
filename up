@@ -68,4 +68,4 @@ echo "**************************************************************************
 echo " Validating install"
 echo "****************************************************************************************************************"
 robot --variable VALID_PASSWORD:${default_user_password} -d install/tests/ install_tests
-robot --variable VALID_PASSWORD:${default_user_password} -d install/tests/ -o ./install/log/runner.xml -l ./install/log/runner_log.html -r ./install/log/runner_report.html ./jenkins_buildnode/runner_validate.robot
+robot --variable VALID_PASSWORD:${default_user_password} -d install/tests/ -o ./install/log/runner.xml -l ./install/log/runner_log.html -r ./install/log/runner_report.html ./buildnode/runner_validate.robot
