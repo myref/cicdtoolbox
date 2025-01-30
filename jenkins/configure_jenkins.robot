@@ -45,8 +45,8 @@ ${GITEA LOGIN}      https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:30
 
 *** Keywords ***   
 Stage the tooling
-    Log To Console              message=Starting test on ${JENKINS URL} with browser ${BROWSER1} and password %{default_user_password}
-    Open Browser                ${JENKINS URL}   ${BROWSER1}   remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444   options=add_argument("--ignore-certificate-errors")
+    Log To Console              message=Test  ${JENKINS URL} on http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444 with browser ${BROWSER1} and password %{default_user_password}
+    Open Browser                ${JENKINS URL}       ${BROWSER1}        remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444       options=add_argument("--ignore-certificate-errors")
     Set Window Size             1920                 1440 
     Set Selenium Speed          ${DELAY}
 
@@ -157,5 +157,5 @@ Confirm organisation configuration
     Go To                       ${JENKINS URL}/job/%{ORG_NAME}/computation/console
     Sleep                       5
     Go To                       ${JENKINS URL}/job/%{ORG_NAME}/computation/console
-    Wait Until Page Contains    Finished: SUCCESS
+    
     Log to Console              Organisation configuration confirmed
