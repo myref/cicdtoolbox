@@ -4,7 +4,7 @@ Library                               OperatingSystem
 Library                               XML
 Documentation                         Setting up Hashicorp Vault
 
-Suite Setup       Open Browser   ${URL}      ${BROWSER}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
+Suite Setup       Open Browser   ${URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
 
 *** Test cases ***
@@ -26,7 +26,7 @@ Set up KV
 
 *** Variables ***
 
-${BROWSER}                            chrome
+${BROWSER1}                            chrome
 ${DELAY}                               0
 ${URL}                                 http://vault.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8200
 

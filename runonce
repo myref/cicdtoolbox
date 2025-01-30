@@ -47,7 +47,7 @@ fi
 if grep -q "seleniumgchost" /etc/hosts; then
     sudo sed -i "/seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
-echo "172.16.10.100   seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+echo "172.16.10.101   seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then
     echo $host_ip"   seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
 fi
