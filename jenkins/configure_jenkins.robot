@@ -42,16 +42,17 @@ ${JENKINS URL}      https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:
 ${JENKINS LOGOUT}   https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/logout
 ${GITEA URL}        https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000
 ${GITEA LOGIN}      https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/login?redirect_to=%2f
+${TEST_HOST}        http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444
 
 *** Keywords ***   
 Stage the tooling
-    Log To Console              message=Test  ${JENKINS URL} on http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444 with browser ${BROWSER1} and password %{default_user_password}
-    Open Browser                ${JENKINS URL}       ${BROWSER1}        remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444       options=add_argument("--ignore-certificate-errors")
+    Log To Console              message=Test ${JENKINS URL} on ${TEST_HOST} with browser ${BROWSER1} and password %{default_user_password}
+    Open Browser                ${JENKINS URL}       ${BROWSER1}        remote_url=${TEST_HOST}       options=add_argument("--ignore-certificate-errors")
     Set Window Size             1920                 1440 
     Set Selenium Speed          ${DELAY}
 
 Create jenkins-jenkins token
-    Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/user/jenkins-jenkins/security
+    Go To                       ${JENKINS URL}user/jenkins-jenkins/security
     Click Button                Add new Token
     Click Button                Generate
     Wait Until Page Contains Element                 class:new-token-value.visible
@@ -63,7 +64,7 @@ Create jenkins-jenkins token
     Create File                 ${EXECDIR}/jtoken.txt   ${TOKEN}
 
 Change jenkins-jenkins credentials 
-    Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/credentials/store/system/domain/_/credential/jenkins-jenkins/update
+    Go To                       ${JENKINS URL}credentials/store/system/domain/_/credential/jenkins-jenkins/update
     Click Button                Change Password
     Input Text                  name:_.password       ${TOKEN}
     Click Button                Save
@@ -80,14 +81,14 @@ Login to Gitea as Jenkins
     Log to Console              Jenkins changed password to token
 
 Enter Gitea token in Jenkins credentials
-    Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/credentials/store/system/domain/_/credential/jenkins-git/update
+    Go To                       ${JENKINS URL}credentials/store/system/domain/_/credential/jenkins-git/update
     Click Button                Change Password
     Input Text                  name:_.password         ${SA_TOKEN_text}
     Click Button                Save
     Log to Console              jenkins-git changed credentials to login to Gitea
 
 Create Jenkins token in Gitea
-    Go To                       https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/settings/applications
+    Go To                       ${GITEA URL}/user/settings/applications
     Input Text                  name                    Jenkins
     
     Click Element               xpath://summary[contains(., "Select permissions")]
@@ -103,7 +104,7 @@ Create Jenkins token in Gitea
     Set Global Variable         ${SA_TOKEN_text}
     Log to Console              Jenkins token created in Gitea
 
-    Go To                       https://gitea.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:3000/user/settings/account
+    Go To                       ${GITEA URL}/user/settings/account
     Input Text                  old_password            %{default_user_password}
     Input Text                  password                ${SA_TOKEN_text}
     Input Text                  retype                  ${SA_TOKEN_text}
@@ -113,7 +114,7 @@ Create Jenkins token in Gitea
 Get Jenkins agent secret
     [Arguments]                  ${stage}
 
-    Go To                        https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/computer/${stage}/
+    Go To                        ${JENKINS URL}computer/${stage}/
     ${agent_page_content}        Get Text    xpath=//pre
     ${secretstuff}               Evaluate    re.split("-secret ", '''${agent_page_content}''', 1)[1]
     ${my_secret}                 Evaluate    re.split(" ", '''${secretstuff}''',1)[0]
