@@ -34,14 +34,14 @@ services:
       - LLDAP_ADMIN_PASSWORD=${local_admin_password}
       - LLDAP_LDAP_ADMIN_PASS=${local_admin_password}
       - LLDAP_HTTP_URL=http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
-      # - LLDAP_JWT_SECRET =${LLDAP_JWT_SECRET}
+      - LLDAP_JWT_SECRET =${LLDAP_JWT_SECRET}
       - LLDAP_LDAP_BASE_DN=dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}
       - LLDAP_LDAP_USER_DN = ${ldap_admin_user}
       - LLDAP_LDAP_USER_EMAIL=${ldap_admin_user}@${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
       - LLDAP_LDAP_USER_PASS =${local_admin_password}
       - LLDAP_FORCE_LDAP_USER_PASS_RESET = FALSE
       - LLDAP_DATABASE_URL=postgres://${ldap_db_user}:${ldap_db_pwd}@cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/ldap
-      # - LLDAP_KEY_SEED = ${LLDAP_KEY_SEED}
+      - LLDAP_KEY_SEED = ${LLDAP_KEY_SEED}
       - LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET = false
       - LLDAP_SMTP_OPTIONS__SERVER = smtp.gmail.com
       - LLDAP_SMTP_OPTIONS__PORT = 587
