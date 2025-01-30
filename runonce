@@ -36,29 +36,22 @@ echo " Making sure all containers are reachable locally with the name in the"
 echo " hosts file."
 echo "****************************************************************************************************************"
 echo " " 
-if [ $install_mode=="local" ]; then
-   echo "****************************************************************************************************************"
-   echo " Adding entries to hosts file"
-   echo "****************************************************************************************************************"
-   sudo chmod o+w /etc/hosts
-   if grep -q "seleniumffhost" /etc/hosts; then
-      echo "Selenium Firefox testhost exists in /etc/hosts, removing..."
-      sudo sed -i "/seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
-   fi
-   echo " Add Selenium Firefox testhost to /etc/hosts"
-   sudo echo "172.16.10.100 seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-
-   if grep -q "seleniumgchost" /etc/hosts; then
-      echo "Selenium Google Chrome testhost exists in /etc/hosts, removing..."
-      sudo sed -i "/seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
-   fi
-   echo " Add Selenium Google Chrome testhost to /etc/hosts"
-   sudo echo "172.16.10.101 seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-   sudo chmod o-w /etc/hosts
-else
-   export host_ip=$(hostname -I | awk '{print $1}')
-   echo $host_ip"   seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+sudo chmod o+w /etc/hosts
+if grep -q "seleniumffhost" /etc/hosts; then
+    sudo sed -i "/seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
+echo "172.16.10.100   seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+if grep -q "seleniumgchost" /etc/hosts; then
+    sudo sed -i "/seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
+fi
+echo "172.16.10.100   seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   seleniumgchost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Setting up Chrome host for Selenium" 
 echo "****************************************************************************************************************"
@@ -174,7 +167,7 @@ echo "You can read the install test reports in https://pulp.tooling.${DOMAIN_NAM
 echo " "
 echo "You can reach the servers on:"
 echo " "
-echo " Vault:       https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200"
+echo " Vault:       https://vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200"
 echo " LLDAP:       http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:17170"
 echo " Keycloak:    https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443"
 echo " Gitea:       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000"
