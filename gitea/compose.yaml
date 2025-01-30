@@ -27,6 +27,8 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
       - GITEA__APP_NAME=Our single source of truth
       - GITEA__RUN_USER=git
       - GITEA__RUN_MODE=prod

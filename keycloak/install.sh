@@ -51,7 +51,7 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Creating keycloak setup. This will take time..."
 echo "****************************************************************************************************************"
-docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/create-realm.sh ${keycloak_pwd} ${keycloak_storepass} ${keycloak_pwd} ${local_admin_user}" | tee install/log/keycloak_create.log
+docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/create-realm.sh ${local_admin_password} ${keycloak_storepass} ${local_admin_password} ${local_admin_user}" | tee install/log/keycloak_create.log
 echo " "
 docker restart keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "****************************************************************************************************************"

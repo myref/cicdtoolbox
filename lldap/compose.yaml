@@ -31,14 +31,14 @@ services:
       - TZ=Europe/Amsterdam
       - LLDAP_URL=http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:17170
       - LLDAP_ADMIN_USERNAME=${ldap_admin_user}
-      - LLDAP_ADMIN_PASSWORD=${ldap_admin_password}
-      - LLDAP_LDAP_ADMIN_PASS=${ldap_admin_password}
+      - LLDAP_ADMIN_PASSWORD=${local_admin_password}
+      - LLDAP_LDAP_ADMIN_PASS=${local_admin_password}
       - LLDAP_HTTP_URL=http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
       - LLDAP_JWT_SECRET =${LLDAP_JWT_SECRET}
       - LLDAP_LDAP_BASE_DN=dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}
       - LLDAP_LDAP_USER_DN = ${ldap_admin_user}
       - LLDAP_LDAP_USER_EMAIL=${ldap_admin_user}@${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
-      - LLDAP_LDAP_USER_PASS =${ldap_admin_password}
+      - LLDAP_LDAP_USER_PASS =${local_admin_password}
       - LLDAP_FORCE_LDAP_USER_PASS_RESET = FALSE
       - LLDAP_DATABASE_URL=postgres://${ldap_db_user}:${ldap_db_pwd}@cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/ldap
       - LLDAP_KEY_SEED = ${LLDAP_KEY_SEED}
@@ -56,6 +56,8 @@ services:
       - GROUP_SCHEMAS_DIR=/bootstrap/group-schemas
       - DO_CLEANUP=false
       - RUST_BACKTRACE=full
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
     networks:
       internal:
         ipv4_address: 172.16.8.11

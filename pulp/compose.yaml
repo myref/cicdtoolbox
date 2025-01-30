@@ -20,10 +20,12 @@ services:
     stop_grace_period: 15s
     # user: '${default_user}'
     environment:
-      CONTENT_ORIGIN: 'https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}'
-      PULP_UI: 'true'
-      PULP_SECRET_KEY: 'secret'
-      PULP_HTTPS: true
+      - CONTENT_ORIGIN=https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+      - PULP_UI=true
+      - PULP_SECRET_KEY=secret
+      - PULP_HTTPS=true
+      - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
+      - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
     secrets:
       - source: pulp_key
         target: /etc/pki/tls/private/pulp_webserver.key
