@@ -14,7 +14,7 @@ services:
     stop_signal: SIGINT
     stop_grace_period: 15s
     environment:
-      KEYCLOAK_ADMIN: '${local_admin}'
+      KEYCLOAK_ADMIN: '${local_admin_user}'
       KEYCLOAK_ADMIN_PASSWORD: '${local_admin_password}'
       KC_HEALTH_ENABLED: 'true'
       KC_METRICS_ENABLED: 'true' 

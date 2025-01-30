@@ -20,13 +20,13 @@ services:
       internal:
         ipv4_address: 172.16.11.8
     environment:
-      - CML_USER=${cml_user}
-      - CML_PASSWORD=${cml_password}
+      # - CML_USER=${cml_user}
+      # - CML_PASSWORD=${cml_password}
       - CML_URL=https://192.168.32.161
       - JENKINS_PULP_PASSWORD=${jenkins_pulp_password}
       - JENKINS_GIT_PASSWORD=${jenkins_git_password}
       - JENKINS_DEV_LOGON_PASSWORD=${jenkins_dev_logon_password}
-      - JENKINS_ADMIN_ID=${local_admin}
+      - JENKINS_ADMIN_ID=${local_admin_user}
       - JENKINS_ADMIN_PASSWORD=${local_admin_password}
       - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
       - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
