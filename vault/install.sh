@@ -88,43 +88,27 @@ rm -f vault/conf/vault/vault-config.json
 echo "****************************************************************************************************************"
 echo " Ensure reachability of Consul"
 echo "****************************************************************************************************************"
+sudo chmod o+w /etc/hosts
 if grep -q "consul" /etc/hosts; then
-    if [ "$install_mode" = "vm" ]; then
-        echo " Consul exists in /etc/hosts, removing..."
-        echo "sudo sed -i '/consul.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
-        echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" =  "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
-else
-    if [ "$install_mode" = "vm" ]; then
-        echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" = "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
+    echo "sudo sed -i '/consul.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
 fi
+echo "172.16.9.4   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Ensure reachability of Vault"
 echo "****************************************************************************************************************"
-if grep -q "Vault" /etc/hosts; then
-    if [ "$install_mode" = "vm" ]; then
-        echo " Vault exists in /etc/hosts, removing..."
-        echo "sudo sed -i '/vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
-        echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" = "local" ]; then
-        echo "172.16.9.4   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    fi
-else
-    if [ "$install_mode" = "vm" ]; then
-        echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" = "local" ]; then
-        echo "172.16.9.4   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    fi
+sudo chmod o+w /etc/hosts
+if grep -q "vault" /etc/hosts; then
+    echo "sudo sed -i '/vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
 fi
+echo "172.16.9.5   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Cleaning Vault" 
 echo "****************************************************************************************************************"

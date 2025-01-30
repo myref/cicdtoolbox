@@ -12,25 +12,15 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Ensure reachability of LDAP"
 echo "****************************************************************************************************************"
+sudo chmod o+w /etc/hosts
 if grep -q "ldap" /etc/hosts; then
-    if [ "$install_mode" = "vm" ]; then
-        echo " LDAP exists in /etc/hosts, removing..."
-        echo "sudo sed -i '/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
-        echo $host_ip"   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" =  "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.8.11   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
-else
-    if [ "$install_mode" = "vm" ]; then
-        echo $host_ip"   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" = "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.8.11   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
+    echo "sudo sed -i '/ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
 fi
+echo "172.16.8.11   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Creating LDAP secrets" 
 echo "****************************************************************************************************************"

@@ -40,26 +40,15 @@ function create_deb_repo() {
 echo "****************************************************************************************************************"
 echo " Ensure reachability of Pulp"
 echo "****************************************************************************************************************"
+sudo chmod o+w /etc/hosts
 if grep -q "pulp" /etc/hosts; then
-    if [ "$install_mode" = "vm" ]; then
-        echo " Pulp exists in /etc/hosts, removing..."
-        echo "sudo sed -i '/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
-        echo $host_ip"   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" =  "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.11.10   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
-else
-    if [ "$install_mode" = "vm" ]; then
-        echo $host_ip"   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" = "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.11.10   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
+    echo "sudo sed -i '/pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
 fi
-
+echo "172.16.11.10   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Starting Pulp"
 echo "****************************************************************************************************************"

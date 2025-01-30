@@ -16,25 +16,15 @@ endspin() {
 echo "****************************************************************************************************************"
 echo " Ensure reachability of Keycloak"
 echo "****************************************************************************************************************"
+sudo chmod o+w /etc/hosts
 if grep -q "keycloak" /etc/hosts; then
-    if [ "$install_mode" = "vm" ]; then
-        echo " KEYCLOAK exists in /etc/hosts, removing..."
-        echo "sudo sed -i '/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
-        echo $host_ip"   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" =  "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.10.11   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
-else
-    if [ "$install_mode" = "vm" ]; then
-        echo $host_ip"   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" = "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.10.11   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
+    echo "sudo sed -i '/keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
 fi
+echo "172.16.10.11   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Starting Keycloak "
 echo "****************************************************************************************************************"

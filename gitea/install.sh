@@ -85,25 +85,15 @@ echo " "
 echo "****************************************************************************************************************"
 echo " Ensure reachability of Gitea"
 echo "****************************************************************************************************************"
+sudo chmod o+w /etc/hosts
 if grep -q "gitea" /etc/hosts; then
-    if [ "$install_mode" = "vm" ]; then
-        echo " Gitea exists in /etc/hosts, removing..."
-        echo "sudo sed -i '/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts" >> hosts_additions.txt
-        echo $host_ip"   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" =  "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.11.3   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
-else
-    if [ "$install_mode" = "vm" ]; then
-        echo $host_ip"   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
-    elif [ "$install_mode" = "local" ]; then
-        sudo chmod o+w /etc/hosts
-        echo "172.16.11.3   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
-        sudo chmod o-w /etc/hosts
-    fi
+    echo "sudo sed -i '/gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d' /etc/hosts"
 fi
+echo "172.16.11.3   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+if [ "$install_mode" = "vm" ]; then
+    echo $host_ip"   gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+fi
+sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Saving gitea certificates"
 echo "****************************************************************************************************************"
