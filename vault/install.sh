@@ -102,11 +102,11 @@ echo " Ensure reachability of Vault"
 echo "****************************************************************************************************************"
 sudo chmod o+w /etc/hosts
 if grep -q "vault" /etc/hosts; then
-    sudo sed -i "/vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
+    sudo sed -i "/vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
 fi
-echo "172.16.9.5   vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
+echo "172.16.9.5   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> /etc/hosts
 if [ "$install_mode" = "vm" ]; then
-    echo $host_ip"   vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
+    echo $host_ip"   vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}" >> hosts_additions.txt
 fi
 sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
