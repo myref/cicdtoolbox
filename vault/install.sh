@@ -112,11 +112,11 @@ sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Cleaning Vault" 
 echo "****************************************************************************************************************"
-rm -f certs/*.json
-rm -f certs/*.pem
-rm -f certs/*.crt
-rm -f certs/*.csr
-rm -f *.txt
+rm -f vault/certs/*.json
+rm -f vault/certs/*.pem
+rm -f vault/certs/*.crt
+rm -f vault/certs/*.csr
+rm -f vault/*.txt
 echo " " 
 echo "****************************************************************************************************************"
 echo " Configuring Vault backend" 

@@ -496,7 +496,7 @@ echo "Created Toolbox Admins group with ID: ${toolbox_admin_id}"
     -r cicdtoolbox \
     --gid $toolbox_admin_id \
     --cclientid Gitea \
-    --rolename infraautomator \
+    --rolename $ORG_NAME \
     --rolename giteaAdmin 
 
 ./kcadm.sh add-roles \

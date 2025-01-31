@@ -1,0 +1,65 @@
+\{
+    \"gitea-cicdtoolbox-read\": {
+        \"org_name\": [\"gitea-cicdtoolbox-read\"]
+    }\,
+    \"gitea-cicdtoolbox-write\": {
+        \"org_name\": [\"gitea-cicdtoolbox-write\"]
+    }\,
+    \"gitea-cicdtoolbox-admin\": {
+        \"org_name\": [\"gitea-cicdtoolbox-admin\"]
+    }\,
+    \"gitea-netcicd-read\": {
+        \"org_name\": [\"gitea-netcicd-read\"]
+    }\,
+    \"gitea-netcicd-write\": {
+        \"org_name\": [\"gitea-netcicd-write\"]
+    }\,
+    \"gitea-netcicd-admin\": {
+        \"org_name\": [\"gitea-netcicd-admin\"]
+    }\,
+    \"gitea-appcicd-read\": {
+        \"org_name\": [\"gitea-appcicd-read\"]
+    }\,
+    \"gitea-appcicd-write\": {
+        \"org_name\": [\"gitea-appcicd-write\"]
+    }\,
+    \"gitea-appcicd-admin\": {
+        \"org_name\": [\"gitea-appcicd-admin\"]
+    }\,
+    \"gitea-templateapp-read\": {
+        \"org_name\": [\"gitea-templateapp-read\"]
+    }\,
+    \"gitea-templateapp-write\": {
+        \"org_name\": [\"gitea-templateapp-write\"]
+    }\,
+    \"gitea-templateapp-admin\": {
+        \"org_name\": [\"gitea-templateapp-admin\"]
+    }\,
+    \"gitea-oscicd-read\": {
+        \"org_name\": [\"gitea-oscicd-read\"]
+    }\,
+    \"gitea-oscicd-write\": {
+        \"org_name\": [\"gitea-oscicd-write\"]
+    }\,
+    \"gitea-oscicd-admin\": {
+        \"org_name\": [\"gitea-oscicd-admin\"]
+    }\,
+    \"gitea-osdeploy-read\": {
+        \"org_name\": [\"gitea-osdeploy-read\"]
+    }\,
+    \"gitea-osdeploy-write\": {
+        \"org_name\": [\"gitea-osdeploy-write\"]
+    }\,
+    \"gitea-osdeploy-admin\": {
+        \"org_name\": [\"gitea-osdeploy-admin\"]
+    }\,
+    \"gitea-ostest-read\": {
+        \"org_name\": [\"gitea-ostest-read\"]
+    }\,
+    \"gitea-ostest-write\": {
+        \"org_name\": [\"gitea-ostest-write\"]
+    }\,
+    \"gitea-ostest-admin\": {
+        \"org_name\": [\"gitea-ostest-admin\"]
+    }
+\}
