@@ -655,10 +655,10 @@ echo "Added roles to Tooling Specialist."
     -s 'config.uuidLDAPAttribute=["uid"]' \
     -s 'config.userObjectClasses=["person"]' \
     -s "config.connectionUrl=[\"ldap://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3890\"]" \
-    -s 'config.usersDn=["ou=people,dc=provider,dc=test"]' \
+    -s "config.usersDn=[\"ou=people,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
     -s 'config.searchScope=["1"]' \
     -s 'config.authType=["simple"]' \
-    -s 'config.bindDn=["uid=admin,ou=people,dc=provider,dc=test"]' \
+    -s "config.bindDn=["uid=admin,ou=people,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
     -s 'config.bindCredential=["'$3'"]' \
     -s 'config.useTruststoreSpi=["ldapsOnly"]' \
     -s 'config.pagination=["false"]' \
