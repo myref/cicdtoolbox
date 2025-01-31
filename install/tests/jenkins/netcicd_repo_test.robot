@@ -1,7 +1,7 @@
 *** Settings ***
 Resource          ../install_test.resource
 
-Documentation       Making sure that Jenkins has access to the myapp-os repository on gitea
+Documentation       Making sure that Jenkins has access to the OsCICD repository on gitea
 
 Suite Setup       Open Browser   ${JENKINS URL}      ${BROWSER}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
@@ -10,6 +10,7 @@ Suite Teardown    Close Browser
 ${JENKINS URL}      https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/
 ${JENKINS NetCICD}  https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/job/%{ORG_NAME}/computation/console
 ${JENKINS LOGOUT}   https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/logout 
+${ORG}              %{ORG_NAME}
 
 *** Test cases ***
 Log into Jenkins
@@ -31,12 +32,12 @@ Log into Jenkins as netcicd
     Jenkins Page Should Be Open
 
 Get repositories
-    Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/job/%{ORG_NAME}/computation/console
+    Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/job/${ORG}/computation/console
 
     ${repo_status}=             Run Keyword And Return Status    Page Should Contain        Finished: SUCCESS
 
     IF  ${repo_status}
-        Log to Console          %{ORG_NAME} organization found
+        Log to Console          ${ORG} organization found
         ${netcicd_status}=      Run Keyword And Return Status    Page Should Contain        OsCICD
 
         IF  ${netcicd_status}
@@ -55,7 +56,7 @@ Get repositories
             Fail
         END
     ELSE
-        Log to Console          %{ORG_NAME} organization *NOT* found
+        Log to Console          ${ORG} organization *NOT* found
         Fail
     END
 

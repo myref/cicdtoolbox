@@ -26,12 +26,14 @@ The setup has been developed and tested on a fully updated Ubuntu 22.04.3 minima
 
 After install, execute:
 
-```sudo wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+```
+sudo wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt-get update && sudo apt-get upgrade -y
 ```
 
-```sudo apt-get update
+```
+sudo apt-get update
 sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
@@ -45,7 +47,9 @@ echo \
 sudo apt-get update
 ```
 
-```sudo apt -y install gh openjdk-17-jre-headless git docker.io docker-compose-plugin docker-buildx curl python3 python3-pip python-is-python3 jq vim xauth iputils-ping make build-essential wget terraform vault direnv```
+```
+sudo apt -y install gh openjdk-17-jre-headless git docker.io docker-compose-plugin docker-buildx curl python3 python3-pip python-is-python3 jq vim xauth iputils-ping make build-essential wget terraform vault direnv
+```
 
 ```sudo usermod -aG docker ${USER}```
 
@@ -71,10 +75,6 @@ Install [Docker Buildkit](https://docs.docker.com/build/buildkit/#getting-starte
 } 
 ```
 
-Copy the pulp config:
-
-```cp pulp/cli.toml ~/.config/pulp/cli.toml```
-
 Reboot to make sure all changes are activated. You will probably get a popup to do that through the software updater anyway.
 
 Install the [CICD-toolbox](https://github.com/myref/cicdtoolbox):
@@ -84,6 +84,15 @@ Create gh login: ```gh auth login``` and follow the prompts.
 ```git clone https://github.com/myref/cicdtoolbox.git```
 
 ```cd cicdtoolbox/```
+
+```
+mkdir .config/pulp
+```
+
+Copy the pulp config:
+
+```cp pulp/cli.toml ~/.config/pulp/cli.toml```
+
 
 ```direnv allow```
 

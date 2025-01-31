@@ -41,7 +41,7 @@ function create_deb_repo() {
     pulp --no-verify-ssl deb repository sync --name=${NAME}
     pulp --no-verify-ssl deb publication create --repository=${NAME}
     pulp --no-verify-ssl deb distribution create --name ${NAME} --base-path ${NAME} --repository ${NAME}
-    pulp --no-verify-ssl deb repository update --name ${NAME} --autopublish
+    pulp --no-verify-ssl deb repository update --name ${NAME}
     pulp --no-verify-ssl deb distribution show --name ${NAME}
 }
 echo "****************************************************************************************************************"
