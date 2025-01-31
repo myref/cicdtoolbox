@@ -70,7 +70,7 @@ echo "**************************************************************************
 echo " Setting pulp admin password"
 echo "****************************************************************************************************************"
 docker exec -it pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "pulpcore-manager reset-admin-password --password ${local_admin_password}"
-pulp --no-verify-ssl config create --username admin --base-url https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} --password ${local_admin_password}
+pulp --no-verify-ssl config create --username admin --base-url https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} --password ${local_admin_password} --overwrite
 echo "****************************************************************************************************************"
 echo " Creating repository and distribution"
 echo "****************************************************************************************************************"

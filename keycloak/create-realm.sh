@@ -674,7 +674,7 @@ lldap_ldap_id=$(cat LLDAP_LDAP | grep id | cut -d"'" -f 2)
     -s providerId=group-ldap-mapper \
     -s providerType=org.keycloak.storage.ldap.mappers.LDAPStorageMapper \
     -s parentId=${lldap_ldap_id} \
-    -s "config.groups.dn=[\"ou=groups,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
+    -s "config.\"groups.dn\"=[\"ou=groups,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
     -s 'config."group.name.ldap.attribute"=["cn"]' \
     -s 'config."group.object.classes"=["groupOfUniqueNames"]' \
     -s 'config.mode=["READ_ONLY"]'
