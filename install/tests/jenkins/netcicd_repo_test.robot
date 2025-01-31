@@ -34,7 +34,7 @@ Log into Jenkins as netcicd
 Get repositories
     Go To                       https://jenkins.tooling.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8084/job/${ORG}/computation/console
 
-    ${repo_status}=             Run Keyword And Return Status    Page Should Contain        Finished: SUCCESS
+    ${repo_status}=             Run Keyword And Return Status    Page Should Contain        Checking branches...
 
     IF  ${repo_status}
         Log to Console          ${ORG} organization found
