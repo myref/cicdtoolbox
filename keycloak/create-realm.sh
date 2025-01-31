@@ -658,7 +658,7 @@ echo "Added roles to Tooling Specialist."
     -s "config.usersDn=[\"ou=people,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
     -s 'config.searchScope=["1"]' \
     -s 'config.authType=["simple"]' \
-    -s "config.bindDn=["uid=admin,ou=people,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
+    -s "config.bindDn=[\"uid=admin,ou=people,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
     -s 'config.bindCredential=["'$3'"]' \
     -s 'config.useTruststoreSpi=["ldapsOnly"]' \
     -s 'config.pagination=["false"]' \
