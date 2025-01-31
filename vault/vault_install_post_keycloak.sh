@@ -31,7 +31,7 @@ export TF_VAR_client_id="Vault"
 echo "****************************************************************************************************************"
 echo " Creating admin policy file with correct domain name" 
 echo "****************************************************************************************************************"
-rm terraform/vault/variables.tf
+rm -f terraform/vault/variables.tf
 cp terraform/vault/variables.tf.org terraform/vault/variables.tf
 sed -i "s/\${DOMAIN_NAME_TL}/${DOMAIN_NAME_TL}/" terraform/vault/variables.tf
 sed -i "s/\${DOMAIN_NAME_SL}/${DOMAIN_NAME_SL}/" terraform/vault/variables.tf

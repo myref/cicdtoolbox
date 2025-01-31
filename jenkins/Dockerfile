@@ -11,6 +11,6 @@ COPY --chown=jenkins:jenkins plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 
 COPY casc.yaml /var/jenkins_conf/casc.yaml
-COPY Infraautomator/ /var/jenkins_home/jobs/Infraautomator/
+COPY org_name/ /var/jenkins_home/jobs/org_name/
 
 ARG JAVA_OPTS

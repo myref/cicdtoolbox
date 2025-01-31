@@ -54,6 +54,13 @@ openssl pkcs12 -export -in jenkins/import.pem -inkey jenkins/jenkins.tooling.${D
 #Import the PKCS12 file into Java keystore:
 keytool -importkeystore -srckeystore jenkins/jenkins.p12 -destkeystore jenkins/keystore/jenkins.jks -srcstoretype pkcs12 -srcstorepass $jenkins_storepass -storepass $jenkins_storepass -noprompt -deststoretype pkcs12
 echo "****************************************************************************************************************"
+echo " Configuring pipeline"
+echo "****************************************************************************************************************"
+echo " " 
+rm -f jenkins/org_name/config.xml
+cp jenkins/org_name/config.xml.template jenkins/org_name/config.xml
+sed -i -e "s/ORG_NAME/${ORG_NAME}/g" jenkins/org_name/config.xml
+echo "****************************************************************************************************************"
 echo " Starting jenkins"
 echo "****************************************************************************************************************"
 echo " " 
