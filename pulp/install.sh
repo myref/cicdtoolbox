@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Started with sh -c "pulp_install.sh ${pulp_pass}"
+# Started with sh -c "pulp/install.sh"
 
 sp="/-\|"
 sc=0

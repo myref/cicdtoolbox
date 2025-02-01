@@ -27,6 +27,8 @@ services:
       - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
       - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
     secrets:
+      # - source: ca_crt
+      #   target: /etc/ssl/certs/cacert.pem
       - source: pulp_key
         target: /etc/pki/tls/private/pulp_webserver.key
       - source: pulp_crt
