@@ -30,8 +30,8 @@ sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
 echo " Configuring Keycloak for Portainer"
 echo "****************************************************************************************************************"
-docker cp portainer/realm_add_portainer.sh keycloak:/opt/keycloak/bin/realm_add_portainer.sh
-docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/realm_add_portainer.sh ${local_admin_password} ${keycloak_storepass} ${local_admin_password} ${local_admin_user}" | tee install/log/keycloak_portainer_create.log
+docker cp portainer/realm_add_portainer.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/realm_add_portainer.sh
+docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/realm_add_portainer.sh " | tee install/log/keycloak_portainer_create.log
 echo " "
 echo "****************************************************************************************************************"
 echo " Starting Portainer"

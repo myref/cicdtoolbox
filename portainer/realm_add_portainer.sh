@@ -4,7 +4,7 @@
 cd $HOME/bin
 
 #Create credentials
-# ./kcadm.sh config credentials --server https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443 --realm master --user $4 --password $1
+# ./kcadm.sh config credentials --server https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443 --realm master --user ${local_admin_user} --password ${local_admin_password}
 # echo "Credentials created"
 
 #Add Portainer client
