@@ -60,6 +60,8 @@ echo " "
 rm -f jenkins/org_name/config.xml
 cp jenkins/org_name/config.xml.template jenkins/org_name/config.xml
 sed -i -e "s/ORG_NAME/${ORG_NAME}/g" jenkins/org_name/config.xml
+sed -i -e "s/provider/${DOMAIN_NAME_SL}/g" jenkins/org_name/config.xml
+sed -i -e "s/test/${DOMAIN_NAME_TL}/g" jenkins/org_name/config.xml
 echo "****************************************************************************************************************"
 echo " Starting jenkins"
 echo "****************************************************************************************************************"

@@ -47,7 +47,7 @@
   <disabled>false</disabled>
   <navigators>
     <org.jenkinsci.plugin.gitea.GiteaSCMNavigator plugin="gitea@1.2.1">
-      <serverUrl>https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000</serverUrl>
+      <serverUrl>https://gitea.tooling.provider.test:3000</serverUrl>
       <repoOwner>ORG_NAME</repoOwner>
       <credentialsId>jenkins-git</credentialsId>
       <traits>
