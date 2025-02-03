@@ -9,7 +9,7 @@ if [ ! -f "/etc/ssh/ssh_host_dsa_key" ]; then
 	/usr/bin/ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
 fi
 
-echo "172.16.8.1 kvmhost" >> /etc/hosts
+echo "192.168.122.16 kvmhost" >> /etc/hosts
 
 # prepare run dir
 if [ ! -d "/var/run/sshd" ]; then

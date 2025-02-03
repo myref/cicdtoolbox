@@ -48,7 +48,7 @@ RUN echo -e """\
 Host *\n\
     PasswordAuthentication yes\n\
     StrictHostKeyChecking no\n\
-    UserKnownHostsFile=/dev/null\n\
+    UserKnownHostsFile ~/.ssh/known_hosts\n\
 """ >> /etc/ssh/ssh_config
 
 RUN echo "export JAVA_HOME=/usr" >> /etc/profile
@@ -75,6 +75,7 @@ WORKDIR /home/jenkins
 RUN curl -fsSL https://raw.githubusercontent.com/dikhan/terraform-provider-openapi/master/scripts/install.sh | bash -s -- --provider-name "onprem" --provider-source-address "restportal.services.provider.test/datacenter"
 COPY terraform-provider-openapi.yaml /home/jenkins/.terraform.d/plugins/terraform-provider-openapi.yaml
 COPY onprem.yaml /home/jenkins/onprem.yaml
+RUN chown -R jenkins:jenkins /home/jenkins
 
 
 USER root

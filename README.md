@@ -1,39 +1,35 @@
 # Background
 When working on [NetCICD](https://github.com/Devoteam/NetCICD), again and again, tools used changed their way of use. In addition, additional functionality was needed: some sort of SSO, git, etc. Adding more tools made the tool chain more brittle every time. And what was worse: building it using VM ate CPU and memory, basically limiting the size of the simulations that can be done. In short: having a dependable pipeline is one complex thing, making sure it keeps on working is another.
 
-With the amazing team of DevOps specialists at Devoteam, we started to develop a basic devops toolchain, containing most things you might need to get started on the click of a button. It is pre-configured and can be used to jumpstart a CICD project and based upon Docker to minimise the footprint on a local machine. 
+The lead to the development of a basic devops toolchain, containing most things that might be needed to get started with the click of a button. It is opinionated and pre-configured and can be used to jumpstart a CICD project. In the included git repository, a number of reference pipelines are included: OsCICD for OS development, AppCICD as a deployment template against multiple backends and the TemplateApp as a template to use when deploying applications. The setup is based upon Docker to minimise the footprint on a local machine. 
 
-Tooling only has to make your life easier, after all Tech is for People, not the other way around. This is the place where we do this. We are far from finished. Feel free to contribute.
+The toolbox is far from finished. Work is currently going into adding modules for NodeRED, Portainer, Netbox and others in spare time. Feel free to contribute.
 
-# Want we want to achieve
-Having a well functioning tool chain can save a lot of time. But automation is also the fastest way to destroy your business. That is why we want to build a setup that is predictable and reliable:
+# Goal
+Having a well functioning tool chain can save a lot of time. But automation is also the fastest way to destroy your business. Therefore the setup has to be  predictable and reliable:
 
 ![toolchain](toolchain.png)
 
-As you can see, the tool chain is separated from the managed environments. This allows to use a single toolset for all environments. 
+The tool chain is separated from the managed environments. This allows to use a single toolset for all environments. 
 
-In every environment you'll see a jump host. This jump host is the only system that can connect back to the tool chain. It is controlled from Jenkins.
+In every environment there is a jump host. This jump host is the only system that can connect back to the tool chain. It is controlled from Jenkins. Next to that there are 4 generic build-hosts (dev, test, acc and prod) that can be used when a secondary deployment environment is not needed.
 
 For more information on the systems used and the setup of the individual systems, look at the wiki.
 
 # How to install
 
 ### Work in progress!!
-Even though we try to make this work as well as we can, it is being improved daily. Master should work, Develop is the most complete.
+This is work in progress and without any guarantees. It is being improved daily.
 ### Software configuration
 
-The setup has been developed and tested on a fully updated Ubuntu 22.04.3 minimal install, 50 GB disk, 4 CPU, 20 GB memory on KVM with Internet access. As the setup also uses local networking, using the Ubuntu Desktop version is easier. During install testing the minimal install is used. 
+The setup has been developed and tested on a fully updated Ubuntu 22.04.3 minimal install, 50 GB disk, 4 CPU, 8 GB memory on KVM with Internet access. As the setup also uses local networking, using the Ubuntu Desktop version is easier. During install testing the minimal install is used. 
 
 After install, execute:
 
 ```
 sudo wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt-get update && sudo apt-get upgrade -y
-```
 
-```
-sudo apt-get update
 sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
@@ -44,10 +40,8 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-```
+sudo apt-get update && sudo apt-get upgrade -y
 
-```
 sudo apt -y install gh openjdk-17-jre-headless git docker.io docker-compose-plugin docker-buildx curl python3 python3-pip python-is-python3 jq vim xauth iputils-ping make build-essential wget terraform vault direnv
 ```
 
@@ -104,8 +98,8 @@ You need to be able to run docker as non-root. See [here](https://docs.docker.co
 
 ### Do NOT run this script after use.
 * The script stops all existing containers
-* It wipes all working directories, networks, containers and builds
-* Networks are preconfigured to enable the connect-back from CML
+* It wipes all working directories, volumes, networks, containers and builds
+* Networks are preconfigured to enable the connect-backto jenkins and gitea
 * Running or starting twice will create failing networks and/or containers, duplicate IP addresses and all kinds of other mayhem.
 
 
