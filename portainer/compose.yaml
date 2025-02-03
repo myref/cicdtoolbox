@@ -3,13 +3,13 @@ volumes:
 
 secrets:
   portainer_key:
-    file: ../vault/certs/portainer.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
+    file: ../vault/certs/portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem
   portainer_crt:
-    file: ../vault/certs/portainer.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
+    file: ../vault/certs/portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt
 
 services:
   portainer:
-    container_name: portainer.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+    container_name: portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
     restart: unless-stopped
     init: true
@@ -22,6 +22,7 @@ services:
       - TZ=Europe/Amsterdam
       - DOMAIN_NAME_SL=${DOMAIN_NAME_SL}
       - DOMAIN_NAME_TL=${DOMAIN_NAME_TL}
+      - VIRTUAL_HOST=portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     secrets:
       - source: ca_crt
         target: /etc/ssl/certs/cacert.pem

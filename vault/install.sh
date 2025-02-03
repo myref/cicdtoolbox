@@ -197,7 +197,7 @@ create_leaf build-prod delivery
 create_leaf keycloak services 
 create_leaf ldap iam  
 create_leaf pulp tooling
-create_leaf portainer tooling 
+create_leaf portainer monitoring 
 create_leaf vault internal 
 echo " " 
 echo "****************************************************************************************************************"

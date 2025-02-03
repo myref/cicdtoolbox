@@ -64,8 +64,8 @@ services:
     networks:
       internal:
         ipv4_address: 172.16.12.2
-    expose:
-      - '50000'
+    ports:
+      - '16122:22'
   build-test:
     container_name: build-test.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build:
@@ -96,8 +96,8 @@ services:
     depends_on:
       - jenkins
       - gitea
-    expose:
-      - '50000'
+    ports:
+      - '16123:22'
     networks:
       internal:
         ipv4_address: 172.16.12.3
@@ -132,8 +132,8 @@ services:
     depends_on:
       - jenkins
       - gitea
-    expose:
-      - '50000'
+    ports:
+      - '16124:22'
     networks:
       internal:
         ipv4_address: 172.16.12.4
@@ -168,8 +168,8 @@ services:
         target: /home/jenkins/secret-file.txt
       - source: prod_jenkins_token
         target: /home/jenkins/git-token.txt
-    expose:
-      - '50000'
+    ports:
+      - '16125:22'
     networks:
       internal:
         ipv4_address: 172.16.12.5

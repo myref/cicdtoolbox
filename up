@@ -13,18 +13,15 @@ endspin() {
    printf "\r%s\n" "$@"
 }
 
-docker-compose start consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+docker compose start consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
 echo "Waiting for Vault to come online"
 until $(curl --output /dev/null --silent --head --fail http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200); do
     printf '.'
     sleep 5
 done
 echo " "
-<<<<<<< HEAD
-unseal_key=(cat ./vault/key.txt)
-=======
+
 unseal_key=$(cat ./vault/key.txt)
->>>>>>> e86c637 (bare rr version)
 robot --variable key:${unseal_key} -d install/log ./vault/unseal.robot
 
 docker-compose start cicdtoolbox-db.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
@@ -34,13 +31,7 @@ until $(curl --output /dev/null --silent --head --fail http://keycloak.services.
     sleep 5
 done
 echo " "
-# echo "****************************************************************************************************************"
-# echo " Creating Grafana Keycloak Client secret"
-# echo "****************************************************************************************************************"
-# export Grafana_CLIENT_SECRET=$(grep Grafana_token install/log/grafana_create.log | cut -d' ' -f2 | tr -d '\r')
-# echo $Grafana_CLIENT_SECRET
-
-docker-compose start 
+docker compose start 
 echo "****************************************************************************************************************"
 echo " Waiting for the containers to come up"
 echo "****************************************************************************************************************"
@@ -51,9 +42,9 @@ until $(curl --output /dev/null --silent --head --insecure --fail https://gitea.
 done
 endspin
 
-echo "Nexus"
+echo "Pulp"
 let t=0
-until $(curl --output /dev/null --insecure --silent --head --fail https://nexus.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443); do
+until $(curl --output /dev/null --insecure --silent --head --fail https://pulp.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}); do
     spin
 done
 endspin
