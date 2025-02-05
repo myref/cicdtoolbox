@@ -11,6 +11,7 @@ services:
   portainer:
     container_name: portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
     build: .
+    command: --sslcert /etc/ssl/portainer.crt --sslkey /etc/ssl/portainer.key
     restart: unless-stopped
     init: true
     stop_signal: SIGINT
@@ -38,3 +39,4 @@ services:
         ipv4_address: 172.16.13.3
     ports:
       - '9000:9000'
+    

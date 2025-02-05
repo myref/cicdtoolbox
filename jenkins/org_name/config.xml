@@ -2,7 +2,7 @@
 <jenkins.branch.OrganizationFolder plugin="branch-api@2.6.3">
   <actions/>
   <description></description>
-  <displayName>All automation of org_name</displayName>
+  <displayName>All automation of infraautomator</displayName>
   <properties>
     <jenkins.branch.OrganizationChildHealthMetricsProperty>
       <templates>
@@ -47,8 +47,8 @@
   <disabled>false</disabled>
   <navigators>
     <org.jenkinsci.plugin.gitea.GiteaSCMNavigator plugin="gitea@1.2.1">
-      <serverUrl>https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000</serverUrl>
-      <repoOwner>org_name</repoOwner>
+      <serverUrl>https://gitea.tooling.provider.test:3000</serverUrl>
+      <repoOwner>infraautomator</repoOwner>
       <credentialsId>jenkins-git</credentialsId>
       <traits>
         <org.jenkinsci.plugin.gitea.BranchDiscoveryTrait>

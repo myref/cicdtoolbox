@@ -19,6 +19,7 @@ echo "**************************************************************************
 echo " Cleaning Jenkins" 
 echo "****************************************************************************************************************"
 rm -f jenkins/jenkins.tooling*
+cp jenkins/casc.yaml.template jenkins/casc.yaml
 echo " " 
 echo "****************************************************************************************************************"
 echo " Cleaning Jenkins buildnodes" 
@@ -117,6 +118,14 @@ echo " Configuring Jenkins for jenkins-jenkins login and storing token"
 echo "****************************************************************************************************************"
 robot -d install/log -o 20_configure_jenkins.xml -l 20_configure_jenkins_log.html -r 20_configure_jenkins_report.html jenkins/configure_jenkins.robot
 echo " " 
+echo "****************************************************************************************************************"
+echo " Creating active casc file"
+echo "****************************************************************************************************************"
+robot -d install/log -o 21_save_jenkins_config.xml -l 21_save_jenkins_config_log.html -r 21_save_jenkins_config_report.html jenkins/save_config.robot
+echo "****************************************************************************************************************"
+echo " Updating remote casc file"
+echo "****************************************************************************************************************"
+docker cp jenkins/casc.yaml jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/var/jenkins_conf/casc.yaml 
 echo "****************************************************************************************************************"
 echo " Building build nodes"
 echo "****************************************************************************************************************"

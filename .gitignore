@@ -21,3 +21,5 @@ terraform/vault/terraform.tfstate
 jenkins/jenkins.tooling.provider.test.*
 jenkins/keystore/jenkins.jks
 install/runonce*
+jenkins/casc.yaml
+hosts_additions.txt

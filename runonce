@@ -156,9 +156,9 @@ echo "Copying logfiles to pulp"
 echo "****************************************************************************************************************"
 echo " "
 if [[ -d install/log ]]; then
-   find install/log -type f | xargs -I {} pulp --no-verify-ssl --username admin --password "${local_admin_password}" file content upload --repository toolbox_install --file "{}" --relative-path "{}" >> install/log/pulp.log &
+   find install/log -type f | xargs -I {} pulp --no-verify-ssl  -b --format none --username admin --password "${local_admin_password}" file content upload --repository toolbox_install --file "{}" --relative-path "{}" >> install/log/pulp.log
 fi
-find install/runonce?* -type f | xargs -I {} pulp --no-verify-ssl --username admin --password "${local_admin_password}" file content upload --repository toolbox_install --file "{}" --relative-path "{}" >> install/log/pulp.log &
+find install/runonce?* -type f | xargs -I {} pulp --no-verify-ssl  -b --format none --username admin --password "${local_admin_password}" file content upload --repository toolbox_install --file "{}" --relative-path "{}" >> install/log/pulp.log
 echo "****************************************************************************************************************"
 echo "Done!"
 echo "****************************************************************************************************************"

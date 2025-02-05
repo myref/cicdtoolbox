@@ -1,4 +1,5 @@
 #!/bin/sh
+service docker restart
 
 if [ ! -f "/etc/ssh/ssh_host_rsa_key" ]; then
 	# generate fresh rsa key

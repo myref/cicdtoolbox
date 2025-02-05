@@ -35,6 +35,11 @@ docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "chm
 docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/realm_add_portainer.sh ${local_admin_user} ${local_admin_password}" | tee install/log/keycloak_portainer_create.log
 echo " "
 echo "****************************************************************************************************************"
+echo " Preparing certificates for Portainer"
+echo "****************************************************************************************************************"
+cp vault/certs/portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem portainer/portainer.key
+cp vault/certs/portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt portainer/portainer.crt
+echo "****************************************************************************************************************"
 echo " Starting Portainer"
 echo "****************************************************************************************************************"
 docker compose --project-name cicd-toolbox up -d --build --no-deps portainer

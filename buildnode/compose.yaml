@@ -42,9 +42,7 @@ services:
     init: true
     stop_signal: SIGINT
     stop_grace_period: 15s
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
+    privileged: true
     environment:
       - BUILD_ENVIRONMENT=Dev
       - ARM_SKIP_PROVIDER_REGISTRATION='true'
@@ -78,6 +76,7 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    privileged: true
     environment:
       - BUILD_ENVIRONMENT=Test
       - ANSIBLE_TF_DIR=AppCICD
@@ -114,6 +113,7 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    privileged: true
     environment:
       - BUILD_ENVIRONMENT=Acc
       - ANSIBLE_TF_DIR=AppCICD
@@ -150,6 +150,7 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    privileged: true
     environment:
       - BUILD_ENVIRONMENT=Prod
       - ANSIBLE_TF_DIR=AppCICD
