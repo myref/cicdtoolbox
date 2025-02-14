@@ -23,3 +23,5 @@ jenkins/keystore/jenkins.jks
 install/runonce*
 jenkins/casc.yaml
 hosts_additions.txt
+terraform/vault/terraform.tfstate.backup
+

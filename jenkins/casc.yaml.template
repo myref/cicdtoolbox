@@ -386,6 +386,10 @@ jenkins:
           value: ${JENKINS_IP}
         - key: "PULP_IP"
           value: ${PULP_IP}
+        - key: "DOMAIN_NAME_SL"
+          value: ${DOMAIN_NAME_SL}
+        - key: "DOMAIN_NAME_TL"
+          value: ${DOMAIN_NAME_TL}
 security:
   scriptApproval:
     approvedSignatures:

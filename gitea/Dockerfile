@@ -15,3 +15,7 @@ COPY gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt /data/gitea/gitea.too
 COPY --chmod=0644 --chown=git:git gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt /home/git/.postgresql/postgresql.crt
 
 COPY ca.crt /home/git/.postgresql/root.crt
+USER root
+# COPY COMPANY_ROOT_CA.crt /usr/local/share/ca-certificates
+# RUN update-ca-certificates
+# user 1000:1000

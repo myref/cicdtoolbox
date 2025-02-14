@@ -30,7 +30,7 @@ Set up KV
 
 ${BROWSER1}                            chrome
 ${DELAY}                               0
-${URL}                                 http://portainer.monitoring.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8200
+${URL}                                 http://portainer.monitoring.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:9000
 ${PORTAINER_ADMIN}                     %{local_admin_user}
 ${PORTAINER_ADMIN_PASSWORD}            %{local_admin_password}
 
@@ -46,11 +46,11 @@ Set Admin credentials
 Choose environment
     Wait Until Page Contains           Environment Wizard
     Click Button                       Get started
-    Go To                              http://portainer.monitoring.simtocare.local:9000/#!/settings
+    Go To                              ${URL}/#!/settings
     Run Keyword And Ignore Error       Scroll Element Into View    /html/body/div/div[2]/div/div/settings-view/div[2]/div[4]/div[1]/div/span[1]/span          
     Click Element                      toggle_forceHTTPS
     
-    ...    http://portainer.monitoring.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:9000/#!/settings/auth
+    Go To                              ${URL}/#!/settings/auth
     Scroll Element Into View           
 
 
