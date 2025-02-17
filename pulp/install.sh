@@ -57,6 +57,12 @@ if [ "$install_mode" = "vm" ]; then
 fi
 sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
+echo " Add Pulp to keycloak"
+echo "****************************************************************************************************************"
+docker cp pulp/add_pulp_to_realm.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/add_pulp_to_realm.sh
+docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/add_pulp_to_realm.sh ${local_admin_user} ${local_admin_password}" | tee install/log/keycloak_pulp_create.log
+echo " "
+echo "****************************************************************************************************************"
 echo " Starting Pulp"
 echo "****************************************************************************************************************"
 docker compose --project-name cicd-toolbox up -d --build --no-deps pulp

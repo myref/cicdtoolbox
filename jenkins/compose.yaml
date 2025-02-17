@@ -20,6 +20,7 @@ services:
       internal:
         ipv4_address: 172.16.11.8
     environment:
+      - ORG_NAME=${ORG_NAME}
       # - CML_USER=${cml_user}
       # - CML_PASSWORD=${cml_password}
       - CML_URL=https://192.168.32.161

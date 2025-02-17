@@ -7,7 +7,14 @@ create_runner_node() {
     echo "****************************************************************************************************************"
     robot --variable environment:$1 --variable VALID_PASSWORD:$2 -d install/log/ -o .30_build-$1_runner_create.xml -l 30_build-$1_runner_create_log.html -r 30_build-$1_runner_create_report.html buildnode/runnertoken.robot
     export RUNNER_TOKEN=$(cat buildnode/${1}_runner_token)
-    # echo $RUNNER_TOKEN
+    echo "****************************************************************************************************************"
+    echo " Adding buildnode_$1 to Keycloak"
+    echo "****************************************************************************************************************"
+    docker cp buildnode/add_buildnode_to_realm.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/add_build_$1_to_realm.sh
+    docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/add_buildnode_to_realm.sh ${local_admin_user} ${local_admin_password} ${1} ${4}" | tee install/log/keycloak_pulp_create.log
+    echo "****************************************************************************************************************"
+    echo " Starting buildnode"
+    echo "****************************************************************************************************************"
     docker compose --project-name cicd-toolbox up -d --build --no-deps --force-recreate build-$1
     docker exec --user root -it build-$1.delivery.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} /bin/bash -c "source /etc/rc.local"
     echo "****************************************************************************************************************"

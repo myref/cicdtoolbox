@@ -149,14 +149,14 @@ Click Jenkins Logout Link
     Capture Page Screenshot
 
 Confirm organisation configuration
-    Go To                       ${JENKINS URL}/job/org_name/configure
+    Go To                       ${JENKINS URL}/job/%{ORG_NAME}/configure
     Wait Until Page Contains    General
     Click Button                Save
     Log to Console              Organisation configuration confirmed
     Capture Page Screenshot
-    Go To                       ${JENKINS URL}/job/org_name/build?delay=0
-    Go To                       ${JENKINS URL}/job/org_name/computation/console
+    Go To                       ${JENKINS URL}/job/%{ORG_NAME}/build?delay=0
+    Go To                       ${JENKINS URL}/job/%{ORG_NAME}/computation/console
     Sleep                       5
-    Go To                       ${JENKINS URL}/job/org_name/computation/console
+    Go To                       ${JENKINS URL}/job/%{ORG_NAME}/computation/console
     
     Log to Console              Organisation configuration confirmed

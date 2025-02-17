@@ -179,6 +179,7 @@ create_intermediate iam
 create_intermediate internal
 create_intermediate tooling
 create_intermediate services
+create_intermediate monitoring
 echo "****************************************************************************************************************"
 echo " Intermediates defined" 
 echo "****************************************************************************************************************"
@@ -206,19 +207,22 @@ echo "**************************************************************************
 echo " " 
 vault auth enable -address="http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200" approle
 create_approle git-jenkins
+create_approle jenkins-ansible
+create_approle jenkins-cml
 create_approle jenkins-git
 create_approle jenkins-jenkins
+create_approle jenkins-org
 create_approle jenkins-pulp
-create_approle jenkins-ansible
-create_approle jenkins-${ORG_NAME}
 echo "****************************************************************************************************************"
 echo " Creating KV pairs" 
 echo "****************************************************************************************************************"
 echo " " 
+create_kv_pair jenkins jenkins_ansible_password ${default_user_password}
+create_kv_pair jenkins jenkins_cml_password ${default_user_password}
+create_kv_pair jenkins jenkins_git_password ${default_user_password}
 create_kv_pair jenkins jenkins_jenkins_password ${default_user_password}
 create_kv_pair jenkins jenkins_pulp_password ${default_user_password}
-create_kv_pair jenkins jenkins_git_password ${default_user_password}
-create_kv_pair jenkins jenkins_dev_logon_password ${default_user_password}
+create_kv_pair jenkins jenkins_org_password ${default_user_password}
 echo "****************************************************************************************************************"
 echo " Creating policies" 
 echo "****************************************************************************************************************"

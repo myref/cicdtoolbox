@@ -104,6 +104,12 @@ echo "**************************************************************************
 cp gitea/groupmapping.json.org gitea/groupmapping.json
 sed -i "s/org_name/${ORG_NAME}/" gitea/groupmapping.json
 echo "****************************************************************************************************************"
+echo " Add Gitea to keycloak"
+echo "****************************************************************************************************************"
+docker cp gitea/add_gitea_to_realm.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/add_gitea_to_realm.sh | tee install/log/keycloak_gitea_create.log
+docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/add_gitea_to_realm.sh ${local_admin_user} ${local_admin_password}" | tee install/log/keycloak_gitea_create.log
+echo " "
+echo "****************************************************************************************************************"
 echo " Starting Gitea"
 echo "****************************************************************************************************************"
 DOCKER_BUILDKIT=1 docker compose --project-name cicd-toolbox up -d --build --no-deps gitea
@@ -178,7 +184,7 @@ CreateTeam ${ORG_NAME} "gitea-templateapp-admin" "The AppCICD repo admin role" "
 echo "****************************************************************************************************************"
 echo " Adding keycloak client key to Gitea"
 echo "****************************************************************************************************************"
-gitea_client_id=$(grep GITEA_token install/log/keycloak_create.log | cut -d' ' -f2 | tr -d '\r' )
+gitea_client_id=$(grep GITEA_token install/log/keycloak_gitea_create.log | cut -d' ' -f2 | tr -d '\r' )
 docker exec -it gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "su git -c '/usr/local/bin/gitea admin auth add-oauth --name keycloak --provider openidConnect --key Gitea --secret $gitea_client_id --auto-discover-url https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443/realms/cicdtoolbox/.well-known/openid-configuration --config=/data/gitea/conf/app.ini'"
 # required claim name contains the claim name required to be able to use the claim, admin-group is the claim value for admin.
 gitea_group_mapping=$(cat gitea/groupmapping.json | tr -d ' ' | tr -d '\n')
