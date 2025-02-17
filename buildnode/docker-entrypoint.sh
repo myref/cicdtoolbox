@@ -19,11 +19,11 @@ fi
 
 cd /home/jenkins
 
-if [ ! -d "/home/jenkins/.ssh"]; then
+if [ ! -d "/home/jenkins/.ssh" ]; then
 	mkdir /home/jenkins/.ssh
 fi
 
-if [ ! -f "/home/jenkins/.ssh/id_rsa"]; then
+if [ ! -f "/home/jenkins/.ssh/id_rsa" ]; then
 	#generate ID
 	ssh-keygen -t rsa -C "jenkins-user" -N '' 
 fi
