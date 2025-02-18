@@ -33,9 +33,9 @@ echo "Created Jenkins client with ID: ${JENKINS_ID}"
 # We need to retrieve the token from keycloak for this client
 ./kcadm.sh get clients/$JENKINS_ID/client-secret -r cicdtoolbox >cicdtoolbox_jenkins_secret
 JENKINS_token=$(grep value cicdtoolbox_jenkins_secret | cut -d '"' -f4)
+
 # Make sure we can grep the clienttoken easily from the keycloak_create.log to create an authentication source in Gitea for Keycloak
 echo "JENKINS_token: ${JENKINS_token}"
-
 
 # Now we can add client specific roles (Clientroles)
 ./kcadm.sh create clients/$JENKINS_ID/roles -r cicdtoolbox -s name=jenkins-admin -s description='The admin role for Jenkins'

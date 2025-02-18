@@ -2,7 +2,7 @@
 Library                               SeleniumLibrary
 Library                               OperatingSystem
 Library                               XML
-Documentation                         Setting up Hashicorp Vault
+Documentation                         Setting up Portainer
 
 Suite Setup       Open Browser   ${URL}      ${BROWSER1}       remote_url=http://seleniumgchost.internal.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:4444    options=add_argument("--ignore-certificate-errors")
 Suite Teardown    Close Browser
@@ -31,6 +31,7 @@ Set up KV
 ${BROWSER1}                            chrome
 ${DELAY}                               0
 ${URL}                                 http://portainer.monitoring.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:9000
+${KEYCLOAK_URL}                        https://keycloak.services.%{DOMAIN_NAME_SL}.%{DOMAIN_NAME_TL}:8443
 ${PORTAINER_ADMIN}                     %{local_admin_user}
 ${PORTAINER_ADMIN_PASSWORD}            %{local_admin_password}
 
@@ -49,9 +50,25 @@ Choose environment
     Go To                              ${URL}/#!/settings
     Run Keyword And Ignore Error       Scroll Element Into View    /html/body/div/div[2]/div/div/settings-view/div[2]/div[4]/div[1]/div/span[1]/span          
     Click Element                      toggle_forceHTTPS
-    
     Go To                              ${URL}/#!/settings/auth
-    Scroll Element Into View           
+    Click Element                      xpath://*[text()='Oauth']
+    Scroll Element Into View           xpath://*[text()='Client ID']
+    Input Text                         oauth_client_id            Portainer
+    Scroll Element Into View           xpath://*[text()='Client secret']
+    Input Text                         oauth_client_secret        %{PORTAINER_SECRET}
+    Scroll Element Into View           xpath://*[text()='Authorization URL']
+    Input Text                         oauth_authorization_uri    ${KEYCLOAK_URL}/realms/cicdtoolbox/protocol/openid-connect/auth
+    Scroll Element Into View           xpath://*[text()='Access token URL']
+    Input Text                         oauth_access_token_uri     ${KEYCLOAK_URL}/realms/cicdtoolbox/protocol/openid-connect/token
+    Scroll Element Into View           xpath://*[text()='Resource URL']
+    Input Text                         oauth_resource_uri         ${KEYCLOAK_URL}/realms/cicdtoolbox/protocol/openid-connect/userinfo
+    Scroll Element Into View           xpath://*[text()='Redirect URL']
+    Input Text                         oauth_redirect_uri         ${URL}
+    Scroll Element Into View           xpath://*[text()='Logout URL']
+    Input Text                         oauth_logout_url           ${KEYCLOAK_URL}/realms/cicdtoolbox/protocol/openid-connect/logout
+    Scroll Element Into View           xpath://*[text()='Save settings']
+    Click Button                       Save settings
+
 
 
 

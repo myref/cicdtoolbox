@@ -28,18 +28,22 @@ if [ "$install_mode" = "vm" ]; then
 fi
 sudo chmod o-w /etc/hosts
 echo "****************************************************************************************************************"
-echo " Configuring Keycloak for Portainer"
+echo " Add Portainer to Keycloak"
 echo "****************************************************************************************************************"
-docker cp portainer/realm_add_portainer.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/realm_add_portainer.sh
-docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "chmod +x /opt/keycloak/bin/realm_add_portainer.sh" | tee install/log/keycloak_portainer_create.log
-docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/realm_add_portainer.sh ${local_admin_user} ${local_admin_password}" | tee install/log/keycloak_portainer_create.log
+docker cp portainer/add_portainer_to_realm.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/add_portainer_to_realm.sh
+docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/add_portainer_to_realm.sh ${local_admin_user} ${local_admin_password}" | tee install/log/keycloak_portainer_create.log
 echo " "
-echo "****************************************************************************************************************"
-echo " Preparing certificates for Portainer"
-echo "****************************************************************************************************************"
-cp vault/certs/portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.pem portainer/portainer.key
-cp vault/certs/portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}.crt portainer/portainer.crt
 echo "****************************************************************************************************************"
 echo " Starting Portainer"
 echo "****************************************************************************************************************"
 docker compose --project-name cicd-toolbox up -d --build --no-deps portainer
+let t=0
+until $(curl --output /dev/null --insecure --silent --head --fail http://portainer.monitoring.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:9000); do
+    spin
+done
+endspin
+echo "****************************************************************************************************************"
+echo " Configuring Portainer"
+echo "****************************************************************************************************************"
+robot -d install/log -o 20_configure_portainer.xml -l 20_configure_portainer_log.html -r 20_configure_portainer_report.html portainer/configure_portainer.robot
+ 
