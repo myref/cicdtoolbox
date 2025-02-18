@@ -25,9 +25,14 @@ fi
 
 if [ ! -f "/home/jenkins/.ssh/id_rsa" ]; then
 	#generate ID
-	ssh-keygen -t rsa -C "jenkins-user" -N '' 
+	ssh-keygen -t rsa -N "" -f /home/jenkins/.ssh/id_rsa -C "jenkins-user"
 fi
 
+chown jenkins:jenkins /home/jenkins/.ssh/id*
+
+# Manual: ssh-copy-id -i /home/jenkins/.ssh/id_rsa.pub kvmuser@kvmhost
+
+echo "-----------------------------------------------------"
 echo "Build environment: ${BUILD_ENVIRONMENT}"
 echo " "
 RUNNER_TOKEN=$(cat git-token.txt)
