@@ -32,6 +32,7 @@ echo " Add Portainer to Keycloak"
 echo "****************************************************************************************************************"
 docker cp portainer/add_portainer_to_realm.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/add_portainer_to_realm.sh
 docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/add_portainer_to_realm.sh ${local_admin_user} ${local_admin_password}" | tee install/log/keycloak_portainer_create.log
+export portainer_secret=$(grep PORTAINER_token: install/log/keycloak_portainer_create.log | cut -d' ' -f2 | tr -d '\r' )
 echo " "
 echo "****************************************************************************************************************"
 echo " Starting Portainer"
@@ -45,5 +46,5 @@ endspin
 echo "****************************************************************************************************************"
 echo " Configuring Portainer"
 echo "****************************************************************************************************************"
-robot -d install/log -o 20_configure_portainer.xml -l 20_configure_portainer_log.html -r 20_configure_portainer_report.html portainer/configure_portainer.robot
+robot -d install/log -o 40_configure_portainer.xml -l 40_configure_portainer_log.html -r 40_configure_portainer_report.html portainer/configure_portainer.robot
  

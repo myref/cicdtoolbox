@@ -65,25 +65,37 @@ sed -i -e "s/ORG_NAME/${ORG_NAME}/g" jenkins/$ORG_NAME/config.xml
 sed -i -e "s/provider/${DOMAIN_NAME_SL}/g" jenkins/$ORG_NAME/config.xml
 sed -i -e "s/test/${DOMAIN_NAME_TL}/g" jenkins/$ORG_NAME/config.xml
 echo "****************************************************************************************************************"
-echo " Preparing Vault setup"
-echo "****************************************************************************************************************"
-export JENKINS_ANSIBLE_VAULT_ID=$(cat vault/ids/jenkins-ansible_vault_id.txt)
-export JENKINS_ANSIBLE_VAULT_SECRET=$(cat vault/ids/jenkins-ansible_vault_secret_id.txt)
-export JENKINS_CML_VAULT_ID=$(cat vault/ids/jenkins-cml_vault_id.txt)
-export JENKINS_CML_VAULT_SECRET=$(cat vault/ids/jenkins-cml_vault_secret_id.txt)
-export JENKINS_GIT_VAULT_ID=$(cat vault/ids/jenkins-git_vault_id.txt)
-export JENKINS_GIT_VAULT_SECRET=$(cat vault/ids/jenkins-git_vault_secret_id.txt)
-export JENKINS_JENKINS_VAULT_ID=$(cat vault/ids/jenkins-jenkins_vault_id.txt)
-export JENKINS_JENKINS_VAULT_SECRET=$(cat vault/ids/jenkins-jenkins_vault_secret_id.txt)
-export JENKINS_ORG_VAULT_ID=$(cat vault/ids/jenkins-org_vault_id.txt)
-export JENKINS_ORG_VAULT_SECRET=$(cat vault/ids/jenkins-org_vault_secret_id.txt)
-export JENKINS_PULP_VAULT_ID=$(cat vault/ids/jenkins-pulp_vault_id.txt)
-export JENKINS_PULP_VAULT_SECRET=$(cat vault/ids/jenkins-pulp_vault_secret_id.txt)
-echo "****************************************************************************************************************"
 echo " Add Jenkins to keycloak"
 echo "****************************************************************************************************************"
 docker cp jenkins/add_jenkins_to_realm.sh keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/keycloak/bin/add_jenkins_to_realm.sh
 docker exec -it keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} sh -c "/opt/keycloak/bin/add_jenkins_to_realm.sh ${local_admin_user} ${local_admin_password}" | tee install/log/keycloak_jenkins_create.log
+echo "****************************************************************************************************************"
+echo " Preparing Jenkins-Vault setup"
+echo "****************************************************************************************************************"
+export JENKINS_ANSIBLE_VAULT_ID=$(cat vault/ids/jenkins-ansible_vault_id.txt)
+echo "JENKINS_ANSIBLE_VAULT_ID="$JENKINS_ANSIBLE_VAULT_ID
+export JENKINS_ANSIBLE_VAULT_SECRET=$(cat vault/ids/jenkins-ansible_vault_secret_id.txt)
+echo "JENKINS_ANSIBLE_VAULT_SECRET="$JENKINS_ANSIBLE_VAULT_SECRET
+export JENKINS_CML_VAULT_ID=$(cat vault/ids/jenkins-cml_vault_id.txt)
+echo "JENKINS_CML_VAULT_ID="$JENKINS_CML_VAULT_ID
+export JENKINS_CML_VAULT_SECRET=$(cat vault/ids/jenkins-cml_vault_secret_id.txt)
+echo "JENKINS_CML_VAULT_SECRET="$JENKINS_CML_VAULT_SECRET
+export JENKINS_GIT_VAULT_ID=$(cat vault/ids/jenkins-git_vault_id.txt)
+echo "JENKINS_GIT_VAULT_ID="$JENKINS_GIT_VAULT_ID
+export JENKINS_GIT_VAULT_SECRET=$(cat vault/ids/jenkins-git_vault_secret_id.txt)
+echo "JENKINS_GIT_VAULT_SECRET="$JENKINS_GIT_VAULT_SECRET
+export JENKINS_JENKINS_VAULT_ID=$(cat vault/ids/jenkins-jenkins_vault_id.txt)
+echo "JENKINS_JENKINS_VAULT_ID="$JENKINS_JENKINS_VAULT_ID
+export JENKINS_JENKINS_VAULT_SECRET=$(cat vault/ids/jenkins-jenkins_vault_secret_id.txt)
+echo "JENKINS_JENKINS_VAULT_SECRET="$JENKINS_JENKINS_VAULT_SECRET
+export JENKINS_ORG_VAULT_ID=$(cat vault/ids/jenkins-org_vault_id.txt)
+echo "JENKINS_ORG_VAULT_ID="$JENKINS_ORG_VAULT_ID
+export JENKINS_ORG_VAULT_SECRET=$(cat vault/ids/jenkins-org_vault_secret_id.txt)
+echo "JENKINS_ORG_VAULT_SECRET="$JENKINS_GIT_VAULT_SECRET
+export JENKINS_PULP_VAULT_ID=$(cat vault/ids/jenkins-pulp_vault_id.txt)
+echo "JENKINS_PULP_VAULT_ID="$JENKINS_PULP_VAULT_ID
+export JENKINS_PULP_VAULT_SECRET=$(cat vault/ids/jenkins-pulp_vault_secret_id.txt)
+echo "JENKINS_PULP_VAULT_SECRET="$JENKINS_PULP_VAULT_SECRET
 echo "****************************************************************************************************************"
 echo " putting Jenkins secret in casc file"
 echo "****************************************************************************************************************"
@@ -96,6 +108,11 @@ echo " Starting jenkins"
 echo "****************************************************************************************************************"
 echo " " 
 docker compose --project-name cicd-toolbox up -d --build --no-deps jenkins
+let t=0
+until $(curl --output /dev/null --insecure --silent --head --fail https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/whoAmI); do
+    spin
+done
+endspin
 echo "****************************************************************************************************************"
 echo " We need a hack to get the CA into Jenkins"
 echo "****************************************************************************************************************"
@@ -108,16 +125,6 @@ docker cp jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/java/openjdk/
 chmod +w ./jenkins/keystore/cacerts
 keytool -import -alias vault.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} -keystore ./jenkins/keystore/cacerts -file ./jenkins/ca.crt -storepass $jenkins_storepass -noprompt
 docker cp ./jenkins/keystore/cacerts jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/java/openjdk/lib/security/cacerts
-echo " " 
-echo "****************************************************************************************************************"
-echo " Restarting Jenkins"
-echo "****************************************************************************************************************"
-docker restart jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
-let t=0
-until $(curl --output /dev/null --insecure --silent --head --fail https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/whoAmI); do
-    spin
-done
-endspin
 echo " " 
 echo "****************************************************************************************************************"
 echo " Downloading agent.jar from jenkins"
@@ -147,6 +154,16 @@ echo "**************************************************************************
 echo " Updating remote casc file"
 echo "****************************************************************************************************************"
 docker cp jenkins/casc.yaml jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/var/jenkins_conf/casc.yaml 
+echo "****************************************************************************************************************"
+echo " Restarting Jenkins"
+echo "****************************************************************************************************************"
+docker restart jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}
+let t=0
+until $(curl --output /dev/null --insecure --silent --head --fail https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/whoAmI); do
+    spin
+done
+endspin
+echo " " 
 echo "****************************************************************************************************************"
 echo " Building build nodes"
 echo "****************************************************************************************************************"

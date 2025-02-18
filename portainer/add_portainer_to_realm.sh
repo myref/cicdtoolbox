@@ -13,17 +13,33 @@ PORTAINER_ID=$(./kcadm.sh create clients \
     -s name="Portainer" \
     -s description="System to manage containers in the toolchain" \
     -s clientId=Portainer \
+    -s surrogateAuthRequired=false \
     -s enabled=true \
-    -s publicClient=false \
-    -s serviceAccountsEnabled=true \
-    -s fullScopeAllowed=false \
+    -s alwaysDisplayInConsole=false \
+    -s clientAuthenticatorType="client-secret" \
+    -s 'redirectUris=[ "https://portainer.monitoring.provider.test:9443*" ]' \
+    -s 'webOrigins=[ "https://portainer.monitoring.provider.test:9443/" ]' \
+    -s notBefore=0 \
+    -s bearerOnly=false \
+    -s consentRequired=false \
     -s standardFlowEnabled=true \
-    -s frontchannelLogout=true \
+    -s implicitFlowEnabled=false \
     -s directAccessGrantsEnabled=true \
-    -s rootUrl=http://portainer.monitoring.provider.test:9000 \
-    -s adminUrl=http://portainer.monitoring.provider.test:9000/ \
-    -s 'redirectUris=[ "http://portainer.monitoring.provider.test:9000/*" ]' \
-    -s 'webOrigins=[ "http://portainer.monitoring.provider.test:9000/" ]' \
+    -s serviceAccountsEnabled=false \
+    -s publicClient=false \
+    -s frontchannelLogout=true \
+    -s protocol="openid-connect" \
+    -s attributes="{ \
+        \"realm_client\": \"false\", \
+        \"oidc.ciba.grant.enabled\": \"false\", \
+        \"frontchannel.logout.session.required\": \"true\", \
+        \"post.logout.redirect.uris\": \"https://portainer.monitoring.provider.test:9443*\", \
+        \"display.on.consent.screen\": "false", \
+        \"oauth2.device.authorization.grant.enabled\": \"true\" \
+       }" \
+    -s fullScopeAllowed=false \
+    -s rootUrl=https://portainer.monitoring.provider.test:9443 \
+    -s adminUrl=https://portainer.monitoring.provider.test:9443/ \
     -o --fields id | grep id | cut -d'"' -f 4)
 
 echo "Created Portainer client with ID: ${PORTAINER_ID}" 
@@ -39,13 +55,13 @@ PORTAINER_token=$(grep value cicdtoolbox_portainer_secret | cut -d '"' -f4)
 echo "PORTAINER_token: ${PORTAINER_token}"
 
 # Now we can add client specific roles (Clientroles)
-./kcadm.sh create clients/$PORTAINER_ID/roles -r cicdtoolbox -s name=PORTAINER-admin -s description='The admin role for Portainer'
+./kcadm.sh create clients/$PORTAINER_ID/roles -r cicdtoolbox -s name=local-admin -s description='The admin role for Portainer'
 echo "Portainer configuration finished"
 
 # We need to add the portainer-admin claim and portainer-group claim to the token
 ./kcadm.sh create clients/$PORTAINER_ID/protocol-mappers/models \
     -r cicdtoolbox \
-	-s name=group-mapper \
+	-s name=portainer-group-mapper \
     -s protocol=openid-connect \
 	-s protocolMapper=oidc-usermodel-client-role-mapper \
     -s consentRequired=false \
@@ -69,3 +85,12 @@ echo "Created Client scope for Portainer with id: ${PORTAINER_SCOPE_ID}"
 
 echo "Created audience mapper in the Client Scope" 
 
+toolbox_admin_id=$(cat TOOLBOX_ADMIN | grep id | cut -d"'" -f 2)
+echo "Retrieved Toolbox Admins group ID: ${toolbox_admin_id}" 
+
+#adding client roles to the group
+./kcadm.sh add-roles \
+    -r cicdtoolbox \
+    --gid $toolbox_admin_id \
+    --cclientid Portainer \
+    --rolename local-admin 
