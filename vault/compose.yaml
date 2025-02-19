@@ -33,10 +33,12 @@ services:
     environment:
       - 'VAULT_ADDR=http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200'
       - 'VAULT_API_ADDR=http://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200'
+      - 'DOMAIN_NAME_SL=${DOMAIN_NAME_SL}'
+      - 'DOMAIN_NAME_TL=${DOMAIN_NAME_TL}'
     cap_add:
       - IPC_LOCK
     healthcheck:
-      test: 'curl --head --insecure -fSs https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/v1/sys/health?standbyok=true'
+      test: [ "CMD", "wget", "--spider", "--no-check-certificate", "https://vault.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200/v1/sys/health?standbyok=true" ]
       interval: 10s
       timeout: 3s
       retries: 10
@@ -57,7 +59,7 @@ services:
     volumes:
       - 'consul-data:/consul/data'
     healthcheck:
-      test: [ "CMD", "wget", "--spider", "off", "http://consul.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8500/ui/" ]
+      test: [ "CMD", "wget", "--spider", "http://localhost:8500/ui/" ]
       interval: 15s
       timeout: 3s
       retries: 10

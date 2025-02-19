@@ -38,5 +38,5 @@ services:
       internal:
         ipv4_address: 172.16.13.3
     ports:
-      - '9000:9000'
+      - '9443:9443'
     

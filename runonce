@@ -100,6 +100,11 @@ echo "**************************************************************************
 pulp/install.sh ${local_admin_password} | tee install/log/pulp_create.log
 echo " "
 echo "****************************************************************************************************************"
+echo " Starting Portainer"
+echo "****************************************************************************************************************"
+portainer/install.sh ${local_admin_password} | tee install/log/portainer_create.log
+echo " "
+echo "****************************************************************************************************************"
 echo " Validating install"
 echo "****************************************************************************************************************"
 robot --variable VALID_PASSWORD:${default_user_password} -d install/log -o 100_install_test.xml -l 100_install_test_log.html -r 100_install_test_report.html install/tests
