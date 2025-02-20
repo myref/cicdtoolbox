@@ -13,6 +13,7 @@ PORTAINER_ID=$(./kcadm.sh create clients \
     -s name="Portainer" \
     -s description="System to manage containers in the toolchain" \
     -s clientId=Portainer \
+    -s surrogateAuthRequired=false \
     -s enabled=true \
     -s clientAuthenticatorType="client-secret" \
     -s 'redirectUris=[ "https://portainer.monitoring.provider.test:9443*" ]' \

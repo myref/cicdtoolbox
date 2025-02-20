@@ -21,11 +21,16 @@ services:
         ipv4_address: 172.16.11.8
     environment:
       - ORG_NAME=${ORG_NAME}
-      # - CML_USER=${cml_user}
-      # - CML_PASSWORD=${cml_password}
       - CML_URL=https://192.168.32.161
+      - CML_USER=${cml_user}
+      - CML_PASSWORD=${cml_user_pwd}
+      - JENKINS_ANSIBLE_VAULT_ID=${JENKINS_ANSIBLE_VAULT_ID}
+      - JENKINS_ANSIBLE_VAULT_PASSWORD=${JENKINS_ANSIBLE_VAULT_SECRET}
+      - JENKINS_PULP_USER=jenkins_pulp
       - JENKINS_PULP_PASSWORD=${jenkins_pulp_password}
+      - JENKINS_GIT_USER=jenkins_git
       - JENKINS_GIT_PASSWORD=${jenkins_git_password}
+      - JENKINS_DEV_LOGON_USER=${default_user}
       - JENKINS_DEV_LOGON_PASSWORD=${jenkins_dev_logon_password}
       - JENKINS_ADMIN_ID=${local_admin_user}
       - JENKINS_ADMIN_PASSWORD=${local_admin_password}

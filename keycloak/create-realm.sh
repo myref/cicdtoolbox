@@ -41,7 +41,7 @@ tool_ops_spec_id=$(cat TOOL_OPS_SPEC | grep id | cut -d"'" -f 2)
 echo "Created Tooling Specialist group within the Tooling Operations Department with ID: ${tool_ops_spec_id}" 
 
 # Add LLDAP integration, needs to be last, otherwise LLDAP groups interfere with group creation in Keycloak
-./kcadm.sh create components -r cicdtoolbox \
+lldap_ldap_id=$(./kcadm.sh create components -r cicdtoolbox \
     -s name=lldap \
     -s providerId=ldap \
     -s providerType=org.keycloak.storage.UserStorageProvider \
@@ -64,9 +64,7 @@ echo "Created Tooling Specialist group within the Tooling Operations Department 
     -s 'config.connectionPooling=["true"]' \
     -s 'config.useKerberosForPasswordAuthentication=["false"]' \
     -s 'config.batchSizeForSync=["1000"]' \
-    -s 'config.fullSyncPeriod=["10"]' &>LLDAP_LDAP
-
-lldap_ldap_id=$(cat LLDAP_LDAP | grep id | cut -d"'" -f 2)
+    -s 'config.fullSyncPeriod=["10"]' | grep id | cut -d"'" -f 2)
 
 ./kcadm.sh create components -r cicdtoolbox \
     -s name=groups \
@@ -79,5 +77,4 @@ lldap_ldap_id=$(cat LLDAP_LDAP | grep id | cut -d"'" -f 2)
     -s 'config.mode=["READ_ONLY"]'
 
 echo "LLDAP configured"
-#Now delete tokens and secrets
-rm cicdtoolbox_*
+
