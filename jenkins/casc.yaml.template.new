@@ -31,9 +31,57 @@ credentials:
           description: "Credentials to let the jenkins user on the buildhost log on\
             \ to the generated machine"
           id: "jenkins-ansible-dev"
-          password: ${JENKINS_DEV_LOGON_PASSWORD}
+          password: ${JENKINS_DEV_LOGON_SECRET}
           scope: GLOBAL
           username: "myapp"
+      - vaultAppRoleCredential:
+          description: "Credentials for Jenkins to log into Ansible via Vault"
+          id: "jenkins-ansible-vault"
+          path: "approle"
+          roleId: ${JENKINS_ANSIBLE_VAULT_ID}
+          scope: GLOBAL
+          secretId: ${JENKINS_ANSIBLE_VAULT_SECRET}
+          usePolicies: false
+      - vaultAppRoleCredential:
+          description: "Credentials for Jenkins to log into CML via Vault"
+          id: "jenkins-cml-vault"
+          path: "approle"
+          roleId: ${JENKINS_CML_VAULT_ID}
+          scope: GLOBAL
+          secretId: ${JENKINS_CML_VAULT_SECRET}
+          usePolicies: false
+      - vaultAppRoleCredential:
+          description: "Credentials for Jenkins to log into git via Vault"
+          id: "jenkins-git-vault"
+          path: "approle"
+          roleId: ${JENKINS_GIT_VAULT_ID}
+          scope: GLOBAL
+          secretId: ${JENKINS_GIT_VAULT_SECRET}
+          usePolicies: false
+      - vaultAppRoleCredential:
+          description: "Credentials for Jenkins to log into Jenkins via Vault"
+          id: "jenkins-jenkins-vault"
+          path: "approle"
+          roleId: ${JENKINS_JENKINS_VAULT_ID}
+          scope: GLOBAL
+          secretId: ${JENKINS_JENKINS_VAULT_SECRET}
+          usePolicies: false
+      - vaultAppRoleCredential:
+          description: "Credentials for Jenkins to log into pulp via Vault"
+          id: "jenkins-pulp-vault"
+          path: "approle"
+          roleId: ${JENKINS_PULP_VAULT_ID}
+          scope: GLOBAL
+          secretId: ${JENKINS_PULP_VAULT_SECRET}
+          usePolicies: false
+      - vaultAppRoleCredential:
+          description: "Credentials for Jenkins to log into ${ORG_NAME} via Vault"
+          id: "jenkins-${ORG_NAME}-vault"
+          path: "approle"
+          roleId: ${JENKINS_ORG_VAULT_ID}
+          scope: GLOBAL
+          secretId: ${JENKINS_ORG_VAULT_SECRET}
+          usePolicies: false
 jenkins:
   authorizationStrategy:
     roleBased:
