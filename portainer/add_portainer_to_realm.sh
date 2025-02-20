@@ -15,15 +15,10 @@ PORTAINER_ID=$(./kcadm.sh create clients \
     -s clientId=Portainer \
     -s surrogateAuthRequired=false \
     -s enabled=true \
-    -s alwaysDisplayInConsole=false \
     -s clientAuthenticatorType="client-secret" \
     -s 'redirectUris=[ "https://portainer.monitoring.provider.test:9443*" ]' \
     -s 'webOrigins=[ "https://portainer.monitoring.provider.test:9443/" ]' \
-    -s notBefore=0 \
-    -s bearerOnly=false \
-    -s consentRequired=false \
     -s standardFlowEnabled=true \
-    -s implicitFlowEnabled=false \
     -s directAccessGrantsEnabled=true \
     -s serviceAccountsEnabled=false \
     -s publicClient=false \
@@ -48,8 +43,7 @@ echo "Created Portainer client with ID: ${PORTAINER_ID}"
 ./kcadm.sh create clients/$PORTAINER_ID/client-secret -r cicdtoolbox
 
 # We need to retrieve the token from keycloak for this client
-./kcadm.sh get clients/$PORTAINER_ID/client-secret -r cicdtoolbox >cicdtoolbox_portainer_secret
-PORTAINER_token=$(grep value cicdtoolbox_portainer_secret | cut -d '"' -f4)
+PORTAINER_token=$(./kcadm.sh get clients/$PORTAINER_ID/client-secret -r cicdtoolbox | grep value | cut -d '"' -f4)
 
 # Make sure we can grep the clienttoken easily from the keycloak_create.log to create an authentication source in Portainer for Keycloak
 echo "PORTAINER_token: ${PORTAINER_token}"
@@ -70,8 +64,7 @@ echo "Portainer configuration finished"
 echo "Created role-group mapper in the Client Scope" 
 
 # We need to add a client scope on the realm for Portainer in order to include the audience in the access token
-./kcadm.sh create -x "client-scopes" -r cicdtoolbox -s name=portainer-audience -s protocol=openid-connect &>cicdtoolbox_PORTAINER_SCOPE
-PORTAINER_SCOPE_ID=$(cat cicdtoolbox_PORTAINER_SCOPE | grep id | cut -d"'" -f 2)
+PORTAINER_SCOPE_ID=$(./kcadm.sh create -x "client-scopes" -r cicdtoolbox -s name=portainer-audience -s protocol=openid-connect | grep id | cut -d"'" -f 2)
 echo "Created Client scope for Portainer with id: ${PORTAINER_SCOPE_ID}" 
 
 # Create a mapper for the audience
