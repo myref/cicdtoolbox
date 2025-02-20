@@ -11,8 +11,8 @@ Suite Teardown    Close Browser
 Set local-admin name 
     Set Admin credentials
     
-Configure Portainer
-    Choose environment
+# Configure Portainer
+#     Choose environment
 
 *** Variables ***
 
