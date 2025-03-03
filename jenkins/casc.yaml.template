@@ -360,7 +360,7 @@ jenkins:
       allowedTokenExpirationClockSkewSeconds: 0
       clientId: "Jenkins"
       clientSecret: oic_secret
-      disableSslVerification: false
+      disableSslVerification: true
       emailFieldName: "email"
       escapeHatchEnabled: true
       escapeHatchGroup: "local-admin"
