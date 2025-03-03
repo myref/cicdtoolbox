@@ -40,9 +40,9 @@ echo "Created Tooling Operator group within the Tooling Operations Department wi
 tool_ops_spec_id=$(cat TOOL_OPS_SPEC | grep id | cut -d"'" -f 2)
 echo "Created Tooling Specialist group within the Tooling Operations Department with ID: ${tool_ops_spec_id}" 
 
-# Add LLDAP integration, needs to be last, otherwise LLDAP groups interfere with group creation in Keycloak
-lldap_ldap_id=$(./kcadm.sh create components -r cicdtoolbox \
-    -s name=lldap \
+# Add MSP_IDP integration for MSP_IDP, needs to be last, otherwise LDAP groups interfere with group creation in Keycloak
+msp_idp_ldap_id=$(./kcadm.sh create components -r cicdtoolbox \
+    -s name=msp_idp \
     -s providerId=ldap \
     -s providerType=org.keycloak.storage.UserStorageProvider \
     -s 'config.priority=["2"]' \
@@ -53,7 +53,7 @@ lldap_ldap_id=$(./kcadm.sh create components -r cicdtoolbox \
     -s 'config.rdnLDAPAttribute=["uid"]' \
     -s 'config.uuidLDAPAttribute=["uid"]' \
     -s 'config.userObjectClasses=["person"]' \
-    -s "config.connectionUrl=[\"ldap://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3890\"]" \
+    -s "config.connectionUrl=[\"ldap://msp-idp.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3890\"]" \
     -s "config.usersDn=[\"ou=people,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
     -s 'config.searchScope=["1"]' \
     -s 'config.authType=["simple"]' \
@@ -64,17 +64,21 @@ lldap_ldap_id=$(./kcadm.sh create components -r cicdtoolbox \
     -s 'config.connectionPooling=["true"]' \
     -s 'config.useKerberosForPasswordAuthentication=["false"]' \
     -s 'config.batchSizeForSync=["1000"]' \
-    -s 'config.fullSyncPeriod=["10"]' | grep id | cut -d"'" -f 2)
+    -s 'config.fullSyncPeriod=["10"]' \
+    -o --fields id | grep id | cut -d'"' -f 4)
+
+echo "Created MSP_IDP with ID: ${msp_idp_ldap_id}"  
 
 ./kcadm.sh create components -r cicdtoolbox \
     -s name=groups \
     -s providerId=group-ldap-mapper \
     -s providerType=org.keycloak.storage.ldap.mappers.LDAPStorageMapper \
-    -s parentId=${lldap_ldap_id} \
+    -s parentId=$msp_idp_ldap_id \
     -s "config.\"groups.dn\"=[\"ou=groups,dc=${DOMAIN_NAME_SL},dc=${DOMAIN_NAME_TL}\"]" \
     -s 'config."group.name.ldap.attribute"=["cn"]' \
     -s 'config."group.object.classes"=["groupOfUniqueNames"]' \
     -s 'config.mode=["READ_ONLY"]'
 
-echo "LLDAP configured"
-
+echo "MSP_IDP configured"
+#Now delete tokens and secrets
+rm cicdtoolbox_*

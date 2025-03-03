@@ -19,11 +19,13 @@ services:
     stop_signal: SIGINT
     stop_grace_period: 15s
     environment:
-      - 'POSTGRES_MULTIPLE_DATABASES=ldap,gitea,keycloak,terraform,pulp'
+      - 'POSTGRES_MULTIPLE_DATABASES=msp_idp,cust1_idp,gitea,keycloak,terraform,pulp'
       - 'POSTGRES_USER=${postgres_user}'
       - 'POSTGRES_PASSWORD=${postgres_password}'
-      - 'ldap_db_user=${ldap_db_user}'
-      - 'ldap_db_pwd=${ldap_db_pwd}'
+      - 'msp_idp_db_user=${msp_idp_db_user}'
+      - 'msp_idp_db_pwd=${msp_idp_db_pwd}'
+      - 'cust1_idp_db_user=${cust1_idp_db_user}'
+      - 'cust1_idp_db_pwd=${cust1_idp_db_pwd}'
       - 'gitea_db_user=${gitea_db_user}'
       - 'gitea_db_pwd=${gitea_db_pwd}'
       - 'keycloak_db_user=${keycloak_db_user}'

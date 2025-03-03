@@ -32,6 +32,8 @@ services:
       JDBC_PARAMS: ssl=true&sslmode=verify-ca&sslrootcert=/etc/pki/ca-trust/source/anchors/ca.crt
       DOMAIN_NAME_SL: '${DOMAIN_NAME_SL}'
       DOMAIN_NAME_TL: '${DOMAIN_NAME_TL}'
+      CUST1_DOMAIN_NAME_SL: '${CUST1_DOMAIN_NAME_SL}'
+      CUST1_DOMAIN_NAME_TL: '${CUST1_DOMAIN_NAME_TL}'
       ORG_NAME: '${ORG_NAME}'
     secrets:
       - source: keycloak_key

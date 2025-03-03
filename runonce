@@ -36,6 +36,7 @@ echo " Making sure all containers are reachable locally with the name in the"
 echo " hosts file."
 echo "****************************************************************************************************************"
 echo " " 
+export host_ip=$(hostname -I | cut -d ' ' -f 1)
 sudo chmod o+w /etc/hosts
 if grep -q "seleniumffhost" /etc/hosts; then
     sudo sed -i "/seleniumffhost.internal.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}/d" /etc/hosts
@@ -71,9 +72,9 @@ echo "**************************************************************************
 cicdtoolbox-db/install.sh | tee install/log/cicdtoolbox-db_create.log
 echo " " 
 echo "****************************************************************************************************************"
-echo " Creating LDAP server" 
+echo " Creating MSP_IDP LDAP server" 
 echo "****************************************************************************************************************"
-lldap/install.sh | tee install/log/lldap_create.log
+msp_idp/install.sh | tee install/log/msp_idp_create.log
 echo " "
 echo "****************************************************************************************************************"
 echo " Creating Keycloak "
@@ -104,6 +105,10 @@ echo " Starting Portainer"
 echo "****************************************************************************************************************"
 portainer/install.sh ${local_admin_password} | tee install/log/portainer_create.log
 echo " "
+echo "****************************************************************************************************************"
+echo " Creating CUST1_IDP LDAP server" 
+echo "****************************************************************************************************************"
+cust1_idp/install.sh | tee install/log/msp_idp_create.log
 echo "****************************************************************************************************************"
 echo " Validating install"
 echo "****************************************************************************************************************"
@@ -173,7 +178,8 @@ echo " "
 echo "You can reach the servers on:"
 echo " "
 echo " Vault:       https://vault.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8200"
-echo " LLDAP:       http://ldap.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:17170"
+echo " MSP_IDP:     http://msp-idp.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:17170"
+echo " CUST1_IDP:   http://cust1-idp.iam.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:17170"
 echo " Keycloak:    https://keycloak.services.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8443"
 echo " Gitea:       https://gitea.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:3000"
 echo " Jenkins:     https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084"
