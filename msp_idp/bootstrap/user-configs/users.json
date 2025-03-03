@@ -6,7 +6,7 @@
   "firstName": "Admin",
   "lastName": "Administrator",
   "groups": [
-    "lldap_admin"
+    "msp_idp_admin"
   ]
 }
 {
@@ -17,7 +17,7 @@
   "firstName": "Admin",
   "lastName": "Administrator",
   "groups": [
-    "lldap_admin"
+    "msp_idp_admin"
   ]
 }
 {
@@ -325,7 +325,7 @@
   "firstName": "Net",
   "lastName": "CICD",
   "groups": [
-    "lldap_admin",
+    "msp_idp_admin",
     "toolbox_admin"
   ]
 }

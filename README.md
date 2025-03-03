@@ -104,7 +104,9 @@ You need to be able to run docker as non-root. See [here](https://docs.docker.co
 
 
 ## Users ##
-All users are configured in LLDAP. [The wiki](https://github.com/Devoteam/CICD-toolbox/wiki/Users-and-passwords) has the complete list.
+All MSP users are configured in MSP_IDP. [The wiki](https://github.com/Devoteam/CICD-toolbox/wiki/Users-and-passwords) has the complete list.
+
+All customer users are in cust1_idp. This is a list specific to the cust1 realm.
 
 ### Wat the Robot script does ###
 In order for Jenkins to be able to run the jenkinsfiles, jenkins needs the jenkins-jenkins user to have a token.

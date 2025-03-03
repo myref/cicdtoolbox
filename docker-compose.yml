@@ -11,7 +11,8 @@ include:
   - jenkins/compose.yaml
   - buildnode/compose.yaml
   - keycloak/compose.yaml
-  - lldap/compose.yaml
+  - msp_idp/compose.yaml
+  - cust1_idp/compose.yaml
   - pulp/compose.yaml
   - portainer/compose.yaml
   - vault/compose.yaml
