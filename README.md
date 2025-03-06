@@ -83,9 +83,9 @@ mkdir ~/.config/pulp
 
 Copy the pulp config:
 
-```cp pulp/cli.toml ~/.config/pulp/cli.toml```
-
 ```cd cicdtoolbox/```
+
+```cp pulp/cli.toml ~/.config/pulp/cli.toml```
 
 ```direnv allow```
 
