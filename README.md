@@ -85,9 +85,9 @@ Copy the pulp config:
 
 ```cd cicdtoolbox/```
 
-```cp pulp/cli.toml ~/.config/pulp/cli.toml```
-
 ```direnv allow```
+
+```cp pulp/cli.toml ~/.config/pulp/cli.toml```
 
 After this, you can run:
 
