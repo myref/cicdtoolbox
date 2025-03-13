@@ -77,18 +77,17 @@ Create gh login: ```gh auth login``` and follow the prompts.
 
 ```git clone https://github.com/myref/cicdtoolbox.git```
 
-```cd cicdtoolbox/```
-
 ```
-mkdir .config/pulp
+mkdir ~/.config/pulp
 ```
 
 Copy the pulp config:
 
-```cp pulp/cli.toml ~/.config/pulp/cli.toml```
-
+```cd cicdtoolbox/```
 
 ```direnv allow```
+
+```cp pulp/cli.toml ~/.config/pulp/cli.toml```
 
 After this, you can run:
 
