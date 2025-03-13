@@ -151,7 +151,6 @@ echo $org_data
 CreateRepo "${ORG_NAME}" "CICD-toolbox" "https://github.com/Devoteam/CICD-toolbox.git" "The CICD-toolbox"
 CreateRepo "${ORG_NAME}" "NetCICD" "https://github.com/Devoteam/NetCICD.git" "The NetCICD pipeline"
 CreateRepo "${ORG_NAME}" "OsCICD" "https://github.com/myref/OsCICD.git" "OsCICD"
-CreateRepo "${ORG_NAME}" "OsDeploy" "https://github.com/myref/OsDeploy.git" "OS configuration"
 CreateRepo "${ORG_NAME}" "OsTest" "https://github.com/myref/OsTest.git" "OS test"
 CreateRepo "${ORG_NAME}" "AppCICD" "https://github.com/DevoteamNL/AppCICD.git" "The AppCICD pipeline"
 CreateRepo "${ORG_NAME}" "templateApp" "https://github.com/DevoteamNL/templateApp.git" "Some Application"
@@ -167,9 +166,7 @@ CreateTeam ${ORG_NAME} "gitea-netcicd-admin" "The NetCICD repo admin role" "admi
 CreateTeam ${ORG_NAME} "gitea-oscicd-admin" "The OsCICD repo admin role" "admin" "OsCICD"
 CreateTeam ${ORG_NAME} "gitea-oscicd-write" "The OsCICD repo editor role" "write" "OsCICD"
 CreateTeam ${ORG_NAME} "gitea-oscicd-read" "The OsCICD repo reader role" "read" "OsCICD"
-CreateTeam ${ORG_NAME} "gitea-osdeploy-admin" "The OsDeploy repo admin role" "admin" "OsDeploy"
-CreateTeam ${ORG_NAME} "gitea-osdeploy-write" "The OsDeploy repo editor role" "write" "OsDeploy"
-CreateTeam ${ORG_NAME} "gitea-osdeploy-read" "The OsDeploy repo reader role" "read" "OsDeploy"
+
 CreateTeam ${ORG_NAME} "gitea-ostest-admin" "The OsTest repo admin role" "admin" "OsTest"
 CreateTeam ${ORG_NAME} "gitea-ostest-write" "The OsTest repo editor role" "write" "OsTest"
 CreateTeam ${ORG_NAME} "gitea-ostest-read" "The OsTest repo reader role" "read" "OsTest"
