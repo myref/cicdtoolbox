@@ -199,7 +199,7 @@ jenkins:
         - entries:
           - group: "jenkins-OsCICD-dev"
           name: "OS development-dev"
-          pattern: "^jenkins-OsCICD-dev$"
+          pattern: "^jenkins-oscicd-dev$"
           permissions:
           - "Credentials/Create"
           - "Credentials/Delete"
@@ -220,7 +220,7 @@ jenkins:
         - entries:
           - group: "jenkins-OsCICD-run"
           name: "OS development-run"
-          pattern: "^jenkins-OsCICD-run$"
+          pattern: "^jenkins-oscicd-run$"
           permissions:
           - "Credentials/View"
           - "Job/Build"
@@ -229,7 +229,7 @@ jenkins:
         - entries:
           - group: "jenkins-OsDeploy-dev"
           name: "deployment development-dev"
-          pattern: "^jenkins-OsDeploy-dev$"
+          pattern: "^jenkins-osdeploy-dev$"
           permissions:
           - "Credentials/Create"
           - "Credentials/Delete"
@@ -250,7 +250,7 @@ jenkins:
         - entries:
           - group: "jenkins-OsDeploy-run"
           name: "deployment development-run"
-          pattern: "^jenkins-OsDeploy-run$"
+          pattern: "^jenkins-osdeploy-run$"
           permissions:
           - "Credentials/View"
           - "Job/Build"
@@ -259,7 +259,7 @@ jenkins:
         - entries:
           - group: "jenkins-OsTest-dev"
           name: "deployment development-dev"
-          pattern: "^jenkins-OsTest-dev$"
+          pattern: "^jenkins-ostest-dev$"
           permissions:
           - "Credentials/Create"
           - "Credentials/Delete"
@@ -280,7 +280,7 @@ jenkins:
         - entries:
           - group: "jenkins-OsTest-run"
           name: "deployment development-run"
-          pattern: "^jenkins-OsTest-run$"
+          pattern: "^jenkins-ostest-run$"
           permissions:
           - "Credentials/View"
           - "Job/Build"
