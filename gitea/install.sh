@@ -35,7 +35,7 @@ function CreateRepo () {
         "branch_filter": "*",
         "config": {
             "content_type": "json",
-            "url": "https://jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:8084/gitea-webhook/post"
+            "url": "https://jenkins.tooling.'${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}':8084/gitea-webhook/post"
             },
         "events": [ "push" ],
         "type": "gitea"
