@@ -123,6 +123,7 @@ echo " Copy CA certificates into Jenkins keystore"
 echo "****************************************************************************************************************"
 docker cp jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/java/openjdk/lib/security/cacerts ./jenkins/keystore/cacerts
 chmod +w ./jenkins/keystore/cacerts
+cp jenkins/keystore/cacerts jenkins/keystore/cacerts.org
 keytool -import -alias vault.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL} -keystore ./jenkins/keystore/cacerts -file ./jenkins/ca.crt -storepass $jenkins_storepass -noprompt
 docker cp ./jenkins/keystore/cacerts jenkins.tooling.${DOMAIN_NAME_SL}.${DOMAIN_NAME_TL}:/opt/java/openjdk/lib/security/cacerts
 echo " " 

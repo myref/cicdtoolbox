@@ -17,8 +17,8 @@
     <jenkins.branch.OrganizationChildTriggersProperty>
       <templates>
         <com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger plugin="cloudbees-folder@6.15">
-          <spec>H H/4 * * *</spec>
-          <interval>86400000</interval>
+          <spec>* * * * *</spec>
+          <interval>60000</interval>
         </com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger>
       </templates>
     </jenkins.branch.OrganizationChildTriggersProperty>

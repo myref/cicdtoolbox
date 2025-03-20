@@ -153,6 +153,7 @@ CreateRepo "${ORG_NAME}" "NetCICD" "https://github.com/Devoteam/NetCICD.git" "Th
 CreateRepo "${ORG_NAME}" "OsCICD" "https://github.com/myref/OsCICD.git" "OsCICD"
 CreateRepo "${ORG_NAME}" "OsTest" "https://github.com/myref/OsTest.git" "OS test"
 CreateRepo "${ORG_NAME}" "AppCICD" "https://github.com/DevoteamNL/AppCICD.git" "The AppCICD pipeline"
+CreateRepo "${ORG_NAME}" "AppTest" "https://github.com/myref/OsTest.git" "Application testing"
 CreateRepo "${ORG_NAME}" "templateApp" "https://github.com/DevoteamNL/templateApp.git" "Some Application"
 
 CreateTeam ${ORG_NAME} "gitea-cicdtoolbox-read" "The CICDtoolbox repo read role" "read" "CICD-toolbox"
